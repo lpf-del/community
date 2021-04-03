@@ -1,0 +1,76 @@
+package life.majiang.community.controller;
+
+import life.majiang.community.deo.QuestionDTO;
+import life.majiang.community.deo.User;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.service.PageDTO;
+import life.majiang.community.service.QuestionDtoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Controller
+public class ProfileController {
+    @Autowired
+    @SuppressWarnings("all")
+    private UserMapper userMapper;
+    @Autowired
+    @SuppressWarnings("all")
+    private QuestionMapper questionMapper;
+    @Autowired
+    @SuppressWarnings("all")
+    private QuestionDtoService questionDtoService;
+    @GetMapping("/profile/{action}")
+    public String profile(@PathVariable(name = "action") String action,
+                          Model model,
+                          HttpServletRequest request,
+                          @RequestParam(name = "page",defaultValue = "1") Integer page){
+        String value = "";
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null && cookies.length != 0){
+            for (Cookie cookie : cookies) {
+                if (cookie!=null&&cookie.getName().equals("token")){
+                    value = cookie.getValue();
+                    break;
+                }
+            }
+            if (value==""&&value==null){
+                return "index";
+            }
+        }
+
+
+        if ("question".equals(action)){
+            model.addAttribute("section","question");
+            model.addAttribute("sectionName","我的提问");
+        }
+        if ("repies".equals(action)){
+            model.addAttribute("section","repies");
+            model.addAttribute("sectionName","最新回复");
+        }
+
+
+        User user = new User();
+        Map<String,Object> map = new HashMap<>();
+        map.put("token",value);
+        List<User> users = userMapper.selectByMap(map);
+
+        user = users.get(0);
+        if (users!=null&&users.size()==1){
+            PageDTO pageDTO = questionDtoService.Listwen(page,user.getId());
+            model.addAttribute("pageDTO",pageDTO);
+        }
+
+        return "profile";
+    }
+}
