@@ -7,10 +7,13 @@ import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class QuestionDtoService {
@@ -33,7 +36,10 @@ public class QuestionDtoService {
         List<Question> list = questionMapper.Lists((page-1)*10,10);
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (Question question : list) {
-            User user = userMapper.selectById(question.getCreator());
+            Map<String,Object> map = new HashMap<>();
+            map.put("account_id",question.getCreator());
+            List<User> users = userMapper.selectByMap(map);
+            User user = users.get(0);
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);
@@ -50,13 +56,16 @@ public class QuestionDtoService {
         if ((double)count/2==1){
             n=1;
         }
-        Integer maxsize=count/2+1-n;
+        Integer maxsize=count/10+1-n;
         PageDTO pageDTO = new PageDTO();
         pageDTO.setTotalPage(maxsize);
-        List<Question> list = questionMapper.ListsByid((page-1)*2,2,id);
+        List<Question> list = questionMapper.ListsByid((page-1)*10,10,id);
         List<QuestionDTO> questionDTOList = new ArrayList<QuestionDTO>();
         for (Question question : list) {
-            User user = userMapper.selectById(question.getCreator());
+            Map<String,Object> map = new HashMap<>();
+            map.put("account_id",question.getCreator());
+            List<User> users = userMapper.selectByMap(map);
+            User user = users.get(0);
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);
             questionDTO.setUser(user);

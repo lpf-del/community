@@ -53,7 +53,7 @@ public class IndexController {
 
 
             if (list.size()==1){
-                request.getSession().setAttribute("user",(User)list.get(0));
+                request.getSession().setAttribute("user",list.get(0));
             }
         }
         PageDTO pageDTO = questionDtoService.List(page);

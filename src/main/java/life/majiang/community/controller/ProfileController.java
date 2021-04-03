@@ -67,7 +67,7 @@ public class ProfileController {
 
         user = users.get(0);
         if (users!=null&&users.size()==1){
-            PageDTO pageDTO = questionDtoService.Listwen(page,user.getId());
+            PageDTO pageDTO = questionDtoService.Listwen(page,Long.parseLong(user.getAccountId()));
             model.addAttribute("pageDTO",pageDTO);
         }
 

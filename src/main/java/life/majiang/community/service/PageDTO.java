@@ -30,6 +30,7 @@ public class PageDTO {
         }
         if (page>=count){
             this.page=count;
+            page = count;
         }
         if (page == 1&&count!=1){
             showPrevious = showFirstPage = false;
