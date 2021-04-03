@@ -35,20 +35,6 @@ public class ProfileController {
                           Model model,
                           HttpServletRequest request,
                           @RequestParam(name = "page",defaultValue = "1") Integer page){
-        String value = "";
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0){
-            for (Cookie cookie : cookies) {
-                if (cookie!=null&&cookie.getName().equals("token")){
-                    value = cookie.getValue();
-                    break;
-                }
-            }
-            if (value==""&&value==null){
-                return "index";
-            }
-        }
-
 
         if ("question".equals(action)){
             model.addAttribute("section","question");
@@ -59,14 +45,8 @@ public class ProfileController {
             model.addAttribute("sectionName","最新回复");
         }
 
-
-        User user = new User();
-        Map<String,Object> map = new HashMap<>();
-        map.put("token",value);
-        List<User> users = userMapper.selectByMap(map);
-
-        user = users.get(0);
-        if (users!=null&&users.size()==1){
+        User user= (User)request.getSession().getAttribute("user");
+        if (user!=null){
             PageDTO pageDTO = questionDtoService.Listwen(page,Long.parseLong(user.getAccountId()));
             model.addAttribute("pageDTO",pageDTO);
         }

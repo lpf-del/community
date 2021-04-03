@@ -35,9 +35,11 @@ public class PublishController {
                             @RequestParam("tag") String tag,
                             HttpServletRequest request,
                             Model model){
-        model.addAttribute("title",title);
-        model.addAttribute("description",description);
-        model.addAttribute("tag",tag);
+        Map<String,Object> map = new HashMap<>();
+        map.put("title",title);
+        map.put("description",description);
+        map.put("tag",tag);
+        model.addAllAttributes(map);
         if (title == null && title == ""){
             model.addAttribute("error","标题不能为空");
             return "publish";
@@ -50,29 +52,7 @@ public class PublishController {
             model.addAttribute("error","标签不能为空");
             return "publish";
         }
-        Cookie[] cookies = request.getCookies();
-        if (cookies == null || cookies.length == 0){
-            model.addAttribute("error","用户未登录");
-            return "publish";
-        }
-        String value = "";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")){
-                value = cookie.getValue();
-                break;
-            }
-        }
-        Map<String,Object> map = new HashMap<>();
-        map.put("token",value);
-        List<User> users = userMapper.selectByMap(map);
-        User user = new User();
-        if (users.size()!=0){
-            user = users.get(0);
-            request.getSession().setAttribute("user", user);
-        }else {
-            model.addAttribute("error","用户未登录");
-            return "publish";
-        }
+        User user = (User)request.getSession().getAttribute("user");
 
         Question question = new Question();
         question.setTitle(title);
