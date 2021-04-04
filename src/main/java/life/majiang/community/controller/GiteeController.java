@@ -58,13 +58,7 @@ public class GiteeController {
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(giteeUser.getAvatar_url());
 
-//            System.out.println(user);
-//            Map<String, Object> map = new HashMap<>();
-//            map.put("name", giteeUser.getName());
-//            List<User> users = userMapper.selectByMap(map);
-//            if (users.size() != 1) {
-                userMapper.insert(user);
-//            }
+            userMapper.insert(user);
 
             response.addCookie(new Cookie("token", token));
 

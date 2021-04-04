@@ -5,6 +5,7 @@ import life.majiang.community.mapper.UserMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -16,10 +17,11 @@ import java.util.List;
 import java.util.Map;
 
 
-@Component
-@AllArgsConstructor
+@Service
 public class SessionInterceptor implements HandlerInterceptor {
-    private final UserMapper userMapper;
+    @Autowired
+    @SuppressWarnings("all")
+    private UserMapper userMapper;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String value = "";
@@ -32,15 +34,9 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
 
-            System.out.println(value);
             Map<String,Object> map = new HashMap();
             map.put("token",value);
-            System.out.println(userMapper);
             List<User> list = userMapper.selectByMap(map);
-            for (Object o : list) {
-                System.out.println(o);
-            }
-
 
             if (list.size()==1){
                 request.getSession().setAttribute("user",list.get(0));

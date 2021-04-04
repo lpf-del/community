@@ -16,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class IndexController {
@@ -35,28 +32,6 @@ public class IndexController {
     public String index(HttpServletRequest request
                         , Model model
                         , @RequestParam(name = "page",defaultValue = "1") Integer page){
-//        String value = "";
-//        Cookie[] cookies = request.getCookies();
-//        if (cookies != null && cookies.length != 0){
-//            for (Cookie cookie : cookies) {
-//                if (cookie!=null&&cookie.getName().equals("token")){
-//                    value = cookie.getValue();
-//                    break;
-//                }
-//            }
-//
-//
-//            Map<String,Object> map = new HashMap();
-//            map.put("token",value);
-//
-//            List list = userMapper.selectByMap(map);
-//            System.out.println(userMapper);
-//
-//
-//            if (list.size()==1){
-//                request.getSession().setAttribute("user",list.get(0));
-//            }
-//        }
         PageDTO pageDTO = questionDtoService.List(page);
 
         model.addAttribute("pageDTO",pageDTO);

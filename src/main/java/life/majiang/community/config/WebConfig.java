@@ -8,11 +8,13 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+//@EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+
     @Autowired
-    UserMapper userMapper;
+    private SessionInterceptor sessionInterceptor;
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new SessionInterceptor(userMapper)).addPathPatterns("/**").excludePathPatterns("/static/**","/callback");
+        registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").excludePathPatterns("/static/**","/callback");
     }
 }

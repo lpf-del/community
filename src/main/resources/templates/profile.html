@@ -49,6 +49,7 @@
                         </a>
                     </li>
                     <li th:each="page : ${pageDTO.pages}" th:class="${pageDTO.page == page}?'active':''">
+                        <!--/*@thymesVar id="page" type=""*/-->
                         <a th:href="@{/profile/question/(page=${page})}" th:text="${page}"></a>
                     </li>
                     <li th:if="${pageDTO.showNext}">

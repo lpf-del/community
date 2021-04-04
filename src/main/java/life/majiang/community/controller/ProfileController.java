@@ -49,6 +49,8 @@ public class ProfileController {
         if (user!=null){
             PageDTO pageDTO = questionDtoService.Listwen(page,Long.parseLong(user.getAccountId()));
             model.addAttribute("pageDTO",pageDTO);
+        }else {
+            return "redirect:/";
         }
 
         return "profile";
