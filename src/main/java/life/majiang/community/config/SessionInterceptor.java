@@ -1,7 +1,10 @@
 package life.majiang.community.config;
 
+import life.majiang.community.deo.User;
 import life.majiang.community.mapper.UserMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -12,10 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+@Component
+@AllArgsConstructor
 public class SessionInterceptor implements HandlerInterceptor {
-    @Autowired
-    @SuppressWarnings("all")
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String value = "";
@@ -28,11 +32,14 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
 
-
+            System.out.println(value);
             Map<String,Object> map = new HashMap();
             map.put("token",value);
-
-            List list = userMapper.selectByMap(map);
+            System.out.println(userMapper);
+            List<User> list = userMapper.selectByMap(map);
+            for (Object o : list) {
+                System.out.println(o);
+            }
 
 
             if (list.size()==1){

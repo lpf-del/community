@@ -32,9 +32,33 @@ public class IndexController {
     @SuppressWarnings("all")
     private QuestionDtoService questionDtoService;
     @GetMapping(value = {"/"})
-    public String index(Model model
+    public String index(HttpServletRequest request
+                        , Model model
                         , @RequestParam(name = "page",defaultValue = "1") Integer page){
+//        String value = "";
+//        Cookie[] cookies = request.getCookies();
+//        if (cookies != null && cookies.length != 0){
+//            for (Cookie cookie : cookies) {
+//                if (cookie!=null&&cookie.getName().equals("token")){
+//                    value = cookie.getValue();
+//                    break;
+//                }
+//            }
+//
+//
+//            Map<String,Object> map = new HashMap();
+//            map.put("token",value);
+//
+//            List list = userMapper.selectByMap(map);
+//            System.out.println(userMapper);
+//
+//
+//            if (list.size()==1){
+//                request.getSession().setAttribute("user",list.get(0));
+//            }
+//        }
         PageDTO pageDTO = questionDtoService.List(page);
+
         model.addAttribute("pageDTO",pageDTO);
         return "index";
     }
