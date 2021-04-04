@@ -27,16 +27,6 @@ public class LiController {
     @Autowired
     @SuppressWarnings("all")
     private UserMapper userMapper;
-    @GetMapping("/in/{id}")
-    public String in(@PathVariable("id") Long id, Model model){
-        Question question = questionMapper.selectById(id);
-        question.setViewCount(question.getViewCount()+1);
-        questionMapper.updateById(question);
-        model.addAttribute("title",question.getTitle());
-        model.addAttribute("description",question.getDescription());
-        model.addAttribute("tag",question.getTag());
-        return "publish";
-    }
     public String huifu(@PathVariable("id") Long id,
                             HttpServletRequest request,
                             Model model){

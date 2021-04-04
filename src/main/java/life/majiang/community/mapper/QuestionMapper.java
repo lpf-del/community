@@ -18,4 +18,5 @@ public interface QuestionMapper extends BaseMapper<Question> {
     List<Question> ListsByid(@Param(value = "page") Integer page, @Param(value = "size") Integer size, @Param(value = "id") Long id);
     @Select("select count(1) from question where creator = #{id}")
     Integer countByid(@Param(value = "id") Long id);
+
 }

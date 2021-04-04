@@ -1,5 +1,7 @@
 package life.majiang.community.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.service.QuestionDtoService;
@@ -11,9 +13,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.regex.Pattern;
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 @Controller
@@ -27,12 +28,28 @@ public class QuestionController {
     @SuppressWarnings("all")
     private UtilLi utilLi;
 
+    @Autowired
+    @SuppressWarnings("all")
+    private QuestionMapper questionMapper;
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Long id, Model model){
+    public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
         QuestionDTO questionDTO = questionDtoService.selectById(id);
+        Question question = questionMapper.selectById(id);
+        question.setViewCount(question.getViewCount()+1);
+        questionMapper.updateById(question);
         model.addAttribute("question",questionDTO);
         String time = utilLi.time(questionDTO.getGmtCreate());
         model.addAttribute("time",time);
+        System.out.println(request.getSession().getAttribute("user"));
+        System.out.println(questionDTO);
         return "question";
+    }
+    @GetMapping("/publish/{id}")
+    public String in(@PathVariable("id") Long id, Model model){
+        Question question = questionMapper.selectById(id);
+        model.addAttribute("title",question.getTitle());
+        model.addAttribute("description",question.getDescription());
+        model.addAttribute("tag",question.getTag());
+        return "publish";
     }
 }

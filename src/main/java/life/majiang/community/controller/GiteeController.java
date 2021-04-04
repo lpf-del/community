@@ -53,7 +53,7 @@ public class GiteeController {
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             user.setName(giteeUser.getName());
-            user.setAccountId(String.valueOf(giteeUser.getId()));
+            user.setAccountId(giteeUser.getId());
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(giteeUser.getAvatar_url());

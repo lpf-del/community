@@ -40,8 +40,8 @@ public class IndexController {
 
     @GetMapping("/login")
     public String login(HttpServletRequest request, HttpServletResponse response){
-        request.getSession().invalidate();
-        Cookie remCookie = new Cookie("token","");
+        request.getSession().removeAttribute("user");
+        Cookie remCookie = new Cookie("token",null);
         remCookie.setMaxAge(0);
         response.addCookie(remCookie);
         return "redirect:/";
