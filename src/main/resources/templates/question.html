@@ -21,7 +21,10 @@
             <span class="text-desc">
                 作者：<span th:text="${question.user.getName()}">|</span>
                 发布于：<span th:text="${time}">|</span>
-                阅读数：<span th:text="${question.viewCount}"/>
+                阅读数：<span th:text="${question.viewCount}">|</span>
+                点赞数：<span th:text="${question.getLikeCount()}"></span>
+                       <a  th:href="@{/dianzan/{id}(id = ${question.getId()})}" th:class="${zan == true}?'':'glyphicon glyphicon-thumbs-up'"></a>
+
             </span>
             <hr class="col-lg-12 col-md-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-xs-12" th:text="${question.getDescription()}"></div>

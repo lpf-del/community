@@ -1,10 +1,14 @@
 package life.majiang.community.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
+import life.majiang.community.deo.User;
+import life.majiang.community.deo.Utillpf;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper1.QuestionMapper1;
+import life.majiang.community.mapper1.UtilLpfMapper;
 import life.majiang.community.service.QuestionDtoService;
 import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -30,6 +37,11 @@ public class QuestionController {
     @Autowired
     @SuppressWarnings("all")
     private QuestionMapper1 questionMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private UtilLpfMapper utilLpfMapper;
+
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
         QuestionDTO questionDTO = questionDtoService.selectById(id);
@@ -37,11 +49,22 @@ public class QuestionController {
         if (question == null){
             throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
-        question.setViewCount(question.getViewCount()+1);
-        questionMapper.updateById(question);
+        UpdateWrapper<Question> updateWrapper = new UpdateWrapper<Question>();
+        updateWrapper.setSql("view_count = view_count +1").eq("id",question.getId());
+        questionMapper.update(null,updateWrapper);
         model.addAttribute("question",questionDTO);
         String time = utilLi.time(questionDTO.getGmtCreate());
         model.addAttribute("time",time);
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("wen_zhang_id",question.getId());
+        List<Utillpf> utilLpfs = utilLpfMapper.selectByMap(map);
+        if (utilLpfs.size()==1&&utilLpfs!=null){
+            model.addAttribute("zan",true);
+        }else {
+            model.addAttribute("zan",false);
+        }
+
         return "question";
     }
     @GetMapping("/publish/{id}")
@@ -51,5 +74,29 @@ public class QuestionController {
         model.addAttribute("description",question.getDescription());
         model.addAttribute("tag",question.getTag());
         return "publish";
+    }
+    @GetMapping("/dianzan/{id}")
+    public String dianzan(@PathVariable("id") Long id, HttpServletRequest request, Model model){
+        User user = (User) request.getSession().getAttribute("user");
+
+        if (user==null){
+            model.addAttribute("zan",false);
+            return "redirect:/question/{id}";
+        }
+
+        Question question = questionMapper.selectById(id);
+
+        UpdateWrapper<Question> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.setSql("like_count = like_count + 1").eq("id",id);
+        questionMapper.update(null,updateWrapper);
+
+        Utillpf utilLpf = new Utillpf();
+        utilLpf.setUserName(user.getName());
+        utilLpf.setWenZhangId(question.getId());
+        utilLpf.setDianZan(true);
+        utilLpfMapper.insert(utilLpf);
+
+        model.addAttribute("zan",true);
+        return "redirect:/question/{id}";
     }
 }

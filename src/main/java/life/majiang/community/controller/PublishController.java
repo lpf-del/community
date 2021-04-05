@@ -68,7 +68,7 @@ public class PublishController {
             questionMapper.insert(question);
         }else {
             UpdateWrapper<Question> updateWrapper = new UpdateWrapper<>();
-            updateWrapper.eq("id",id);
+            updateWrapper.eq("id",id).eq("gmt_modified",System.currentTimeMillis());
             Question question1 = questionMapper.selectById(id);
             if (question1 == null){
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);

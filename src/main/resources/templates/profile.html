@@ -32,6 +32,7 @@
                     <span class="text-desc">
                             <span th:text="${question.commentCount}" th:href="@{/huifu/{id}(id=${question.user.getId()})}"/>个回复
                             <span th:text="${question.viewCount}"/>次浏览
+                            <span th:text="${question.getLikeCount()}"/>次点赞
                             <span th:text="${#dates.format(question.gmtCreate,'yyyy-MM-dd HH:mm')}"/>
                         </span>
                     <a th:href="@{/delect/{id}(id=${question.getId()},idi=${question.user.getId()})}">删除</a>
