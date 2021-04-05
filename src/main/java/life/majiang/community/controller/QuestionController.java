@@ -2,6 +2,8 @@ package life.majiang.community.controller;
 
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
+import life.majiang.community.exception.CustomizeErrorCode;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.service.QuestionDtoService;
 import life.majiang.community.utilsli.UtilLi;
@@ -32,13 +34,14 @@ public class QuestionController {
     public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
         QuestionDTO questionDTO = questionDtoService.selectById(id);
         Question question = questionMapper.selectById(id);
+        if (question == null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         question.setViewCount(question.getViewCount()+1);
         questionMapper.updateById(question);
         model.addAttribute("question",questionDTO);
         String time = utilLi.time(questionDTO.getGmtCreate());
         model.addAttribute("time",time);
-        System.out.println(request.getSession().getAttribute("user"));
-        System.out.println(questionDTO);
         return "question";
     }
     @GetMapping("/publish/{id}")

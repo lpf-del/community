@@ -3,6 +3,8 @@ package life.majiang.community.controller;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.User;
+import life.majiang.community.exception.CustomizeErrorCode;
+import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,10 @@ public class PublishController {
         }else {
             UpdateWrapper<Question> updateWrapper = new UpdateWrapper<>();
             updateWrapper.eq("id",id);
+            Question question1 = questionMapper.selectById(id);
+            if (question1 == null){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
             questionMapper.update(question,updateWrapper);
         }
         return "redirect:/";
