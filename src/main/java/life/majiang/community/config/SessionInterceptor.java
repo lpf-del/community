@@ -2,9 +2,7 @@ package life.majiang.community.config;
 
 import life.majiang.community.deo.User;
 import life.majiang.community.mapper.UserMapper;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

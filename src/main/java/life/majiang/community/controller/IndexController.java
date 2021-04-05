@@ -1,10 +1,7 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.deo.Question;
-import life.majiang.community.deo.QuestionDTO;
-import life.majiang.community.deo.User;
-import life.majiang.community.mapper.QuestionMapper;
-import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.mapper1.QuestionMapper;
+import life.majiang.community.mapper1.UserMapper;
 import life.majiang.community.service.PageDTO;
 import life.majiang.community.service.QuestionDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
