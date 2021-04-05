@@ -1,7 +1,9 @@
 package life.majiang.community.controller;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.GiteeUser;
 import life.majiang.community.deo.PrividerToken;
+import life.majiang.community.deo.Question;
 import life.majiang.community.deo.User;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.provider.GiteeProvider;
@@ -57,11 +59,17 @@ public class GiteeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(giteeUser.getAvatar_url());
-
-            userMapper.insert(user);
-
+            Map<String,Object> map = new HashMap<>();
+            map.put("name",giteeUser.getName());
+            List<User> users = userMapper.selectByMap(map);
+            if (users!=null&&users.size()==0){
+                userMapper.insert(user);
+            }else {
+                UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("account_id",giteeUser.getId());
+                userMapper.update(user,updateWrapper);
+            }
             response.addCookie(new Cookie("token", token));
-
             return "redirect:/";
         } else {
             return "redirect:/";
