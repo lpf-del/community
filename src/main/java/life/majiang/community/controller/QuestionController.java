@@ -2,7 +2,7 @@ package life.majiang.community.controller;
 
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
-import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.service.QuestionDtoService;
 import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ public class QuestionController {
 
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper questionMapper;
+    private QuestionMapper1 questionMapper;
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
         QuestionDTO questionDTO = questionDtoService.selectById(id);

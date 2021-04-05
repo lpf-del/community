@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.GiteeUser;
 import life.majiang.community.deo.PrividerToken;
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper1.UserMapper;
+import life.majiang.community.mapper1.UserMapper1;
 import life.majiang.community.provider.GiteeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +35,7 @@ public class GiteeController {
     private GiteeUser giteeUser;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper userMapper;
+    private UserMapper1 userMapper1;
 
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code
@@ -59,13 +59,13 @@ public class GiteeController {
             user.setAvatarUrl(giteeUser.getAvatar_url());
             Map<String,Object> map = new HashMap<>();
             map.put("name",giteeUser.getName());
-            List<User> users = userMapper.selectByMap(map);
+            List<User> users = userMapper1.selectByMap(map);
             if (users!=null&&users.size()==0){
-                userMapper.insert(user);
+                userMapper1.insert(user);
             }else {
                 UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq("account_id",giteeUser.getId());
-                userMapper.update(user,updateWrapper);
+                userMapper1.update(user,updateWrapper);
             }
             response.addCookie(new Cookie("token", token));
             return "redirect:/";

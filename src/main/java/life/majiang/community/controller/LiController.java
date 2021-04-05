@@ -1,8 +1,8 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper1.QuestionMapper;
-import life.majiang.community.mapper1.UserMapper;
+import life.majiang.community.mapper1.QuestionMapper1;
+import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +20,10 @@ import java.util.Map;
 public class LiController {
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper questionMapper;
+    private QuestionMapper1 questionMapper;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper userMapper;
+    private UserMapper1 userMapper1;
     public String huifu(@PathVariable("id") Long id,
                             HttpServletRequest request,
                             Model model){
@@ -42,7 +42,7 @@ public class LiController {
         }
         Map<String,Object> map = new HashMap<>();
         map.put("token",value);
-        List<User> users = userMapper.selectByMap(map);
+        List<User> users = userMapper1.selectByMap(map);
         User user = new User();
         if (users.size()!=0){
             user = users.get(0);

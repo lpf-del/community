@@ -3,8 +3,8 @@ package life.majiang.community.controller;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper.QuestionMapper;
-import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.mapper1.QuestionMapper1;
+import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,10 +20,10 @@ import java.util.Map;
 public class PublishController {
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper questionMapper;
+    private QuestionMapper1 questionMapper;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper userMapper;
+    private UserMapper1 userMapper1;
     @GetMapping("/publish")
     public String publish(){
         return "publish";

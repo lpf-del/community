@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
 
-public interface QuestionMapper extends BaseMapper<Question> {
+public interface QuestionMapper1 extends BaseMapper<Question> {
     @Select("select * from question")
     List<Question> List();
     @Select("select * from question limit #{page},#{size}")

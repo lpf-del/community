@@ -3,7 +3,7 @@ package life.majiang.community;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-@MapperScan("life.majiang.community.mapper")
+@MapperScan(value = {"life.majiang.community.mapper","life.majiang.community.mapper1"})
 @SpringBootApplication
 public class CommunityApplication {
 

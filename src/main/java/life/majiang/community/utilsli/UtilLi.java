@@ -3,7 +3,7 @@ package life.majiang.community.utilsli;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class UtilLi {
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper userMapper;
+    private UserMapper1 userMapper1;
 
     /**
      * 将文章和用户相联系
@@ -28,7 +28,7 @@ public class UtilLi {
         for (Question question : list) {
             Map<String,Object> map = new HashMap<>();
             map.put("account_id",question.getCreator());
-            List<User> users = userMapper.selectByMap(map);
+            List<User> users = userMapper1.selectByMap(map);
             User user = users.get(0);
             QuestionDTO questionDTO = new QuestionDTO();
             BeanUtils.copyProperties(question, questionDTO);

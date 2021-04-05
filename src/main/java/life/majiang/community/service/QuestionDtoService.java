@@ -3,8 +3,8 @@ package life.majiang.community.service;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper1.QuestionMapper;
-import life.majiang.community.mapper1.UserMapper;
+import life.majiang.community.mapper1.QuestionMapper1;
+import life.majiang.community.mapper1.UserMapper1;
 import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import java.util.Map;
 public class QuestionDtoService {
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper questionMapper;
+    private QuestionMapper1 questionMapper;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper userMapper;
+    private UserMapper1 userMapper1;
     @Autowired
     @SuppressWarnings("all")
     UtilLi utilLi;
@@ -61,7 +61,7 @@ public class QuestionDtoService {
         BeanUtils.copyProperties(question, questionDTO);
         Map<String, Object> map = new HashMap<>();
         map.put("account_id",question.getCreator());
-        List<User> users = userMapper.selectByMap(map);
+        List<User> users = userMapper1.selectByMap(map);
         if (users!=null){
             questionDTO.setUser(users.get(0));
         }
