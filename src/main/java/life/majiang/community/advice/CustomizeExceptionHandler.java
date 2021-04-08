@@ -1,5 +1,7 @@
 package life.majiang.community.advice;
 
+import life.majiang.community.deo.ResultDTO;
+import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -13,14 +15,24 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomizeExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    ModelAndView handle(HttpServletRequest request, Throwable e, Model model){
+    Object handle(HttpServletRequest request, Throwable e, Model model){
 //       HttpStatus status = getStatus(request);
-        if (e instanceof CustomizeException){
-            model.addAttribute("message",e.getMessage());
-       }else {
-           model.addAttribute("message","服务器冒烟了,要不然你稍后再试试");
-       }
-       return new ModelAndView("error");
+        String contentType = request.getContentType();
+        if ("application/json".equals(contentType)){
+            if (e instanceof CustomizeException){
+                return ResultDTO.errorOf((CustomizeException) e);
+            }else {
+                return ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
+            }
+        }else {
+            if (e instanceof CustomizeException){
+                model.addAttribute("message",e.getMessage());
+            }else {
+                model.addAttribute("message",CustomizeErrorCode.SYS_ERROR.getMessage());
+            }
+            return new ModelAndView("error");
+        }
+
     }
 
 //    private HttpStatus getStatus(HttpServletRequest request){

@@ -1,16 +1,20 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.deo.Comment;
-import life.majiang.community.deo.CommentDTO;
-import life.majiang.community.deo.User;
+import life.majiang.community.deo.*;
+import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.mapper1.CommentMapper;
+import life.majiang.community.service.CommentService;
+import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 @Controller
 public class CommentController {
@@ -18,23 +22,49 @@ public class CommentController {
     @SuppressWarnings("all")
     private CommentMapper commentMapper;
 
+    @Autowired
+    @SuppressWarnings("all")
+    private CommentService commentService;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private QuestionMapper1 questionMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private UtilLi utilLi;
+
+    @Transactional
+    @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
     public Object post(@RequestBody CommentDTO commentDTO, HttpServletRequest request){
-        User user = (User)request.getSession().getAttribute("user");
+        Map<String,Object> map = utilLi.getmap(commentDTO,request);
 
-        if (user!=null){
-            Comment comment = new Comment();
-            comment.setParentId(commentDTO.getParentId());
-            comment.setContent(commentDTO.getContent());
-            comment.setType(commentDTO.getType());
-            comment.setGmtCreate(System.currentTimeMillis());
-            comment.setGmtModified(comment.getGmtCreate());
-            comment.setCommentator(user.getId());
-            commentMapper.insert(comment);
-        }else {
-            return "redirect:/";
+        User user = (User)map.get("user");
+
+        if (user == null){
+            return ResultDTO.errorOf(203L,"未登录不能进行评论,请先登录");
         }
 
-        return null;
+        Comment comment = new Comment();
+        comment.setParentId(commentDTO.getParentId());
+        comment.setContent(commentDTO.getContent());
+        comment.setType(commentDTO.getType());
+        comment.setGmtCreate(System.currentTimeMillis());
+        comment.setGmtModified(comment.getGmtCreate());
+        comment.setCommentator(user.getId());
+        comment.setLikeCount(0L);
+        commentMapper.insert(comment);
+
+        utilLi.countli(commentDTO);
+
+        return map;
     }
 }
+
+
+
+
+
+
+

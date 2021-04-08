@@ -1,13 +1,15 @@
 package life.majiang.community.utilsli;
 
-import life.majiang.community.deo.Question;
-import life.majiang.community.deo.QuestionDTO;
-import life.majiang.community.deo.User;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import life.majiang.community.deo.*;
+import life.majiang.community.mapper1.CommentMapper;
+import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -17,6 +19,14 @@ public class UtilLi {
     @Autowired
     @SuppressWarnings("all")
     private UserMapper1 userMapper1;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private QuestionMapper1 questionMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private CommentMapper commentMapper;
 
     /**
      * 将文章和用户相联系
@@ -81,5 +91,57 @@ public class UtilLi {
         }
         String[] string = {"年前","月前","天前","小时前","分前","秒前"};
         return String.valueOf(integer) + string[s];
+    }
+
+    public Map<String,Object> getmap(CommentDTO commentDTO, HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>();
+
+        User user = (User)request.getSession().getAttribute("user");
+
+        map.put("user",user);
+
+        if (user == null){
+            return map;
+        }
+
+        if (commentDTO.getContent() == null || commentDTO.getContent().equals("")){
+            map.put("message","不能输入空评论");
+            return map;
+        }
+
+        Question question;
+        Comment comment1;
+
+        if (commentDTO.getType() != null && commentDTO.getType() == 0L){
+            question = questionMapper.selectById(commentDTO.getParentId());
+            if (question == null){
+                map.put("massage","文章被删除");
+                return map;
+            }
+        }else if (commentDTO.getType() != null && commentDTO.getType() == 1L){
+            comment1 = commentMapper.selectById(commentDTO.getParentId());
+            if (comment1 == null){
+                map.put("massage","评论被删除");
+                return map;
+            }
+        }
+
+        map.put("massage","评论成功");
+        return map;
+    }
+
+
+    public void countli(CommentDTO commentDTO) {
+        UpdateWrapper updateWrapper = new UpdateWrapper();
+
+        if (commentDTO.getType() == 0L && commentDTO.getType() != null){
+            updateWrapper.setSql("comment_count = comment_count +1");
+            updateWrapper.eq("id",commentDTO.getParentId());
+            questionMapper.update(null,updateWrapper);
+        }else if (commentDTO.getType() == 1L && commentDTO.getType() != null){
+            updateWrapper.setSql("like_count = like_count +1");
+            updateWrapper.eq("id",commentDTO.getParentId());
+            commentMapper.update(null,updateWrapper);
+        }
     }
 }
