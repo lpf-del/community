@@ -11,7 +11,7 @@ function post(){
             "type":0
         }),
         success:function (response){
-
+            console.log(response)
             if(response.code == 200){
                 $("#comment_content").hide();
             }else {

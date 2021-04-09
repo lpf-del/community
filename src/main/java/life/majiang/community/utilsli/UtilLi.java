@@ -1,5 +1,6 @@
 package life.majiang.community.utilsli;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.*;
 import life.majiang.community.mapper1.CommentMapper;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Component
 public class UtilLi {
@@ -125,7 +128,7 @@ public class UtilLi {
                 return map;
             }
         }
-
+        map.put("code",200);
         map.put("massage","评论成功");
         return map;
     }
@@ -143,5 +146,33 @@ public class UtilLi {
             updateWrapper.eq("id",commentDTO.getParentId());
             commentMapper.update(null,updateWrapper);
         }
+    }
+
+    public List<CommentUserDTO> listByQuestionId(Long id) {
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("type",0L).eq("parent_id",id).orderByDesc("gmt_create");
+        List<Comment> comments = commentMapper.selectList(queryWrapper);
+
+        if (comments.size() == 0){
+            return new ArrayList<>();
+        }
+        //去重评论人
+        Set<Long> commentators = comments.stream().map(comment -> comment.getCommentator()).collect(Collectors.toSet());
+        List<Long> userId = new ArrayList<>();
+        userId.addAll(commentators);
+        //获取评论人并转换为map
+        QueryWrapper<User> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.in("id",userId);
+        List<User> users = userMapper1.selectList(queryWrapper1);
+        Map<Long, User> userMap = users.stream().collect(Collectors.toMap(User::getId, user->user));
+
+        List<CommentUserDTO> commentUserDTOS = comments.stream().map(comment -> {
+            CommentUserDTO commentUserDTO = new CommentUserDTO();
+            BeanUtils.copyProperties(comment,commentUserDTO);
+            commentUserDTO.setUser(userMap.get(comment.getCommentator()));
+            return commentUserDTO;
+        }).collect(Collectors.toList());
+
+        return commentUserDTOS;
     }
 }

@@ -24,10 +24,6 @@ public class CommentController {
 
     @Autowired
     @SuppressWarnings("all")
-    private CommentService commentService;
-
-    @Autowired
-    @SuppressWarnings("all")
     private QuestionMapper1 questionMapper;
 
     @Autowired
@@ -46,17 +42,21 @@ public class CommentController {
             return ResultDTO.errorOf(203L,"未登录不能进行评论,请先登录");
         }
 
-        Comment comment = new Comment();
-        comment.setParentId(commentDTO.getParentId());
-        comment.setContent(commentDTO.getContent());
-        comment.setType(commentDTO.getType());
-        comment.setGmtCreate(System.currentTimeMillis());
-        comment.setGmtModified(comment.getGmtCreate());
-        comment.setCommentator(user.getId());
-        comment.setLikeCount(0L);
-        commentMapper.insert(comment);
+        String message = (String)map.get("message");
+        if (message == null || message == ""){
+            Comment comment = new Comment();
+            comment.setParentId(commentDTO.getParentId());
+            comment.setContent(commentDTO.getContent());
+            comment.setType(commentDTO.getType());
+            comment.setGmtCreate(System.currentTimeMillis());
+            comment.setGmtModified(comment.getGmtCreate());
+            comment.setCommentator(user.getId());
+            comment.setLikeCount(0L);
+            commentMapper.insert(comment);
 
-        utilLi.countli(commentDTO);
+            utilLi.countli(commentDTO);
+        }
+
 
         return map;
     }

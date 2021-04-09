@@ -1,23 +1,27 @@
 package life.majiang.community.controller;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import life.majiang.community.deo.Question;
-import life.majiang.community.deo.QuestionDTO;
-import life.majiang.community.deo.User;
-import life.majiang.community.deo.Utillpf;
+import life.majiang.community.deo.*;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
+import life.majiang.community.mapper1.CommentMapper;
 import life.majiang.community.mapper1.QuestionMapper1;
+import life.majiang.community.mapper1.UserMapper1;
 import life.majiang.community.mapper1.UtilLpfMapper;
 import life.majiang.community.service.QuestionDtoService;
 import life.majiang.community.utilsli.UtilLi;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +46,14 @@ public class QuestionController {
     @SuppressWarnings("all")
     private UtilLpfMapper utilLpfMapper;
 
+    @Autowired
+    @SuppressWarnings("all")
+    private CommentMapper commentMapper;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private UserMapper1 userMapper1;
+
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
         QuestionDTO questionDTO = questionDtoService.selectById(id);
@@ -55,6 +67,26 @@ public class QuestionController {
         model.addAttribute("question",questionDTO);
         String time = utilLi.time(questionDTO.getGmtCreate());
         model.addAttribute("time",time);
+
+
+
+        //1
+//        Map<String,Object> map1 = new HashMap<>();
+//        map1.put("parent_id",id);
+//        List<Comment> comments = commentMapper.selectByMap(map1);
+//        List<CommentUserDTO> listcomment = new ArrayList<>();
+//        for (Comment comment : comments) {
+//            CommentUserDTO commentUserDTO = new CommentUserDTO();
+//            BeanUtils.copyProperties(comment,commentUserDTO);
+//            User user = userMapper1.selectById(comment.getCommentator());
+//            commentUserDTO.setUser(user);
+//            listcomment.add(commentUserDTO);
+//        }
+        //2
+        List<CommentUserDTO> list = utilLi.listByQuestionId(id);
+
+        model.addAttribute("comments",list);
+
 
         Map<String,Object> map = new HashMap<>();
         map.put("wen_zhang_id",question.getId());
@@ -75,11 +107,43 @@ public class QuestionController {
         model.addAttribute("tag",question.getTag());
         return "publish";
     }
-    @GetMapping("/dianzan/{id}")
-    public String dianzan(@PathVariable("id") Long id, HttpServletRequest request, Model model){
+    @GetMapping("/dianzan1/{id}/{idi}")
+    public String dianzan(@PathVariable("id") Long id, @PathVariable("idi") Long idi, HttpServletRequest request, Model model){
         User user = (User) request.getSession().getAttribute("user");
 
-        if (user==null){
+        Map<String,Object> map = new HashMap<>();
+        map.put("user_name",user.getName());
+        List<Utillpf> utillpfs = utilLpfMapper.selectByMap(map);
+
+        if (user==null || utillpfs.size() != 0){
+            model.addAttribute("zan1",false);
+            return "redirect:/question/{id}";
+        }
+
+        Comment comment = commentMapper.selectById(idi);
+
+        UpdateWrapper<Comment> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.setSql("like_count = like_count + 1").eq("id",idi);
+        commentMapper.update(null,updateWrapper);
+
+        Utillpf utilLpf = new Utillpf();
+        utilLpf.setUserName(user.getName());
+        utilLpf.setWenZhangId(comment.getId());
+        utilLpf.setDianZan(true);
+        utilLpfMapper.insert(utilLpf);
+
+        model.addAttribute("zan1",true);
+        return "redirect:/question/{id}";
+    }
+    @GetMapping("/dianzan/{id}")
+    public String dianzan1(@PathVariable("id") Long id, HttpServletRequest request, Model model){
+        User user = (User) request.getSession().getAttribute("user");
+
+        Map<String,Object> map = new HashMap<>();
+        map.put("user_name",user.getName());
+        List<Utillpf> utillpfs = utilLpfMapper.selectByMap(map);
+
+        if (user==null || utillpfs.size() != 0){
             model.addAttribute("zan",false);
             return "redirect:/question/{id}";
         }
