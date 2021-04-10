@@ -62,21 +62,11 @@ public class QuestionController {
         String time = utilLi.time(questionDTO.getGmtCreate());
         model.addAttribute("time",time);
 
+        List<Question> questionList= utilLi.selectRelated(questionDTO);
+        System.out.println(questionList);
+       model.addAttribute("relatedQuestions",questionList);
 
 
-        //1
-//        Map<String,Object> map1 = new HashMap<>();
-//        map1.put("parent_id",id);
-//        List<Comment> comments = commentMapper.selectByMap(map1);
-//        List<CommentUserDTO> listcomment = new ArrayList<>();
-//        for (Comment comment : comments) {
-//            CommentUserDTO commentUserDTO = new CommentUserDTO();
-//            BeanUtils.copyProperties(comment,commentUserDTO);
-//            User user = userMapper1.selectById(comment.getCommentator());
-//            commentUserDTO.setUser(user);
-//            listcomment.add(commentUserDTO);
-//        }
-        //2
         List<CommentUserDTO> list = utilLi.listByQuestionId(id,0L);
 
         model.addAttribute("comments",list);

@@ -56,11 +56,8 @@ function collapseComments(e){
             e.setAttribute("data-collapse", "in");
             e.classList.add("active");
         }else {
-
-
         $.getJSON("/comment/" + data1, function (data) {
             $.each(data.data.reverse(), function (index, comment) {
-                console.log(comment)
                 var mediaLeftElement = $("<div/>", {
                     "class": "media-left"
                 }).append($("<img/>", {
@@ -79,7 +76,7 @@ function collapseComments(e){
                     "class": "menu"
                 }).append($("<span/>", {
                     "class": "pull-right",
-                    "html": moment(comment.gmtCreate).format('MM-DD')
+                    // "html": moment(comment.gmtCreate).format('MM-DD')
                 })));
 
                 var mediaElement = $("<div/>", {

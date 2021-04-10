@@ -9,6 +9,7 @@ import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
@@ -174,5 +175,20 @@ public class UtilLi {
         }).collect(Collectors.toList());
 
         return commentUserDTOS;
+    }
+
+    public List<Question> selectRelated(QuestionDTO questionDTO) {
+        if (questionDTO.getTag() == null){
+            return new ArrayList<>();
+        }
+        Pattern p = Pattern.compile("[|]");
+        String[] split = p.split(questionDTO.getTag());
+        
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.like("tag",split[0]);
+        queryWrapper.notIn("id",questionDTO.getId());
+        List<Question> list = questionMapper.selectList(queryWrapper);
+        queryWrapper.toString();
+        return list;
     }
 }
