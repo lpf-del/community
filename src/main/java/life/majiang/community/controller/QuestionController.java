@@ -1,7 +1,5 @@
 package life.majiang.community.controller;
 
-import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.*;
 import life.majiang.community.exception.CustomizeErrorCode;
@@ -12,16 +10,12 @@ import life.majiang.community.mapper1.UserMapper1;
 import life.majiang.community.mapper1.UtilLpfMapper;
 import life.majiang.community.service.QuestionDtoService;
 import life.majiang.community.utilsli.UtilLi;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,10 +77,9 @@ public class QuestionController {
 //            listcomment.add(commentUserDTO);
 //        }
         //2
-        List<CommentUserDTO> list = utilLi.listByQuestionId(id);
+        List<CommentUserDTO> list = utilLi.listByQuestionId(id,0L);
 
         model.addAttribute("comments",list);
-
 
         Map<String,Object> map = new HashMap<>();
         map.put("wen_zhang_id",question.getId());
@@ -98,6 +91,13 @@ public class QuestionController {
         }
 
         return "question";
+    }
+    @ResponseBody
+    @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
+    public ResultDTO comment(@PathVariable(name = "id") Long id){
+        Comment comment = commentMapper.selectById(id);
+        List<CommentUserDTO> list = utilLi.listByQuestionId(id,1L);
+        return ResultDTO.ok(list);
     }
     @GetMapping("/publish/{id}")
     public String in(@PathVariable("id") Long id, Model model){

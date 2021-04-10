@@ -27,6 +27,7 @@
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <span id="qu_id" ></span>
             <h3><span th:text="${question.title}"></span></h3>
             <hr>
             <span class="text-desc">
@@ -45,7 +46,7 @@
             </div>
             <h4 th:text="${question.getCommentCount()}">个回复</h4>
 <!--            回复-->
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" th:each="comment :${comments}">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 comments" th:each="comment :${comments}">
                 <div class="media">
                     <div class="media-left">
                         <a>
@@ -58,9 +59,15 @@
                         </h3>
                         <div th:text="${comment.getContent()}"></div>
                         <div class="menu">
-                            <a  th:href="@{/dianzan1/{id}/{idi}(id = ${question.getId()} ,idi = ${comment.getId()})}" th:class="${zan1 == true}?'':'glyphicon glyphicon-thumbs-up icon'"></a>
-                            <span class="glyphicon glyphicon-comment icon"></span>
+                            <a  th:href="@{/dianzan1/{id}/{idi}(id = ${question.getId()} ,idi = ${comment.getId()})}" th:class="${zan == true}?'':'glyphicon glyphicon-thumbs-up icon'"></a>
+                            <span class="glyphicon glyphicon-comment icon" th:data-id="${comment.id}" onclick="collapseComments(this)"></span>
                             <span class="pull-right" th:text="${#dates.format(comment.gmtCreate,'MM-dd')}"></span>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse"  th:id="${'comment-' + comment.id}" >
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <input type="text" class="form-control" id="comment_content1" placeholder="评论一下">
+                                <button type="button" class="btn btn-success pull-right"  th:id="${comment.id}" onclick="post(1,this)">评论</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,7 +89,7 @@
                 </div>
                 <input type="hidden" id="question_id" th:value="${question.id}">
                 <textarea class="form-control comment" rows="6" id="comment_content"></textarea>
-                <button type="button" class="btn-publish btn btn-success" onclick="post()">回复</button>
+                <button type="button" class="btn-publish btn btn-success"  th:id="${question.id}" onclick="post(0,this)">回复</button>
             </div>
         </div>
 

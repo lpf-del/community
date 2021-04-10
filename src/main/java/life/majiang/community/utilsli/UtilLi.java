@@ -148,9 +148,9 @@ public class UtilLi {
         }
     }
 
-    public List<CommentUserDTO> listByQuestionId(Long id) {
+    public List<CommentUserDTO> listByQuestionId(Long id, Long i) {
         QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("type",0L).eq("parent_id",id).orderByDesc("gmt_create");
+        queryWrapper.eq("type",i).eq("parent_id",id).orderByDesc("gmt_create");
         List<Comment> comments = commentMapper.selectList(queryWrapper);
 
         if (comments.size() == 0){
