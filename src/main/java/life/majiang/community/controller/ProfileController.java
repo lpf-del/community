@@ -1,6 +1,9 @@
 package life.majiang.community.controller;
 
+import life.majiang.community.deo.Ifica;
+import life.majiang.community.deo.Notification;
 import life.majiang.community.deo.User;
+import life.majiang.community.mapper1.NotificationMapper;
 import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.mapper1.UserMapper1;
 import life.majiang.community.service.PageDTO;
@@ -13,6 +16,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class ProfileController {
@@ -25,6 +32,11 @@ public class ProfileController {
     @Autowired
     @SuppressWarnings("all")
     private QuestionDtoService questionDtoService;
+
+    @Autowired
+    @SuppressWarnings("all")
+    private NotificationMapper notificationMapper;
+
     @GetMapping("/profile/{action}")
     public String profile(@PathVariable(name = "action") String action,
                           Model model,
@@ -42,8 +54,30 @@ public class ProfileController {
 
         User user= (User)request.getSession().getAttribute("user");
         if (user!=null){
-            PageDTO pageDTO = questionDtoService.Listwen(page,user.getAccountId());
-            model.addAttribute("pageDTO",pageDTO);
+            if(action.equals("question")){
+                PageDTO pageDTO = questionDtoService.Listwen(page,user.getAccountId());
+                model.addAttribute("pageDTO",pageDTO);
+            }else if (action.equals("repies")){
+                Map<String,Object> map = new HashMap<>();
+                map.put("receiver",user.getAccountId());
+                List<Notification> notifications = notificationMapper.selectByMap(map);
+
+
+                List<Ifica> list = new ArrayList<>();
+                for (Notification notification : notifications) {
+                    User user1 = userMapper1.selectById(notification.getNotifier());
+                    Ifica ifica = new Ifica();
+                    ifica.setS1(user1.getName());
+                    Long type = notification.getType();
+                    if (type == 0L || type == 1L){
+                        ifica.setS2("  回复你  ");
+                    }
+                    ifica.setS3(notification.getIfication());
+                    ifica.setId(notification.getQuestionId());
+                    list.add(ifica);
+                }
+                model.addAttribute("unreadCounts",list);
+            }
         }else {
             return "redirect:/";
         }

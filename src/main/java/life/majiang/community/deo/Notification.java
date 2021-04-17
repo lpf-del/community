@@ -16,4 +16,6 @@ public class Notification {
     private Long type;
     private Long gmtCreate;
     private Boolean status;
+    private String ification;
+    private Long questionId;
 }

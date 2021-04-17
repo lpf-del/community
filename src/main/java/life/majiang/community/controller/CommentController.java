@@ -1,6 +1,7 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.deo.*;
+import life.majiang.community.mapper1.NotificationMapper;
 import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.mapper1.CommentMapper;
 import life.majiang.community.service.CommentService;
@@ -30,6 +31,10 @@ public class CommentController {
     @SuppressWarnings("all")
     private UtilLi utilLi;
 
+    @Autowired
+    @SuppressWarnings("all")
+    private NotificationMapper notificationMapper;
+
     @Transactional
     @ResponseBody
     @RequestMapping(value = "/comment", method = RequestMethod.POST)
@@ -56,6 +61,8 @@ public class CommentController {
 
             utilLi.countli(commentDTO);
         }
+
+        utilLi.tongzhi(commentDTO.getType(),commentDTO,request);
 
 
         return map;

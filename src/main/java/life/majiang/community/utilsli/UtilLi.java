@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.*;
 import life.majiang.community.mapper1.CommentMapper;
+import life.majiang.community.mapper1.NotificationMapper;
 import life.majiang.community.mapper1.QuestionMapper1;
 import life.majiang.community.mapper1.UserMapper1;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,11 @@ public class UtilLi {
     @Autowired
     @SuppressWarnings("all")
     private CommentMapper commentMapper;
+
+
+    @Autowired
+    @SuppressWarnings("all")
+    private NotificationMapper notificationMapper;
 
     /**
      * 将文章和用户相联系
@@ -190,5 +196,18 @@ public class UtilLi {
         List<Question> list = questionMapper.selectList(queryWrapper);
         queryWrapper.toString();
         return list;
+    }
+
+    public void tongzhi(long l, CommentDTO commentDTO,HttpServletRequest request) {
+        User user = (User)request.getSession().getAttribute("user");
+        Question question = questionMapper.selectById(commentDTO.getParentId());
+        Notification notification = new Notification();
+        notification.setGmtCreate(System.currentTimeMillis());
+        notification.setNotifier(user.getId());
+        notification.setReceiver(question.getCreator());
+        notification.setType(l);
+        notification.setIfication(commentDTO.getContent());
+        notification.setQuestionId(commentDTO.getParentId());
+        notificationMapper.insert(notification);
     }
 }

@@ -85,7 +85,6 @@ public class QuestionController {
     @ResponseBody
     @RequestMapping(value = "/comment/{id}", method = RequestMethod.GET)
     public ResultDTO comment(@PathVariable(name = "id") Long id){
-        Comment comment = commentMapper.selectById(id);
         List<CommentUserDTO> list = utilLi.listByQuestionId(id,1L);
         return ResultDTO.ok(list);
     }

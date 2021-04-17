@@ -15,10 +15,10 @@
 <div th:insert="~{navigation :: nav}"></div>
 <div class="container-fluid main profile">
     <div class="row">
-        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+        <div  th:if="${pageDTO != null}" class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h3><span th:text="${sectionName}"></span></h3>
             <hr>
-            <div class="media" th:each="question : ${pageDTO.questionDTOS}">
+            <div class="media"  th:each="question : ${pageDTO.questionDTOS}">
                 <div class="media-left">
                     <a th:href="@{/question/{id}(id=${question.getId()})}">
                         <img class="media-object media-object1  img-rounded" th:src="${question.user.avatarUrl}" >
@@ -68,12 +68,20 @@
                 </ul>
             </nav>
         </div>
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12 comments" th:each="unreadCount :${unreadCounts}">
+            <div class="media-body">
+                <a href="#" style="font-size: 28px;" th:text="${unreadCount.getS1()}"></a>
+                <a style="color: #0f0f0f;" th:text="${unreadCount.getS2()}"></a>
+                <a style="font-size: 28px;" th:href="@{/question/{id}(id = ${unreadCount.getId()})}" th:text="${unreadCount.getS3()}"></a>
+            </div>
+        </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
             <div class="list-group section">
                 <a href="/profile/question"  th:class="${section =='question'}?'active list-group-item':'list-group-item'">我的问题</a>
                 <a href="/profile/repies"  th:class="${section == 'repies'}?'active list-group-item':'list-group-item'">
                     最新回复
-                    <span class="badge">11</span>
+
+
                 </a>
             </div>
         </div>
