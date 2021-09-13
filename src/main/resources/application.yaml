@@ -2,15 +2,34 @@ gitee:
   oauth:
     clientid: "266407dfe065073d7c2b9b75183a9558ee8b6661b6587fc88e20277cbe2b6d3a"
     clientsecret: "578cb20e60e35b5326ace875fd3b80850caf83b00b5ed2f98270a5d44197b887"
-    callback: "http://localhost:8888/callback"
+    callback: "http://121.40.218.249:8888/callback"
 
-spring:
-  datasource:
-    url: jdbc:h2:~/community
-    driver-class-name: org.h2.Driver
-
+#spring:
+#  datasource:
+#    url: jdbc:h2:~/community
+#    driver-class-name: org.h2.Driver
+#  h2:
+#    console:
+#      settings:
+#        web-allow-others: true
+#      path: /h2
+#      enabled: true
+#    jdbc:h2:tcp://lpf-pqcm:9092/~/community
+# http://lpf-pqcm:9092/home/lpf
+#  spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+#  spring.datasource.url=jdbc:mysql://localhost:3306/test
+#  spring.datasource.username=root
+#  spring.datasource.password=
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
   type-aliases-package: life.majiang.community.mapper
   mapper-locations: classpath:resources/mapper/*.xml
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://121.40.218.249:3306/lpf_commity?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+    username: root
+    password: 123456
+    type: com.alibaba.druid.pool.DruidDataSource

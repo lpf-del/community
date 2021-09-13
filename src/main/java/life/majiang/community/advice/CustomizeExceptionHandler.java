@@ -15,31 +15,24 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomizeExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    Object handle(HttpServletRequest request, Throwable e, Model model){
+    Object handle(HttpServletRequest request, Throwable e, Model model) {
 //       HttpStatus status = getStatus(request);
         String contentType = request.getContentType();
-        if ("application/json".equals(contentType)){
-            if (e instanceof CustomizeException){
+        if ("application/json".equals(contentType)) {
+            if (e instanceof CustomizeException) {
                 return ResultDTO.errorOf((CustomizeException) e);
-            }else {
+            } else {
                 return ResultDTO.errorOf(CustomizeErrorCode.SYS_ERROR);
             }
-        }else {
-            if (e instanceof CustomizeException){
-                model.addAttribute("message",e.getMessage());
-            }else {
-                model.addAttribute("message",CustomizeErrorCode.SYS_ERROR.getMessage());
+        } else {
+            if (e instanceof CustomizeException) {
+                model.addAttribute("message", e.getMessage());
+            } else {
+                model.addAttribute("message", CustomizeErrorCode.SYS_ERROR.getMessage());
             }
             return new ModelAndView("error");
         }
 
     }
 
-//    private HttpStatus getStatus(HttpServletRequest request){
-//        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-//        if (statusCode == null){
-//            return HttpStatus.INTERNAL_SERVER_ERROR;
-//        }
-//        return HttpStatus.valueOf(statusCode);
-//    }
 }

@@ -1,9 +1,7 @@
-package life.majiang.community.mapper1;
+package life.majiang.community.mapper;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import life.majiang.community.deo.Comment;
-import life.majiang.community.deo.User;
 
 public interface CommentMapper extends BaseMapper<Comment> {
 }

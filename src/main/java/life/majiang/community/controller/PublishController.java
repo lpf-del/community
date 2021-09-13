@@ -5,8 +5,8 @@ import life.majiang.community.deo.Question;
 import life.majiang.community.deo.User;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
-import life.majiang.community.mapper1.QuestionMapper1;
-import life.majiang.community.mapper1.UserMapper1;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,10 +22,10 @@ import java.util.Map;
 public class PublishController {
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper1 questionMapper;
+    private QuestionMapper questionMapper;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
+    private UserMapper userMapper1;
     @GetMapping("/publish")
     public String publish(){
         return "publish";

@@ -1,4 +1,4 @@
-package life.majiang.community.mapper1;
+package life.majiang.community.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import life.majiang.community.deo.Utillpf;

@@ -35,12 +35,13 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a th:href="@{/profile/question/(page=1)}">个人中心</a></li>
-                        <li><a href="#">个人资料</a></li>
+                        <li><a href="/homePage">个人主页</a></li>
                         <li><a href="/login">退出登录</a></li>
                     </ul>
                 </li>
                 <li th:if="${session.user==null}">
-                    <a href="https://gitee.com/oauth/authorize?client_id=266407dfe065073d7c2b9b75183a9558ee8b6661b6587fc88e20277cbe2b6d3a&redirect_uri=http://localhost:8888/callback&response_type=code&state=1">登录</a>
+<!--                    <a href="https://gitee.com/oauth/authorize?client_id=266407dfe065073d7c2b9b75183a9558ee8b6661b6587fc88e20277cbe2b6d3a&redirect_uri=http://121.40.218.249:8888/callback&response_type=code&state=1">登录</a>-->
+                    <a th:href="@{/log}">登录</a>
                 </li>
             </ul>
         </div>

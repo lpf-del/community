@@ -3,31 +3,29 @@ package life.majiang.community.utilsli;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.*;
-import life.majiang.community.mapper1.CommentMapper;
-import life.majiang.community.mapper1.NotificationMapper;
-import life.majiang.community.mapper1.QuestionMapper1;
-import life.majiang.community.mapper1.UserMapper1;
+import life.majiang.community.mapper.CommentMapper;
+import life.majiang.community.mapper.NotificationMapper;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Component
 public class UtilLi {
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
+    private UserMapper userMapper1;
 
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper1 questionMapper;
+    private QuestionMapper questionMapper;
 
     @Autowired
     @SuppressWarnings("all")

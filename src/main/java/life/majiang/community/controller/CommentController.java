@@ -1,10 +1,9 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.deo.*;
-import life.majiang.community.mapper1.NotificationMapper;
-import life.majiang.community.mapper1.QuestionMapper1;
-import life.majiang.community.mapper1.CommentMapper;
-import life.majiang.community.service.CommentService;
+import life.majiang.community.mapper.NotificationMapper;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,7 @@ public class CommentController {
 
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper1 questionMapper;
+    private QuestionMapper questionMapper;
 
     @Autowired
     @SuppressWarnings("all")
@@ -68,6 +67,7 @@ public class CommentController {
         return map;
     }
 }
+
 
 
 

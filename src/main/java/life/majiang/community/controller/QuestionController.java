@@ -4,10 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.*;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
-import life.majiang.community.mapper1.CommentMapper;
-import life.majiang.community.mapper1.QuestionMapper1;
-import life.majiang.community.mapper1.UserMapper1;
-import life.majiang.community.mapper1.UtilLpfMapper;
+import life.majiang.community.mapper.CommentMapper;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.mapper.UtilLpfMapper;
 import life.majiang.community.service.QuestionDtoService;
 import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ public class QuestionController {
 
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper1 questionMapper;
+    private QuestionMapper questionMapper;
 
     @Autowired
     @SuppressWarnings("all")
@@ -46,7 +46,7 @@ public class QuestionController {
 
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
+    private UserMapper userMapper1;
 
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){

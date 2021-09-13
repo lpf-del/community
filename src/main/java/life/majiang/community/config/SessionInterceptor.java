@@ -1,7 +1,7 @@
 package life.majiang.community.config;
 
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper1.UserMapper1;
+import life.majiang.community.mapper.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
+    private UserMapper userMapper1;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String value = "";
@@ -32,13 +32,16 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
 
-            Map<String,Object> map = new HashMap();
-            map.put("token",value);
-            List<User> list = userMapper1.selectByMap(map);
+//            Map<String,Object> map = new HashMap();
+//            map.put("token",value);
+//            List<User> list = userMapper1.selectByMap(map);
 
-            if (list.size()==1){
-                request.getSession().setAttribute("user",list.get(0));
-            }
+//            if (list.size()==1){
+//                request.getSession().setAttribute("user",list.get(0));
+//            }
+            User user = new User();
+            user.setName("lpf");
+            request.getSession().setAttribute("user", user);
         }
         return true;
     }

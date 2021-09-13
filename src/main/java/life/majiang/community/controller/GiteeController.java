@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.GiteeUser;
 import life.majiang.community.deo.PrividerToken;
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper1.UserMapper1;
+import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.provider.GiteeProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
@@ -35,8 +36,12 @@ public class GiteeController {
     private GiteeUser giteeUser;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
-
+    private UserMapper userMapper1;
+    @GetMapping("/log")
+    public String loin(HttpServletResponse response, HttpServletRequest request){
+        response.addCookie(new Cookie("token", "111"));
+        return "redirect:/";
+    }
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code
             , @RequestParam("state") String state
@@ -48,7 +53,7 @@ public class GiteeController {
         prividerToken.setState(state);
         String accessToken = giteeProvider.getAccessToken(prividerToken);
         giteeUser = giteeProvider.getUser(accessToken);
-        if (giteeUser != null/* && giteeUser.getId()!= null*/) {
+        if (giteeUser != null) {
             User user = new User();
             String token = UUID.randomUUID().toString();
             user.setToken(token);

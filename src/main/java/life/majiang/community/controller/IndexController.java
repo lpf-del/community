@@ -1,7 +1,7 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.mapper1.QuestionMapper1;
-import life.majiang.community.mapper1.UserMapper1;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.service.PageDTO;
 import life.majiang.community.service.QuestionDtoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 public class IndexController {
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
+    private UserMapper userMapper1;
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper1 questionMapper;
+    private QuestionMapper questionMapper;
     @Autowired
     @SuppressWarnings("all")
     private QuestionDtoService questionDtoService;

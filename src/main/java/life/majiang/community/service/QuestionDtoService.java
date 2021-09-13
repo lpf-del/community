@@ -3,8 +3,8 @@ package life.majiang.community.service;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.QuestionDTO;
 import life.majiang.community.deo.User;
-import life.majiang.community.mapper1.QuestionMapper1;
-import life.majiang.community.mapper1.UserMapper1;
+import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.utilsli.UtilLi;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import java.util.Map;
 public class QuestionDtoService {
     @Autowired
     @SuppressWarnings("all")
-    private QuestionMapper1 questionMapper;
+    private QuestionMapper questionMapper;
     @Autowired
     @SuppressWarnings("all")
-    private UserMapper1 userMapper1;
+    private UserMapper userMapper1;
     @Autowired
     @SuppressWarnings("all")
     UtilLi utilLi;
@@ -33,7 +33,7 @@ public class QuestionDtoService {
         if (page>=maxsize){
             page=maxsize;
         }
-        List<Question> list = questionMapper.Lists((page-1)*10,10);
+        List<Question> list = questionMapper.Lists(0,10);
         List<QuestionDTO> questionDTOList = utilLi.questionDTOList(list);
         pageDTO.setQuestionDTOS(questionDTOList);
         pageDTO.pages(page,maxsize);
