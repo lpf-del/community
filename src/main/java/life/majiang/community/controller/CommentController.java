@@ -4,7 +4,7 @@ import life.majiang.community.deo.*;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.CommentMapper;
-import life.majiang.community.utilsli.UtilLi;
+import life.majiang.community.util.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;

@@ -4,6 +4,7 @@ import life.majiang.community.deo.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -23,8 +24,18 @@ public class homePageController {
     }
 
     @GetMapping("/personalInformation")
-    public String personalInformation(){
-        return null;
+    public String personalInformation(HttpServletRequest request){
+        Cookie[] cookies = request.getCookies();
+        Cookie cookie = null;
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals("user")){
+                cookie = cookies[i];
+                break;
+            }
+        }
+        String value = cookie.getValue();
+
+        return "personalInformation";
     }
 
 }

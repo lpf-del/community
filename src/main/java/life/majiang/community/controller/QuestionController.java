@@ -9,7 +9,7 @@ import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.mapper.UtilLpfMapper;
 import life.majiang.community.service.QuestionDtoService;
-import life.majiang.community.utilsli.UtilLi;
+import life.majiang.community.util.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

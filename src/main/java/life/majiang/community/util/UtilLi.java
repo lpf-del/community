@@ -1,4 +1,4 @@
-package life.majiang.community.utilsli;
+package life.majiang.community.util;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
