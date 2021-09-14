@@ -41,6 +41,8 @@ public class SessionInterceptor implements HandlerInterceptor {
 //            }
             User user = new User();
             user.setName("lpf");
+            user.setGmtCreate(1627982267510L);
+            user.setAccountId(8871126L);
             request.getSession().setAttribute("user", user);
         }
         return true;

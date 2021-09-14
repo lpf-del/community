@@ -17,8 +17,13 @@ public class homePageController {
 
     @GetMapping("/homePage")
     public String homePage(HttpServletRequest request){
-        User user = (User)request.getSession().getAttribute("user");
-        user.getName();
+//        User user = (User)request.getSession().getAttribute("user");
+//        user.getName();
+        return "homePage";
+    }
+
+    @GetMapping("/personalInformation")
+    public String personalInformation(){
         return null;
     }
 

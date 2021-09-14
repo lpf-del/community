@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").excludePathPatterns("/static/**", "/callback");
+        registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").excludePathPatterns("/static/**", "/callback","/static/img");
     }
 
 }

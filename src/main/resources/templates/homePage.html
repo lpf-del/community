@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+	<head>
+		<title>主页</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<!--    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+<!--		<link rel="stylesheet" href="/css/community.css">-->
+		<script src="/js/jquery-3.6.0.min.js"></script>
+		<script src="/js/bootstrap.min.js" type="application/javascript"></script>
+		<style type="text/css">
+			::-webkit-scrollbar {
+				display: none;
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+			}
+
+			ul>li {
+				list-style: none;
+			}
+
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+			}
+
+			nav {
+				font-size: 14px;
+				font-weight: 400;
+				color: #222226;
+				background: #fff;
+				/*-webkit-box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);*/
+				/*box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);*/
+				position: relative;
+			}
+
+			section {
+				padding: 0 68px;
+				width: 100%;
+				max-width: 1796px;
+				min-width: 1280px;
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				min-height: 700px;
+				margin: 16px auto 0;
+				background: #f4f5f5
+			}
+
+			footer {}
+
+			header {
+				height: 300px;
+				width: 100%;
+			}
+
+			header>.tuPian {
+				height: 6.25rem;
+				background-image: url(/img/homePageHead.jpg);
+				background-size: 100% 100%;
+				color: azure;
+				font-size: 20px;
+			}
+
+			header>.tuPian>p {
+				padding-top: 20px;
+				padding-left: 20px;
+			}
+
+			header>.touXiang {
+				position: relative;
+				margin-bottom: 32px;
+			}
+
+			header>.touXiang>.bianJi {
+				align-items: center;
+				font-size: 14px;
+				width: 96px;
+				text-align: center;
+				height: 32px;
+				border-radius: 20px;
+				margin-left: 16px;
+				background: #fc5531;
+				color: #fff;
+				border: none;
+				justify-content: center;
+				-webkit-box-align: center;
+				display: flex;
+				-webkit-box-pack: center;
+			}
+
+			.zhaoPian {
+				position: absolute;
+				left: 50%;
+				transform: translateX(-50%);
+				top: -36px;
+				width: 104px;
+				height: 104px;
+				border: 4px solid #fff;
+				border-radius: 50%;
+				background: #fff;
+			}
+
+			.zhaoPian>img {
+				width: 100%;
+				height: 100%;
+				display: block;
+				border-radius: 50%;
+			}
+
+			.bianJi {
+				display: flex;
+				float: right;
+				justify-content: center;
+				align-items: center;
+				font-size: 14px;
+				width: 96px;
+				text-align: center;
+				height: 32px;
+				border-radius: 20px;
+				margin-left: 16px;
+				margin-top: 15px;
+				margin-right: 20px;
+			}
+
+			.paiMing {
+				display: flex;
+				-webkit-box-pack: center;
+				justify-content: center;
+				margin-top: 100px;
+			}
+
+			.paiMing>ul {
+				display: flex;
+			}
+
+			.paiMing>ul>li {
+				width: 144px;
+				display: flex;
+				-webkit-box-orient: vertical;
+				-webkit-box-direction: normal;
+				flex-direction: column;
+				-webkit-box-align: center;
+				align-items: center;
+				position: relative;
+			}
+
+			.paiMing>ul>li>.one {
+				color: #222226;
+				font-family: DINCond-Black;
+				font-size: 24px;
+				line-height: 24px;
+				margin-bottom: 16px;
+			}
+
+			.paiMing>ul>li>.two {
+				color: #999aaa;
+				font-size: 14px;
+				line-height: 16px;
+			}
+
+			.section {
+				padding: 0 0px;
+				width: 100%;
+				max-width: 1796px;
+				min-width: 1280px;
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				min-height: 700px;
+				margin: 16px auto 0;
+			}
+
+			.section>.section_left {
+				width: 334px;
+				-webkit-box-flex: 0;
+				flex: none;
+				margin-right: 16px;
+			}
+
+			.section>.section_right {
+				-webkit-box-flex: 1;
+				flex: 0.9;
+			}
+
+			.JiaRu {
+				margin-bottom: 16px;
+				background: #fff;
+				padding: 16px;
+				padding: 13px 16px;
+			}
+
+			.ChengJiu {
+				background: #fff;
+				margin-bottom: 16px;
+			}
+
+			.ChengJiu>.chengjiu1 {
+				font-size: 16px;
+				color: #222226;
+				font-weight: 500;
+				line-height: 48px;
+				padding-left: 16px;
+				border-bottom: 1px solid #e8e8ed;
+			}
+
+			.ChengJiu>.chengjiu2 {
+				box-sizing: border-box;
+				padding: 16px;
+				font-family: PingFang SC, Hiragino Sans GB, Arial, Microsoft YaHei, Verdana, Roboto, Noto, Helvetica Neue, sans-serif;
+			}
+
+			.chengjiu>ul {
+				list-style: none;
+			}
+
+			.chengjiu {}
+
+			.chengjiu>ul>li {
+				margin-bottom: 16px;
+				color: #555666;
+				font-size: 14px;
+				line-height: 24px;
+				display: -webkit-box;
+				display: flex;
+			}
+
+			.chengjiu>ul>li>i {
+				margin-right: 16px;
+				width: 24px;
+				height: 24px;
+				display: block;
+				background-size: cover;
+			}
+
+			.chengjiu>ul>li>div {
+				margin-bottom: 16px;
+				color: #555666;
+				font-size: 14px;
+				line-height: 24px;
+				display: -webkit-box;
+
+				display: flex;
+			}
+
+			.chengjiu>ul>li>div>span {
+				font-size: 16px;
+				color: #222226;
+				font-weight: 500;
+				margin: 0 4px;
+			}
+
+			.navList-box {
+				width: 100%;
+				position: relative;
+			}
+
+			.navList-box>.navList {
+				width: 100%;
+				height: 48px;
+				line-height: 48px;
+				background: #fff;
+				/*-webkit-box-shadow: 0 1px 8px 0 rgb(0 0 0 / 4%);*/
+				/*box-shadow: 0 1px 8px 0 rgb(0 0 0 / 4%);*/
+				display: -webkit-box;
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+				padding-right: 16px;
+				-webkit-transform: translateZ(0);
+				transform: translateZ(0);
+			}
+
+			.navList>ul {
+				font-size: 16px;
+				color: #555666;
+			}
+
+			.navList>ul>li {
+				float: left;
+				-webkit-box-flex: 1;
+				flex-grow: 1;
+				padding: 0 16px;
+				text-align: center;
+				cursor: pointer;
+				position: relative;
+				display: -webkit-box;
+				display: -ms-flexbox;
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+			}
+
+			.navList>ul>li>span {
+				font-size: 14px;
+				color: #999aaa;
+			}
+
+			.navList>.search {
+				-webkit-box-flex: 1;
+				flex: 1;
+				display: -webkit-box;
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+				position: relative;
+			}
+
+			.navList>.search>input {
+				font-size: 14px;
+				width: 100%;
+				max-width: 336px;
+				min-width: 102px;
+				height: 32px;
+				line-height: normal;
+				outline: 0;
+				background: #f8f8f8;
+				vertical-align: top;
+				text-indent: 16px;
+				padding-right: 34px;
+				border: 1px solid #e8e8ed;
+				border-radius: 16px;
+				-webkit-transition: all .5s ease 0s;
+				transition: all .5s ease 0s;
+				position: absolute;
+				right: 0;
+			}
+
+			.navList>.search>div {
+				position: absolute;
+				right: 4px;
+				display: -webkit-box;
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+				-webkit-box-pack: center;
+				justify-content: center;
+			}
+
+			.navList>.search>div>img {
+				width: 30px;
+				height: 30px;
+				cursor: pointer;
+			}
+		</style>
+	</head>
+	<body>
+		<nav th:insert="~{navigation :: nav}"></nav>
+		<header>
+			<div class="tuPian">
+				<p>lpf的博客</p>
+			</div>
+			<div class="touXiang">
+				<div class="zhaoPian">
+					<img src="/img/TouXiang.jpg">
+					<i></i>
+				</div>
+				<p class="bianJi" th:href="@{/personalInformation}">编辑資料</p>
+			</div>
+			<div class="paiMing">
+				<ul>
+					<li>
+						<div class="one">0</div>
+						<div class="two">被访问量</div>
+					</li>
+					<li>
+						<div class="one">暂无</div>
+						<div class="two">原创文章</div>
+					</li>
+					<li>
+						<div class="one">暂无</div>
+						<div class="two">作者排名</div>
+					</li>
+					<li>
+						<div class="one">0</div>
+						<div class="two">粉丝数量</div>
+					</li>
+				</ul>
+			</div>
+		</header>
+		<section>
+			<div class="section">
+				<div class="section_left">
+					<div class="JiaRu">
+						于 2021-04-02 加入xxx社区
+					</div>
+					<div class="ChengJiu">
+						<div class="chengjiu1">
+							获得成就
+						</div>
+						<div class="chengjiu2">
+							<div class="chengjiu">
+								<ul>
+									<li>
+										<i style="background-image: url(/img/dianZan.png);"></i>
+										<div>
+											获得
+											<span>0</span>
+											次点赞
+										</div>
+									</li>
+									<li>
+										<i style="background-image: url(/img/pingLun.png);"></i>
+										<div>
+											内容获得
+											<span>0</span>
+											次评论
+										</div>
+									</li>
+									<li>
+										<i style="background-image: url(/img/shouCang.png);"></i>
+										<div>
+											获得
+											<span>0</span>
+											次收藏
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="section_right">
+					<div class="navList-box">
+						<div class="navList">
+							<ul>
+								<li>
+									最近
+									<span></span>
+								</li>
+								<li>
+									文章
+									<span>0</span>
+								</li>
+								<li>
+									资源
+									<span>0</span>
+								</li>
+								<li>
+									问答
+									<span>0</span>
+								</li>
+								<li>
+									课程
+									<span>0</span>
+								</li>
+								<li>
+									帖子
+									<span>0</span>
+								</li>
+								<li>
+									收藏
+									<span></span>
+								</li>
+								<li>
+									关注/订阅
+									<span></span>
+								</li>
+							</ul>
+							<div class="search">
+								<input type="text" name="" id="searchInput" value="搜索" />
+								<div>
+									<img src="/img/souSuo.png">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
