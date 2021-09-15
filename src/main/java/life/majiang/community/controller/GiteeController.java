@@ -40,7 +40,12 @@ public class GiteeController {
     @GetMapping("/log")
     public String loin(HttpServletResponse response, HttpServletRequest request){
         response.addCookie(new Cookie("token", "111"));
-        return "redirect:/";
+        return "login";
+    }
+    @GetMapping("/toRegister")
+    public String toRegister(){
+
+        return "register";
     }
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code

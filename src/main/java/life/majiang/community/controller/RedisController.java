@@ -1,6 +1,6 @@
 package life.majiang.community.controller;
 
-import life.majiang.community.entity.UserEntity;
+import life.majiang.community.entity.UserEntityTEST;
 import life.majiang.community.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +26,7 @@ public class RedisController {
 
     @RequestMapping("set")
     public boolean redisset(String key, String value){
-        UserEntity userEntity =new UserEntity();
+        UserEntityTEST userEntity =new UserEntityTEST();
         userEntity.setId(Long.valueOf(1));
         userEntity.setGuid(String.valueOf(1));
         userEntity.setName("zhangsan");

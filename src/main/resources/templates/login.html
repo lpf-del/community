@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>lpf社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul > li {
+            list-style: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        nav {
+            font-size: 14px;
+            font-weight: 400;
+            color: #222226;
+            background: #fff;
+            /*-webkit-box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);*/
+            /*box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);*/
+            position: relative;
+        }
+
+        section {
+            -webkit-box-pack: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            background: left 100% bottom 220px/contain #32ca99 no-repeat url(/img/background.png);
+            box-sizing: border-box;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-justify-content: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding-bottom: 220px;
+            padding-top: 54px;
+        }
+
+        footer {
+        }
+
+        #dengLuBiaoQian {
+            background: #32CA99;
+            width: 980px;
+            height: 28px;
+            margin: 0 auto;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        #dengLuBiaoQian > span {
+
+            height: 56px;
+            line-height: 56px;
+            margin: 0 auto;
+            padding: 0 20px;
+            font-size: 40px;
+            background: #fff;
+            text-align: center;
+        }
+
+        #login {
+            position: relative;
+            width: 980px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .login_left {
+
+            width: 489px;
+        }
+
+        .login_l1 {
+            position: relative;
+            width: 480px;
+        }
+
+        .login_l2 {
+            border-right: 1px solid #ddd;
+            height: 300px;
+            margin-top: 28px;
+        }
+
+        .login_right {
+            padding-left: 45px;
+            width: 490px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .form_login {
+            position: relative;
+        }
+
+        .form {
+            margin-top: 50px;
+            width: 414px;
+        }
+
+        .type-tab {
+            cursor: pointer;
+
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .type-tab > span {
+            font-size: 14px;
+            color: #555;
+            letter-spacing: 0;
+            margin-right: 20px;
+        }
+
+        .status-box {
+            position: relative;
+        }
+
+        .status-box1 {
+            position: relative;
+        }
+
+        .status-box > input {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            color: #aaa;
+            font-size: 14px;
+            padding: 10px;
+            height: 40px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+
+        .status-box > .text {
+            margin: 6px 0;
+            font-size: 12px;
+            min-height: 20px;
+            line-height: 20px;
+        }
+
+        .btn-box {
+            display: -webkit-box;
+            display: -webkit-flex;
+
+            display: flex;
+            -webkit-box-pack: justify;
+            -webkit-justify-content: space-between;
+
+            justify-content: space-between;
+            -webkit-align-content: center;
+
+            align-content: center;
+        }
+
+        .btn-login {
+            border: 1px solid #0381aa;
+            color: #fff;
+            background-color: #00a7de;
+        }
+
+        .btn {
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 184px;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+
+            transition: all .3s;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .login_box {
+            display: -webkit-box;
+            display: -webkit-flex;
+
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+<div th:insert="~{navigation :: nav}"></div>
+<section>
+    <div>
+        <div id="dengLuBiaoQian">
+            <span>登录</span>
+        </div>
+        <div class="login_box">
+            <div id="login">
+                <div class="login_left">
+                    <div class="login_l1">
+
+                    </div>
+                    <div class="login_l2"></div>
+                </div>
+                <div class="login_right">
+                    <div class="form_login">
+                        <div class="form">
+                            <div>
+                                <div class="type-tab">
+                                    <span class="active">密码登录</span>
+                                    <span class="">短信登录</span>
+                                </div>
+                                <div>
+                                    <div class="status-box">
+                                        <input type="text"  value="你的手机号/邮箱"/>
+                                        <div class="text"></div>
+                                    </div>
+                                    <div class="status-box">
+                                        <input type="text"  value="密码"/>
+                                        <div class="text"></div>
+                                    </div>
+                                </div>
+                                <div class="btn-box">
+                                    <a class="btn btn-login">登录</a>
+                                    <a th:href="@{/toRegister}" class="btn btn-reg">注册</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+</body>
+</html>

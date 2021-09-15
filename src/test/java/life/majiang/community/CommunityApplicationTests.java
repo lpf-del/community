@@ -2,26 +2,28 @@ package life.majiang.community;
 
 import life.majiang.community.deo.Question;
 import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.annotation.Resource;
+import java.util.UUID;
+
 @SpringBootTest
 class CommunityApplicationTests {
 
-   @Autowired
-    QuestionMapper questionMapper;
+
+    @Resource
+    RedisUtil redisUtil;
 
     @Test
     void contextLoads() {
-        Question question = new Question();
-        question.setId(1L);
-        question.setTitle("111111");
-        int insert = questionMapper.insert(question);
-        System.out.println(insert);
-//        Page<Question> page=new Page<>(2,10);
-//        questionMapper.selectPage(page,null);
-//        page.getRecords().forEach(System.out::println);
+        redisUtil.set("question",new Question());
+        Question question = (Question)redisUtil.get("question");
+        redisUtil.del("question");
+        UUID uuid = UUID.randomUUID();
+        String string = uuid.toString();
     }
 
 }

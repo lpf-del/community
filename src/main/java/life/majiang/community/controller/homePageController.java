@@ -1,9 +1,11 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.deo.User;
+import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class homePageController {
 
+    @Resource
+    private RedisUtil redisUtil;
     @GetMapping("/homePage")
     public String homePage(HttpServletRequest request){
 //        User user = (User)request.getSession().getAttribute("user");
@@ -34,6 +38,7 @@ public class homePageController {
             }
         }
         String value = cookie.getValue();
+
 
         return "personalInformation";
     }
