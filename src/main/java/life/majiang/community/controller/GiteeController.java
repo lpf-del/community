@@ -1,20 +1,31 @@
 package life.majiang.community.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import jdk.nashorn.internal.runtime.JSONFunctions;
 import life.majiang.community.deo.GiteeUser;
 import life.majiang.community.deo.PrividerToken;
 import life.majiang.community.deo.User;
+import life.majiang.community.entity.UserEntity;
+import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.provider.GiteeProvider;
+import life.majiang.community.service.UserEntityService;
+import life.majiang.community.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,16 +48,98 @@ public class GiteeController {
     @Autowired
     @SuppressWarnings("all")
     private UserMapper userMapper1;
+    @Resource
+    private UserEntityService userEntityService;  //新user类
+
+    @Resource
+    private RedisUtil redisUtil; //redis工具类
+
     @GetMapping("/log")
-    public String loin(HttpServletResponse response, HttpServletRequest request){
+    public String loin(HttpServletResponse response, HttpServletRequest request, Model model) {
+        String password = "";
+        String telephone = "";
+        if (request.getCookies() != null){
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("password")) {
+                    password = cookie.getValue();
+                } else if (cookie.getName().equals("telephone")) {
+                    telephone = cookie.getValue();
+                }
+            }
+        }
+        model.addAttribute("password", password);
+        model.addAttribute("telephone", telephone);
         response.addCookie(new Cookie("token", "111"));
         return "login";
     }
+
+    /**
+     * 跳转登录界面
+     *
+     * @return
+     */
     @GetMapping("/toRegister")
-    public String toRegister(){
+    public String toRegister(HttpServletRequest request, Model model) {
 
         return "register";
     }
+
+    /**
+     * 注册初始化 点赞、热度、访问量、uuid、注册时间
+     * username不能重复、其他不做限制
+     *
+     * 密码使用MD5加密
+     *
+     * 注册添加cookie、并跳转主页面、在redis添加手机方便手机登录
+     *
+     * redis添加用户信息（key： 电话号  value：userRntity类（json））
+     *
+     * @param username
+     * @param password
+     * @param telephone
+     * @param response
+     * @param model
+     * @return
+     */
+    @PostMapping("/register")
+    public String register(@RequestParam(value = "username", required = false) String username,
+                           @RequestParam(value = "password", required = false) String password,
+                           @RequestParam(value = "telephone", required = false) String telephone,
+                           HttpServletResponse response,
+                           Model model) {
+
+        try {
+            UserEntity userEntity = userEntityService.register(username,password,telephone);
+            response.addCookie(new Cookie("token", "1"));
+            redisUtil.set(telephone, JSON.toJSONString(userEntity));
+            return "redirect:/";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error",e.getMessage());
+            return "register";
+        }
+
+    }
+
+    @PostMapping("/telephoneLogin")
+    private String telephoneLogin(@RequestParam(value = "password", required = false) String password,
+                                  @RequestParam(value = "telephone", required = false) String telephone,
+                                  HttpServletResponse response,
+                                  Model model){
+        try {
+            UserEntity userEntity = userEntityService.telephoneLogin(password, telephone);
+            response.addCookie(new Cookie("username", userEntity.getUserName()));
+            response.addCookie(new Cookie("telephone", userEntity.getTelephone()));
+            response.addCookie(new Cookie("password", password));
+            return "redirect:/";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            return "login";
+        }
+    }
+
+
     @GetMapping("/callback")
     public String callback(@RequestParam("code") String code
             , @RequestParam("state") String state
@@ -67,15 +160,15 @@ public class GiteeController {
             user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setAvatarUrl(giteeUser.getAvatar_url());
-            Map<String,Object> map = new HashMap<>();
-            map.put("name",giteeUser.getName());
+            Map<String, Object> map = new HashMap<>();
+            map.put("name", giteeUser.getName());
             List<User> users = userMapper1.selectByMap(map);
-            if (users!=null&&users.size()==0){
+            if (users != null && users.size() == 0) {
                 userMapper1.insert(user);
-            }else {
+            } else {
                 UpdateWrapper<User> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq("account_id",giteeUser.getId());
-                userMapper1.update(user,updateWrapper);
+                updateWrapper.eq("account_id", giteeUser.getId());
+                userMapper1.update(user, updateWrapper);
             }
             response.addCookie(new Cookie("token", token));
             return "redirect:/";

@@ -32,13 +32,6 @@ public class SessionInterceptor implements HandlerInterceptor {
                 }
             }
 
-//            Map<String,Object> map = new HashMap();
-//            map.put("token",value);
-//            List<User> list = userMapper1.selectByMap(map);
-
-//            if (list.size()==1){
-//                request.getSession().setAttribute("user",list.get(0));
-//            }
             User user = new User();
             user.setName("lpf");
             user.setGmtCreate(1627982267510L);

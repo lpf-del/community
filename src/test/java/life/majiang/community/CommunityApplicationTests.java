@@ -1,7 +1,10 @@
 package life.majiang.community;
 
 import life.majiang.community.deo.Question;
+import life.majiang.community.entity.UserEntity;
+import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.mapper.QuestionMapper;
+import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.util.RedisUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +19,14 @@ class CommunityApplicationTests {
 
     @Resource
     RedisUtil redisUtil;
-
+    @Resource
+    UserEntityMapper userEntityMapper;
     @Test
     void contextLoads() {
-        redisUtil.set("question",new Question());
-        Question question = (Question)redisUtil.get("question");
-        redisUtil.del("question");
-        UUID uuid = UUID.randomUUID();
-        String string = uuid.toString();
+//        UserEntity userEntity = new UserEntity();
+//        userEntity.setUserName("lpf");
+//        userEntityMapper.insert(userEntity);
+        System.out.println(CustomizeErrorCode.NO_LOGIN);
     }
 
 }

@@ -1,8 +1,12 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.deo.User;
+import life.majiang.community.entity.UserEntity;
+import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.annotation.Resource;
@@ -20,25 +24,26 @@ public class homePageController {
 
     @Resource
     private RedisUtil redisUtil;
+
+    @Resource
+    private UserEntityService userEntityService;
+
+    /**
+     * 个人主页
+     * 首先用缓存
+     * @param request
+     * @param model
+     * @return
+     */
     @GetMapping("/homePage")
-    public String homePage(HttpServletRequest request){
-//        User user = (User)request.getSession().getAttribute("user");
-//        user.getName();
+    public String homePage(HttpServletRequest request, Model model){
+        model = userEntityService.getHomePageInformation(request.getCookies(), model);
+//        DigestUtils.md5DigestAsHex();
         return "homePage";
     }
 
     @GetMapping("/personalInformation")
     public String personalInformation(HttpServletRequest request){
-        Cookie[] cookies = request.getCookies();
-        Cookie cookie = null;
-        for (int i = 0; i < cookies.length; i++) {
-            if (cookies[i].getName().equals("user")){
-                cookie = cookies[i];
-                break;
-            }
-        }
-        String value = cookie.getValue();
-
 
         return "personalInformation";
     }
