@@ -14,6 +14,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.UUID;
@@ -78,6 +79,8 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         return userEntity;
     }
 
+
+
     /**
      * 同一个电话多次密码输入错误
      * 记录错误次数
@@ -111,5 +114,17 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         model.addAllAttributes(map);
 
         return model;
+    }
+
+    @Override
+    public String saveCookieToken(String telephone, String password) {
+        String md5 = "MD5_" + telephone;
+        String md5_t_p = (String)redisUtil.get(md5);
+        if (md5_t_p == null){
+            md5_t_p = DigestUtils.md5DigestAsHex(("MD5_" + telephone + password).getBytes());
+            redisUtil.set("MD5_" + telephone, md5_t_p);
+            redisUtil.expire("MD5_" + telephone, 60 * 60 * 24 * 7L);
+        }
+        return md5_t_p;
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,7 +75,7 @@ public class GiteeController {
     }
 
     /**
-     * 跳转登录界面
+     * 跳转注册界面
      *
      * @return
      */
@@ -110,7 +111,8 @@ public class GiteeController {
 
         try {
             UserEntity userEntity = userEntityService.register(username,password,telephone);
-            response.addCookie(new Cookie("token", "1"));
+            String md5_t_p = userEntityService.saveCookieToken(telephone, password);
+            response.addCookie(new Cookie("token", md5_t_p));
             redisUtil.set(telephone, JSON.toJSONString(userEntity));
             return "redirect:/";
         } catch (Exception e) {
@@ -121,6 +123,14 @@ public class GiteeController {
 
     }
 
+    /**
+     * 手机 + 密码登录
+     * @param password
+     * @param telephone
+     * @param response
+     * @param model
+     * @return
+     */
     @PostMapping("/telephoneLogin")
     private String telephoneLogin(@RequestParam(value = "password", required = false) String password,
                                   @RequestParam(value = "telephone", required = false) String telephone,
@@ -128,9 +138,11 @@ public class GiteeController {
                                   Model model){
         try {
             UserEntity userEntity = userEntityService.telephoneLogin(password, telephone);
+            String md5_t_p = userEntityService.saveCookieToken(telephone, password);
+            response.addCookie(new Cookie("token", md5_t_p));
+            //向cookie添加用户名 电话号
             response.addCookie(new Cookie("username", userEntity.getUserName()));
             response.addCookie(new Cookie("telephone", userEntity.getTelephone()));
-            response.addCookie(new Cookie("password", password));
             return "redirect:/";
         } catch (Exception e) {
             e.printStackTrace();

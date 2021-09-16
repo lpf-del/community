@@ -5,6 +5,7 @@ import life.majiang.community.entity.UserEntity;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author lpf
@@ -42,4 +43,14 @@ public interface UserEntityService extends IService<UserEntity> {
      * @return
      */
     Model getHomePageInformation(Cookie[] cookies, Model model);
+
+    /**
+     *
+     *  向cookie添加MD5+电话号+密码的密文用于检测是否登录
+     *  密文redis只保存7天
+     *  （返回密文在外面保存）
+     * @param telephone
+     * @param password
+     */
+    String saveCookieToken(String telephone, String password);
 }

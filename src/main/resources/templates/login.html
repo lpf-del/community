@@ -236,6 +236,52 @@
             border-radius: 50%;
         }
     </style>
+    <script>
+        function sendCode(){
+            var memPhone = $("#telephone").val();
+            console.log(memPhone.length);
+            if(memPhone == '' || memPhone.length != 11){
+                console.log("请输入正确的手机号！");
+                return;
+            }else{
+                $.ajax({
+                    type: 'GET',
+                    url: '/fitness/code',
+                    data: {
+                        memPhone : memPhone
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if(data){
+                            timer();
+                        }else{
+                            console.log("获取验证码失败");
+                        }
+                    },
+                    error: function(data) {
+                        console.log('连接超时！');
+                    },
+                });
+            }
+        }
+
+        var wait = 60;
+        //倒计时
+        function timer() {
+            if(wait == 0){
+                $("#sendBtn").val("获取验证码");
+                $("#sendBtn").removeAttr("disabled");
+                $("#sendBtn").css("border-color","1e9fff").css("background", "#ffffff").css("cursor", "pointer");
+                wait = 60;
+            }else{
+                $("#sendBtn").attr("disabled","true");
+                $("#sendBtn").css("border-color","fbfbfb").css("background", "#ccc").css("cursor", "not-allowed");
+                $("#sendBtn").val(wait + "秒后重发");
+                wait--;
+                setTimeout(function() {timer()}, 1000);
+            }
+        }
+    </script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -266,7 +312,7 @@
                                     <div>
                                         <div class="status-box">
                                             <input type="text" th:value="${telephone}" id="telephone" name="telephone"
-                                                   value="你的手机号/邮箱"/>
+                                                   value="你的手机号/邮箱" />
                                             <div class="text"></div>
                                         </div>
                                         <div class="status-box">
@@ -274,6 +320,12 @@
                                                    value="密码(方便测试密码默认自动保存)"/>
                                             <div class="text"></div>
                                         </div>
+                                        <div class="layui-form-item input-item">
+                                            <label for="YZName">验证码</label>
+                                            <input type="text" placeholder="请输入验证码" autocomplete="off" id="code" name="code" maxlength="6" class="layui-input" style="width: 50%;display: inline">
+                                            <input type="button" class="layui-btn layui-btn-primary" value="获取验证码" id="sendBtn" style="width:41%;margin-left: 18px;border-color:#1e9fff !important;" onclick="sendCode(this)"></input>
+                                        </div>
+
                                     </div>
                                     <div class="btn-box">
                                         <button type="submit" class="btn btn-login">登录</button>

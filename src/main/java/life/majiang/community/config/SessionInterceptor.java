@@ -2,11 +2,13 @@ package life.majiang.community.config;
 
 import life.majiang.community.deo.User;
 import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,16 +22,31 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     @SuppressWarnings("all")
     private UserMapper userMapper1;
+
+    @Resource
+    private RedisUtil redisUtil;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String value = "";
+        String token = "";
+        String telephone = "";
         Cookie[] cookies = request.getCookies();
-        if (cookies != null && cookies.length != 0){
+        if (cookies != null){
             for (Cookie cookie : cookies) {
-                if (cookie!=null&&cookie.getName().equals("token")){
-                    value = cookie.getValue();
-                    break;
+                if (cookie.getName().equals("token")){
+                    token = cookie.getValue();
+                }else if (cookie.getName().equals("telephone")){
+                    telephone = cookie.getValue();
                 }
+            }
+            /**
+             * 检查cookie的token密文是否在redis 没有就拦截 跳到登录界面
+             *
+             */
+            String md5 = (String)redisUtil.get("MD5_" + telephone);
+            if ((md5 != null && !md5.equals(token)) || md5 == null){
+                request.getRequestDispatcher("/log").forward(request, response);
+                return false;
             }
 
             User user = new User();

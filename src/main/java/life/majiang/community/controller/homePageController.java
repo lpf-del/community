@@ -37,6 +37,7 @@ public class homePageController {
      */
     @GetMapping("/homePage")
     public String homePage(HttpServletRequest request, Model model){
+
         model = userEntityService.getHomePageInformation(request.getCookies(), model);
 //        DigestUtils.md5DigestAsHex();
         return "homePage";

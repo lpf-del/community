@@ -23,10 +23,7 @@ class CommunityApplicationTests {
     UserEntityMapper userEntityMapper;
     @Test
     void contextLoads() {
-//        UserEntity userEntity = new UserEntity();
-//        userEntity.setUserName("lpf");
-//        userEntityMapper.insert(userEntity);
-        System.out.println(CustomizeErrorCode.NO_LOGIN);
+        System.out.println((String) null);
     }
 
 }
