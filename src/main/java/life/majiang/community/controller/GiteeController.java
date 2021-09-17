@@ -2,22 +2,18 @@ package life.majiang.community.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
-import jdk.nashorn.internal.runtime.JSONFunctions;
 import life.majiang.community.deo.GiteeUser;
 import life.majiang.community.deo.PrividerToken;
 import life.majiang.community.deo.User;
 import life.majiang.community.entity.UserEntity;
-import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.provider.GiteeProvider;
 import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,7 +22,6 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,6 +50,7 @@ public class GiteeController {
     @Resource
     private RedisUtil redisUtil; //redis工具类
 
+
     @GetMapping("/log")
     public String loin(HttpServletResponse response, HttpServletRequest request, Model model) {
         String password = "";
@@ -70,6 +66,27 @@ public class GiteeController {
         }
         model.addAttribute("password", password);
         model.addAttribute("telephone", telephone);
+        model.addAttribute("st1", 1);
+        response.addCookie(new Cookie("token", "111"));
+        return "login";
+    }
+
+    @GetMapping("/log2")
+    public String loin2(HttpServletResponse response, HttpServletRequest request, Model model) {
+        String password = "";
+        String telephone = "";
+        if (request.getCookies() != null){
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("password")) {
+                    password = cookie.getValue();
+                } else if (cookie.getName().equals("telephone")) {
+                    telephone = cookie.getValue();
+                }
+            }
+        }
+        model.addAttribute("password", password);
+        model.addAttribute("telephone", telephone);
+        model.addAttribute("st2", 2);
         response.addCookie(new Cookie("token", "111"));
         return "login";
     }

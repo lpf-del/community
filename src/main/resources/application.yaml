@@ -4,6 +4,8 @@ gitee:
     clientsecret: "578cb20e60e35b5326ace875fd3b80850caf83b00b5ed2f98270a5d44197b887"
     callback: "http://121.40.218.249:8888/callback"
 
+
+#h2数据库的配置
 #spring:
 #  datasource:
 #    url: jdbc:h2:~/community
@@ -51,3 +53,22 @@ spring:
         max-idle: 8   # 连接池中的最大空闲连接 默认 8
         min-idle: 0   # 连接池中的最小空闲连接 默认 0
     timeout: 5000     # 最大超时时间
+
+
+#qq邮箱的配置
+#邮箱配置
+#平台地址，这里用的是qq邮箱，使用其他邮箱请更换
+  mail:
+    host: smtp.qq.com
+    username: 2677086147@qq.com #2568034812@qq.com  自己的邮箱
+    password: #发送短信的授权码
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true  #spring.mail.properties.mail.smtp.ssl.enable=true
+    default-encoding: utf-8 #编码格式
+
+
+
+

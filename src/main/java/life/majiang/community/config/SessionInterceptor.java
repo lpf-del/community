@@ -4,6 +4,7 @@ import life.majiang.community.deo.User;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 
-@Service
+@Component
 public class SessionInterceptor implements HandlerInterceptor {
     @Autowired
     @SuppressWarnings("all")
@@ -43,6 +44,7 @@ public class SessionInterceptor implements HandlerInterceptor {
              * 检查cookie的token密文是否在redis 没有就拦截 跳到登录界面
              *
              */
+
             String md5 = (String)redisUtil.get("MD5_" + telephone);
             if ((md5 != null && !md5.equals(token)) || md5 == null){
                 request.getRequestDispatcher("/log").forward(request, response);

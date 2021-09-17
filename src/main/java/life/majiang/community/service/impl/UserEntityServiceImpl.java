@@ -127,4 +127,15 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         }
         return md5_t_p;
     }
+
+    @Override
+    public UserEntity addUserEntityByMail(String email) throws Exception {
+        UserEntity userEntity = userEntityMapper.getUserEntityByEmail(email);
+        if (userEntity == null){
+            throw new Exception("邮箱未注册");
+        }else {
+            redisUtil.set(email, JSON.toJSONString(userEntity));
+            return userEntity;
+        }
+    }
 }

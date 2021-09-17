@@ -53,4 +53,12 @@ public interface UserEntityService extends IService<UserEntity> {
      * @param password
      */
     String saveCookieToken(String telephone, String password);
+
+
+    /**
+     * 通过mail查询用户信息并保存redis
+     * @param email
+     * @return
+     */
+    UserEntity addUserEntityByMail(String email) throws Exception;
 }
