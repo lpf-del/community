@@ -61,7 +61,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: 2677086147@qq.com #2568034812@qq.com  自己的邮箱
-    password: #发送短信的授权码
+    password: sjvohrvfbgwbebai  #发送短信的授权码
     properties:
       mail:
         smtp:
@@ -70,5 +70,11 @@ spring:
     default-encoding: utf-8 #编码格式
 
 
+lpf_comminity:
+  apiUrl: https://sms_developer.zhenzikj.com
+  appId: 110009
+  appSecret: 132a87a8-0852-49b2-b972-9db2aa5efd67
+  timeOut: 5
+  codeLength: 6
 
 

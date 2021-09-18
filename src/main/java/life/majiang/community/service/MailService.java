@@ -39,8 +39,8 @@ public class MailService {
      * @param email
      * @return
      */
-    public boolean sendMimeMail(String email) {
-        try {
+    public void sendMimeMail(String email) {
+
             SimpleMailMessage mailMessage = new SimpleMailMessage();
 
             mailMessage.setSubject("验证码邮件");//主题
@@ -60,12 +60,8 @@ public class MailService {
 
             mailSender.send(mailMessage);//发送
 
-            redisUtil.expire(mail_code, 60 * 5L);//给邮箱的验证码设置超值时长
-            return  true;
-        }catch (Exception e){
-            e.printStackTrace();
-            return false;
-        }
+            redisUtil.expire(mail_code, 60 * 5L);//给邮箱的验证码设置超时时长
+
     }
 
     /**

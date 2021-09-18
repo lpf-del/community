@@ -1,15 +1,20 @@
 package life.majiang.community.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.javafx.collections.MappingChange;
 import com.zhenzi.sms.ZhenziSmsClient;
+import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.Random;
 
 /**
@@ -32,6 +37,12 @@ public class CodeController {
     @Resource
     private RedisUtil redisUtil;
 
+    /**
+     * 用榛子云的接口发送手机短信
+     * @param memPhone
+     * @param httpSession
+     * @return
+     */
     @ResponseBody
     @GetMapping("/fitness/code")
     public boolean getCode(@RequestParam("memPhone") String memPhone, HttpSession httpSession){
@@ -41,28 +52,52 @@ public class CodeController {
             String code = String.valueOf(new Random().nextInt(999999));
             //将验证码通过榛子云接口发送至手机
             ZhenziSmsClient client = new ZhenziSmsClient(apiUrl, appId, appSecret);
-            System.out.println(memPhone + "_" + code);
-            String result = client.send(memPhone, "您的验证码为:" + code + "，该码有效期为5分钟，该码只能使用一次!");
+
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("templateId", "6783");
+            map.put("message", "亲爱的用户，您的短信验证码为" + code + ",5分钟内有效，若非本人操作请忽略。");
+            // 接收短信的手机号码
+            map.put("number", memPhone);
+
+            String result = client.send(map);
 
             json = JSONObject.parseObject(result);
-            System.out.println(json.getIntValue("code"));
             if (json.getIntValue("code")!=0){//发送短信失败
                 return  false;
             }
-            //将验证码存到session中,同时存入创建时间
-            //以json存放，这里使用的是阿里的fastjson
-            json = new JSONObject();
-            json.put("memPhone",memPhone);
-            json.put("code",code);
-            json.put("createTime",System.currentTimeMillis());
-            // 将认证码存入SESSION
-            httpSession.setAttribute("code",json);
-            redisUtil.set(memPhone + "_code", json.toJSONString());
+            redisUtil.set(memPhone + "_code", code);
+            redisUtil.expire(memPhone + "_code", 60 * 5L);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Resource
+    private UserEntityService userEntityService;
+
+    /**
+     * 手机验证码登录的请求
+     * @param memPhone
+     * @param phoneCode
+     * @param model
+     * @return
+     */
+    @PostMapping("/loginPhoneYan")
+    public String login(@RequestParam(value = "memPhone",required = false) String memPhone,
+                        @RequestParam(value = "phoneCode",required = false) String phoneCode,
+                        Model model){
+        try {
+            userEntityService.loginPhoneCode(memPhone, phoneCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            model.addAttribute("st3", 3);
+            model.addAttribute("memPhone", memPhone);
+            return "login";
+        }
+        return "redirect:/";
     }
 
 }

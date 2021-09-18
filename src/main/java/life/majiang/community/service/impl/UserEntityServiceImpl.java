@@ -138,4 +138,16 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
             return userEntity;
         }
     }
+
+    @Override
+    public void loginPhoneCode(String memPhone, String phoneCode) throws Exception {
+        Object o = redisUtil.get(memPhone + "_code");
+        if (o == null){
+            throw new Exception("验证码失效");
+        }else {
+            if (!phoneCode.equals(o.toString())){
+                throw new Exception("验证码输入错误");
+            }
+        }
+    }
 }

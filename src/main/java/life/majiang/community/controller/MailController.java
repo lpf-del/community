@@ -5,8 +5,7 @@ import life.majiang.community.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,9 +19,9 @@ public class MailController {
     @Autowired
     private MailService mailService;
 
-    @PostMapping("/sendEmail")
+    @GetMapping("/sendEmail")
     @ResponseBody
-    public void sendEmail(String email, Model model){
+    public void sendEmail(@RequestParam("email") String email){
         mailService.sendMimeMail(email);
     }
 
@@ -40,8 +39,9 @@ public class MailController {
      * @return
      */
     @PostMapping("/loginYan")
-    @ResponseBody
-    public String login(String email, String code, Model model){
+    public String login(@RequestParam(value = "email",required = false) String email,
+                        @RequestParam(value = "code",required = false) String code,
+                        Model model){
         try {
             mailService.loginIn(email, code);
         } catch (Exception e) {

@@ -118,7 +118,7 @@
         <dependency>
             <groupId>com.zhenzikj</groupId>
             <artifactId>zhenzisms</artifactId>
-            <version>1.0.2</version>
+            <version>2.0.2</version>
         </dependency>
         <!--手机验证码登录的包：腾讯云的-->
         <dependency>

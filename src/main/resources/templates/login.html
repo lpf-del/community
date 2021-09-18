@@ -146,7 +146,21 @@
             position: relative;
         }
 
-        .status-box > input {
+        .status-box > .input2 {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 50%;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            color: #aaa;
+            font-size: 14px;
+            padding: 10px;
+            height: 40px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+        .status-box > .input1 {
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
             box-sizing: border-box;
@@ -236,67 +250,76 @@
             border-radius: 50%;
         }
     </style>
-<!--    <script>-->
-<!--        function sendCode() {-->
-<!--            var memPhone = $("#telephone").val();-->
-<!--            console.log(memPhone.length);-->
-<!--            if (memPhone == '' || memPhone.length != 11) {-->
-<!--                console.log("请输入正确的手机号！");-->
-<!--                return;-->
-<!--            } else {-->
-<!--                $.ajax({-->
-<!--                    type: 'GET',-->
-<!--                    url: '/fitness/code',-->
-<!--                    data: {-->
-<!--                        memPhone: memPhone-->
-<!--                    },-->
-<!--                    dataType: 'json',-->
-<!--                    success: function (data) {-->
-<!--                        if (data) {-->
-<!--                            timer();-->
-<!--                        } else {-->
-<!--                            console.log("获取验证码失败");-->
-<!--                        }-->
-<!--                    },-->
-<!--                    error: function (data) {-->
-<!--                        console.log('连接超时！');-->
-<!--                    },-->
-<!--                });-->
-<!--            }-->
-<!--        }-->
+    <script>
+        function sendCode() {
+            var memPhone = $("#memPhone").val();
+            console.log(memPhone.length);
+            if (memPhone == '' || memPhone.length != 11) {
+                console.log("请输入正确的手机号！");
+                return;
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/fitness/code',
+                    data: {
+                        memPhone: memPhone
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data) {
+                            timer();
+                        } else {
+                            console.log("获取验证码失败");
+                        }
+                    },
+                    error: function (data) {
+                        console.log('连接超时！');
+                    },
+                });
+            }
+        }
+        function sendMailCode() {
+            var Email = $("#email").val();
 
-<!--        var wait = 60;-->
+            $.ajax({
+                type: 'GET',
+                url: '/sendEmail',
+                data: {
+                    email: Email
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        timer();
+                    } else {
+                        console.log("获取验证码失败");
+                    }
+                }
+            });
 
-<!--        //倒计时-->
-<!--        function timer() {-->
-<!--            if (wait == 0) {-->
-<!--                $("#sendBtn").val("获取验证码");-->
-<!--                $("#sendBtn").removeAttr("disabled");-->
-<!--                $("#sendBtn").css("border-color", "1e9fff").css("background", "#ffffff").css("cursor", "pointer");-->
-<!--                wait = 60;-->
-<!--            } else {-->
-<!--                $("#sendBtn").attr("disabled", "true");-->
-<!--                $("#sendBtn").css("border-color", "fbfbfb").css("background", "#ccc").css("cursor", "not-allowed");-->
-<!--                $("#sendBtn").val(wait + "秒后重发");-->
-<!--                wait&#45;&#45;;-->
-<!--                setTimeout(function () {-->
-<!--                    timer()-->
-<!--                }, 1000);-->
-<!--            }-->
-<!--        }-->
+        }
 
-<!--    </script>-->
-<!--    <script>-->
-<!--        let isPhone=false;-->
-<!--        function activeOne(val){-->
-<!--            if(val===1) isPhone=true-->
-<!--            else isPhone=false;-->
-<!--        }-->
+        var wait = 60;
 
-<!--        function isActive() {-->
-<!--            return isPhone;-->
-<!--        }-->
-<!--    </script>-->
+        //倒计时
+        function timer() {
+            if (wait == 0) {
+                $("#sendBtn").val("获取验证码");
+                $("#sendBtn").removeAttr("disabled");
+                $("#sendBtn").css("border-color", "1e9fff").css("background", "#ffffff").css("cursor", "pointer");
+                wait = 60;
+            } else {
+                $("#sendBtn").attr("disabled", "true");
+                $("#sendBtn").css("border-color", "fbfbfb").css("background", "#ccc").css("cursor", "not-allowed");
+                $("#sendBtn").val(wait + "秒后重发");
+                wait--;
+                setTimeout(function () {
+                    timer()
+                }, 1000);
+            }
+        }
+
+    </script>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
@@ -318,20 +341,21 @@
                         <div class="form">
                             <div>
                                 <div class="type-tab">
-                                    <a th:href="@{/log}"><span class="active">手机密码登录</span></a>
-                                    <a th:href="@{/log2}"><span class="active" >邮箱/短信登录</span></a>
+                                    <a th:href="@{/log}"><span class="active">手机/密码登录</span></a>
+                                    <a th:href="@{/log2}"><span class="active" >邮箱/验证码登录</span></a>
+                                    <a th:href="@{/log3}"><span class="active" >手机号/短信登录</span></a>
                                 </div>
                                 <div th:if="${st1 == 1}">
                                     <form action="/telephoneLogin" method="post" >
                                         <div >
                                             <div class="status-box">
-                                                <input type="text" th:value="${telephone}" id="telephone" name="telephone"
-                                                       placeholder="你的手机号/邮箱"/>
+                                                <input type="text" th:value="${telephone}" id="telephone" name="telephone" class="input1"
+                                                       placeholder="手机号"/>
                                                 <div class="text"></div>
                                             </div>
                                             <div class="status-box">
-                                                <input type="password" th:value="${password}" id="password" name="password"
-                                                       placeholder="(方便测试密码默认自动保存)"/>
+                                                <input type="password" th:value="${password}" id="password" name="password" class="input1"
+                                                       placeholder="密码(方便测试密码默认自动保存)"/>
                                                 <div class="text"></div>
                                             </div>
                                         </div>
@@ -342,17 +366,17 @@
                                     </form>
                                 </div>
                                 <div th:if="${st2 == 2}">
-
-                                <form action="/telephoneLogin" method="post">
+                                <form action="/loginYan" method="post">
                                        <div >
                                            <div class="status-box">
-                                               <input type="text" th:value="${telephone}" id="telephone" name="telephone"
-                                                      placeholder="你的手机号/邮箱"/>
+                                               <input type="text" th:value="${email}" id="email" name="email" class="input1"
+                                                      placeholder="邮箱"/>
                                                <div class="text"></div>
                                            </div>
                                            <div class="status-box">
-                                               <input type="password" th:value="${password}" id="password" name="password"
-                                                      placeholder="密码(方便测试密码默认自动保存)"/>
+                                               <input type="text" id="code" name="code" class="input2"
+                                                      placeholder="验证码"/>
+                                               <div  class="btn btn-login" onclick="sendMailCode()">发送验证码</div>
                                                <div class="text"></div>
                                            </div>
                                        </div>
@@ -362,7 +386,27 @@
                                        </div>
                                    </form>
                                </div>
-
+                                <div th:if="${st3 == 3}">
+                                    <form action="/loginPhoneYan" method="post">
+                                        <div >
+                                            <div class="status-box">
+                                                <input type="text" th:value="${memPhone}" id="memPhone" name="memPhone" class="input1"
+                                                       placeholder="手机号"/>
+                                                <div class="text"></div>
+                                            </div>
+                                            <div class="status-box">
+                                                <input type="text" id="phoneCode" name="phoneCode" class="input2"
+                                                       placeholder="验证码"/>
+                                                <div  class="btn btn-login" onclick="sendCode()">发送验证码</div>
+                                                <div class="text"></div>
+                                            </div>
+                                        </div>
+                                        <div class="btn-box">
+                                            <button type="submit" class="btn btn-login">登录</button>
+                                            <a th:href="@{/toRegister}" class="btn btn-reg">注册</a>
+                                        </div>
+                                    </form>
+                                </div>
                                 <div class="img_div">
                                     <img src="/img/hengXian.png" class="img"><span class="text-muted">其方式登录</span><img
                                         src="/img/hengXian.png" class="img">

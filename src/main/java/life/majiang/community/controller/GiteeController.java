@@ -90,6 +90,25 @@ public class GiteeController {
         response.addCookie(new Cookie("token", "111"));
         return "login";
     }
+    @GetMapping("/log3")
+    public String loin3(HttpServletResponse response, HttpServletRequest request, Model model) {
+        String password = "";
+        String telephone = "";
+        if (request.getCookies() != null){
+            for (Cookie cookie : request.getCookies()) {
+                if (cookie.getName().equals("password")) {
+                    password = cookie.getValue();
+                } else if (cookie.getName().equals("telephone")) {
+                    telephone = cookie.getValue();
+                }
+            }
+        }
+        model.addAttribute("password", password);
+        model.addAttribute("telephone", telephone);
+        model.addAttribute("st3", 3);
+        response.addCookie(new Cookie("token", "111"));
+        return "login";
+    }
 
     /**
      * 跳转注册界面

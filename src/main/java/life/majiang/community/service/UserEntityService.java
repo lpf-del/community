@@ -61,4 +61,11 @@ public interface UserEntityService extends IService<UserEntity> {
      * @return
      */
     UserEntity addUserEntityByMail(String email) throws Exception;
+
+    /**
+     * 查询redis的code看是否和输入的一致
+     * @param memPhone
+     * @param phoneCode
+     */
+    void loginPhoneCode(String memPhone, String phoneCode) throws Exception;
 }
