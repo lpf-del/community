@@ -23,4 +23,10 @@ public interface UserEntityMapper extends BaseMapper<UserEntity> {
 
     @Select("select * from user_entity where mail = #{mail}")
     UserEntity getUserEntityByEmail(@Param(value = "mail") String mail);
+
+    @Select("select * from user_entity where telephone = #{telephone}")
+    UserEntity getUserEntityByPhone(@Param(value = "telephone") String telephone);
+
+    @Select("select * from user_entity where user_name = #{user_name}")
+    UserEntity getUserEntityByUserName(@Param(value = "user_name") String user_name);
 }

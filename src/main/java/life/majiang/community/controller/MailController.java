@@ -1,12 +1,15 @@
 package life.majiang.community.controller;
 
 import life.majiang.community.entity.UserEntity;
+import life.majiang.community.service.CookieService;
 import life.majiang.community.service.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -32,6 +35,8 @@ public class MailController {
 //        return "sucess";
 //    }
 
+    @Resource
+    private CookieService cookieService;
     /**
      * 邮箱+验证码
      * @param email
@@ -41,9 +46,10 @@ public class MailController {
     @PostMapping("/loginYan")
     public String login(@RequestParam(value = "email",required = false) String email,
                         @RequestParam(value = "code",required = false) String code,
-                        Model model){
+                        Model model, HttpServletResponse response){
         try {
             mailService.loginIn(email, code);
+            cookieService.addUserToken(response, email, code);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", e.getMessage());

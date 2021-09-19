@@ -30,22 +30,21 @@ public class SessionInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = "";
-        String telephone = "";
+        String username = "";
         Cookie[] cookies = request.getCookies();
         if (cookies != null){
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals("token")){
                     token = cookie.getValue();
-                }else if (cookie.getName().equals("telephone")){
-                    telephone = cookie.getValue();
+                }else if (cookie.getName().equals("username")){
+                    username= cookie.getValue();
                 }
             }
             /**
              * 检查cookie的token密文是否在redis 没有就拦截 跳到登录界面
              *
              */
-
-            String md5 = (String)redisUtil.get("MD5_" + telephone);
+            String md5 = (String)redisUtil.get("MD5_" + username);
             if ((md5 != null && !md5.equals(token)) || md5 == null){
                 request.getRequestDispatcher("/log").forward(request, response);
                 return false;

@@ -5,6 +5,7 @@ import life.majiang.community.entity.UserEntity;
 import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -36,23 +37,14 @@ public interface UserEntityService extends IService<UserEntity> {
     UserEntity telephoneLogin(String password, String telephone) throws Exception;
 
     /**
-     * 从cookie中获取电话信息
-     * 从redis获取user信息
-     *
-     * @param cookies
+     *   获取页面信息
+     * @param request
+     * @param model
      * @return
      */
-    Model getHomePageInformation(Cookie[] cookies, Model model);
+    Model getHomePageInformation(HttpServletRequest request, Model model);
 
-    /**
-     *
-     *  向cookie添加MD5+电话号+密码的密文用于检测是否登录
-     *  密文redis只保存7天
-     *  （返回密文在外面保存）
-     * @param telephone
-     * @param password
-     */
-    String saveCookieToken(String telephone, String password);
+
 
 
     /**

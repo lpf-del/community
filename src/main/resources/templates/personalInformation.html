@@ -1,10 +1,403 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>个人信息</title>
+    <title>lpf社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul > li {
+            list-style: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        section {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            flex-direction: column;
+            min-height: calc(100% - 140px);
+            margin-bottom: 32px;
+            background: #F7F9FC;
+        }
+
+        .container {
+            position: relative;
+            width: auto;
+            min-width: 896px;
+            min-height: 800px;
+            background: transparent;
+            margin: 10px auto 0;
+        }
+
+        .container > .container-left {
+            position: absolute;
+            width: 190px;
+            top: 0;
+            float: left;
+            background: #fff;
+        }
+
+        .container > .container-right {
+            min-width: 1000px;
+            margin-left: 200px;
+            min-height: 800px;
+        }
+
+        .container > .container-left > ul {
+            width: 100%;
+            list-style: none;
+            font-size: 14px;
+            padding: 8px 0;
+        }
+
+        .router-link-active {
+            font-weight: 500;
+            color: #222226;
+            background: #f0f0f5;
+        }
+
+        .el-icon-arrow-right {
+            font-weight: 500;
+            color: #222226;
+            background: #f0f0f5;
+        }
+
+        .container > .container-left > ul > li > a {
+            display: block;
+            width: 100%;
+            height: 48px;
+            line-height: 48px;
+            text-align: center;
+            color: #555666;
+        }
+
+        .container-profile {
+            /* min-width: 1000px; */
+            align-content: space-between;
+        }
+
+        .general-info {
+            margin-bottom: 10px;
+            background: #fff;
+        }
+
+        .general-info .general-info-t {
+            padding: 24px 0 40px 24px;
+            position: relative;
+            display: -webkit-box;
+            display: flex;
+            /*-webkit-box-shadow: 0 1px 8px 0 rgb(0 0 0 / 4%);*/
+            /*box-shadow: 0 1px 8px 0 rgb(0 0 0 / 4%);*/
+        }
+
+        .general-info .general-info-t .general-info-avatar {
+            flex-shrink: 0;
+            position: relative;
+            width: 96px;
+            height: 96px;
+            margin-right: 16px;
+            /*-webkit-box-shadow: 0 0 10px 2px rgb(0 0 0 / 6%);*/
+            /*box-shadow: 0 0 10px 2px rgb(0 0 0 / 6%);*/
+            border: 2px solid #fff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .general-info .general-info-t .general-info-avatar > img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 50%;
+        }
+
+        .general-info .general-info-t .general-info-t-info {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            flex-direction: column;
+            -webkit-box-pack: center;
+            justify-content: center;
+        }
+
+        .general-info .general-info-t .general-info-t-info .profile-name-info {
+            margin-bottom: 16px;
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-align: center;
+            align-items: center;
+        }
+
+        .general-info .general-info-t .general-info-t-info .profile-name-info .person-name {
+            color: #222226;
+            font-weight: 500;
+            line-height: 24px;
+            font-size: 20px;
+            margin-right: 16px;
+        }
+
+        .general-info .general-info-t .general-info-t-info .profile-name-info .person-code-age {
+            height: 16px;
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-pack: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            align-items: center;
+            border-radius: 8px;
+        }
+
+        .general-info .general-info-t .general-info-t-info .profile-name-info .person-code-age span {
+            padding: 0 6px 0 4px;
+            font-size: 12px;
+            display: block;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+        }
+
+        .base-info {
+            width: 1000px;
+            background: #fff;
+            margin-bottom: 10px;
+        }
+
+        .base-info .base-info-head {
+            height: 48px;
+            line-height: 48px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2e2e2e;
+            padding-left: 16px;
+            border-bottom: 1px solid #f0f0f2;
+        }
+
+        .base-info .base-info-content {
+            padding: 16px;
+        }
+
+        .base-info .base-info-content .base-info-content-show {
+            cursor: pointer;
+            padding: 16px 112px 16px 0;
+            position: relative;
+        }
+
+        ul {
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            margin: 0;
+            padding: 0;
+            font-family: PingFang SC, Hiragino Sans GB, Arial, Microsoft YaHei, Verdana, Roboto, Noto, Helvetica Neue, sans-serif !important;
+        }
+
+        .base-info .base-info-content .base-info-content-show ul li {
+            line-height: 24px;
+            font-size: 14px;
+            margin-bottom: 32px;
+            display: -webkit-box;
+            display: flex;
+        }
+
+        .base-info .base-info-content .base-info-content-show ul li .content-show-l {
+            width: 56px;
+            color: #555666;
+            margin-right: 40px;
+            flex-shrink: 0;
+            padding-left: 16px;
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+        }
+
+        .base-info .base-info-content .base-info-content-show ul li .content-show-r {
+            color: #222226;
+            word-break: break-all;
+        }
+
+        .xiugai {
+            color: red;
+            float: right;
+            padding-right: 40px;
+            font-size: 17px;
+        }
+        .homebutton {
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 184px;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            line-height: inherit;
+            transition: all .3s;
+        }
+        .homeinput {
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 50%;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            color: #aaa;
+            font-size: 14px;
+            padding: 10px;
+            height: 40px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+
+
+    </style>
+    <script>
+
+    </script>
 </head>
 <body>
+<div th:insert="~{navigation :: nav}"></div>
+<section>
+    <div class="container">
+        <div class="container-left">
+            <ul>
+                <li class="router-link-active">
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5413&quot;}">个人资料</a>
+                </li>
+                <li class="">
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5414&quot;}">账号设置</a>
+                </li>
+                <li>
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5699&quot;}">隐私设置</a>
+                </li>
+                <li>
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5415&quot;}">信息认证</a>
+                </li>
+                <li>
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5453&quot;}">我的收藏</a>
+                </li>
+            </ul>
+        </div>
+        <div class="container-right">
+            <div class="profile-header">
+                <div class="profile-header">
+                    <div class="general-info">
+                        <div class="general-info-t">
+                            <div class="general-info-avatar">
+                                <img src="./img/TouXiang.jpg">
+                            </div>
+                            <div class="general-info-t-info">
+                                <div class="profile-name-info">
+                                    <div class="person-name">[[${userEntity.userName}]]</div>
+                                    <div class="person-code-age"
+                                         style="background-color: rgb(209, 221, 241); color: rgb(69, 81, 101);">
+                                        <span th:text="${#dates.format(userEntity.getRegisterTime(),'yyyy-MM-dd')}"></span>
+                                    </div>
+                                </div>
+                            </div>
 
+                        </div>
+                    </div>
+                    <div class="base-info">
+                        <div class="base-info-head">基本信息 <a class="xiugai" href="/personalInformation?xiugai=1">修改</a>
+                        </div>
+                        <div class="base-info-content">
+                            <div class="base-info-content-show">
+                                <ul th:if="${xiugai == null}">
+                                    <li>
+                                        <div class="content-show-l">用户昵称</div>
+                                        <div class="content-show-r">[[${userEntity.userName}]]</div>
+                                    </li>
+                                    <li>
+                                        <div class="content-show-l">ID(uuid)</div>
+                                        <div class="content-show-r">[[${userEntity.uuid}]]</div>
+                                    </li>
+                                    <li>
+                                        <div class="content-show-l">邮箱</div>
+                                        <div class="content-show-r">[[${userEntity.mail}]]</div>
+                                    </li>
+                                    <li>
+                                        <div class="content-show-l">性别</div>
+                                        <div class="content-show-r">男</div>
+                                    </li>
+                                    <li>
+                                        <div class="content-show-l">个人简介</div>
+                                        <div class="content-show-r">[[${userEntity.introduction}]]</div>
+                                    </li>
+                                    <li>
+                                        <div class="content-show-l">所在地区</div>
+                                        <div class="content-show-r">[[${userEntity.address}]]</div>
+                                    </li>
+                                    <li>
+                                        <div class="content-show-l">开始工作</div>
+                                        <div class="content-show-r no-data">未开始工作</div>
+                                    </li>
+                                </ul>
+                                <ul th:if="${xiugai != null}">
+                                    <form action="/modifyInformation" method="post">
+                                        <li>
+                                            <div class="content-show-l">用户昵称</div>
+                                            <input type="text" th:value="${username}" id="username" name="username" class="homeinput"/>
+                                            <!--<div class="content-show-r">[[${userEntity.userName}]]</div>-->
+                                        </li>
+                                        <li>
+                                            <div class="content-show-l">ID(uuid)</div>
+                                            <div class="content-show-r" >[[${userEntity.uuid}]]</div>
+                                        </li>
+                                        <li>
+                                            <div class="content-show-l">邮箱</div>
+                                            <div class="content-show-r">[[${userEntity.mail}]]</div>
+                                        </li>
+                                        <li>
+                                            <div class="content-show-l">性别</div>
+                                            <div class="content-show-r">男</div>
+                                        </li>
+                                        <li>
+                                            <div class="content-show-l">个人简介</div>
+                                            <input type="text" th:value="${introduction}" id="introduction" name="introduction" class="homeinput"/>
+                                        </li>
+                                        <li>
+                                            <div class="content-show-l">所在地区</div>
+                                            <input type="text" th:value="${address}" id="address" name="address" class="homeinput"/>
+                                        </li>
+                                        <li>
+                                            <div class="content-show-l">开始工作</div>
+                                            <div class="content-show-r no-data">未开始工作</div>
+                                        </li>
+                                        <button type="submit" class="homebutton">提交信息</button>
+                                    </form>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 </body>
 </html>

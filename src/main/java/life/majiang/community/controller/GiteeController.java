@@ -8,6 +8,7 @@ import life.majiang.community.deo.User;
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.provider.GiteeProvider;
+import life.majiang.community.service.CookieService;
 import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class GiteeController {
 
     @Resource
     private RedisUtil redisUtil; //redis工具类
+
+    @Resource
+    private CookieService cookieService;
 
 
     @GetMapping("/log")
@@ -147,8 +151,7 @@ public class GiteeController {
 
         try {
             UserEntity userEntity = userEntityService.register(username,password,telephone);
-            String md5_t_p = userEntityService.saveCookieToken(telephone, password);
-            response.addCookie(new Cookie("token", md5_t_p));
+            cookieService.addUserToken(response, telephone, password);
             redisUtil.set(telephone, JSON.toJSONString(userEntity));
             return "redirect:/";
         } catch (Exception e) {
@@ -174,11 +177,7 @@ public class GiteeController {
                                   Model model){
         try {
             UserEntity userEntity = userEntityService.telephoneLogin(password, telephone);
-            String md5_t_p = userEntityService.saveCookieToken(telephone, password);
-            response.addCookie(new Cookie("token", md5_t_p));
-            //向cookie添加用户名 电话号
-            response.addCookie(new Cookie("username", userEntity.getUserName()));
-            response.addCookie(new Cookie("telephone", userEntity.getTelephone()));
+            cookieService.addUserToken(response, telephone, password);
             return "redirect:/";
         } catch (Exception e) {
             e.printStackTrace();

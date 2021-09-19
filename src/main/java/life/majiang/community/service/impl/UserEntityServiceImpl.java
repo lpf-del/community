@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.UserEntityMapper;
+import life.majiang.community.service.CookieService;
 import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -14,6 +15,7 @@ import org.springframework.util.DigestUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.HashMap;
@@ -57,7 +59,7 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
     public UserEntity telephoneLogin(String password, String telephone) throws Exception {
         password = DigestUtils.md5DigestAsHex(password.getBytes());
         //3次密码错误不能登录
-        Object o = redisUtil.get(telephone + "_" + telephone);
+        Object o = redisUtil.get(telephone);
         if(o != null && (o.toString()).equals("3")){
             throw new Exception("请十分钟后再输入");
         }
@@ -87,25 +89,20 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
      * @param telephone
      */
     private void repeatErrorLogin(String telephone) {
-        Object o = redisUtil.get(telephone + "_" + telephone);
+        Object o = redisUtil.get(telephone);
         if (o == null){
-            redisUtil.set(telephone + "_" + telephone, 0);
-            redisUtil.expire(telephone + "_" + telephone, 60 * 10L);
+            redisUtil.set(telephone, 1);
+            redisUtil.expire(telephone, 60 * 10L);
         }
-        redisUtil.incr(telephone + "_" + telephone, 1);
+        redisUtil.incr(telephone, 1);
     }
 
+    @Resource
+    private CookieService cookieService;
+
     @Override
-    public Model getHomePageInformation(Cookie[] cookies, Model model) {
-        String telephone = "";
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("telephone")){
-                telephone = cookie.getValue();
-            }
-        }
-
-        UserEntity userEntity = JSON.parseObject((String) redisUtil.get(telephone), UserEntity.class);
-
+    public Model getHomePageInformation(HttpServletRequest request, Model model) {
+        UserEntity userEntity = cookieService.getPersonInformation(request);
         HashMap<String, Object> map = new HashMap<>();
         map.put("likeCount", userEntity.getLikeCount());
         map.put("postCount", userEntity.getPostCount());
@@ -116,17 +113,7 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         return model;
     }
 
-    @Override
-    public String saveCookieToken(String telephone, String password) {
-        String md5 = "MD5_" + telephone;
-        String md5_t_p = (String)redisUtil.get(md5);
-        if (md5_t_p == null){
-            md5_t_p = DigestUtils.md5DigestAsHex(("MD5_" + telephone + password).getBytes());
-            redisUtil.set("MD5_" + telephone, md5_t_p);
-            redisUtil.expire("MD5_" + telephone, 60 * 60 * 24 * 7L);
-        }
-        return md5_t_p;
-    }
+
 
     @Override
     public UserEntity addUserEntityByMail(String email) throws Exception {

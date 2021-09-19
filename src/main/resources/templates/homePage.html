@@ -348,7 +348,11 @@
 				height: 30px;
 				cursor: pointer;
 			}
+
 		</style>
+		<script>
+
+		</script>
 	</head>
 	<body>
 		<nav th:insert="~{navigation :: nav}"></nav>
@@ -361,7 +365,7 @@
 					<img src="/img/TouXiang.jpg">
 					<i></i>
 				</div>
-				<p class="bianJi" th:href="@{/personalInformation}">编辑資料</p>
+				<div class="bianJi" href="/personalInformation?xiugai=0">编辑資料</div>
 			</div>
 			<div class="paiMing">
 				<ul>
