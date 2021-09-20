@@ -1,8 +1,10 @@
 package life.majiang.community.controller;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import life.majiang.community.entity.AccountInformation;
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.UserEntityMapper;
+import life.majiang.community.service.AccountSettingsService;
 import life.majiang.community.service.CookieService;
 import life.majiang.community.service.PersonService;
 import life.majiang.community.service.UserEntityService;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 
 /**
@@ -42,6 +45,9 @@ public class homePageController {
     @Resource
     private CookieService cookieService;
 
+    @Resource
+    private AccountSettingsService accountSettingsService;
+
     /**
      * 个人主页
      * 首先用缓存
@@ -66,7 +72,7 @@ public class homePageController {
      */
     @GetMapping("/personalInformation")
     public String personalInformation(HttpServletRequest request, Model model, Integer xiugai){
-        UserEntity userEntity = personService.getPersonInformation(request, model);
+        UserEntity userEntity = personService.getPersonInformation(request);
         model.addAttribute("userEntity", userEntity);
         if (xiugai == 1) model.addAttribute("xiugai", xiugai);
         return "personalInformation";
@@ -76,6 +82,7 @@ public class homePageController {
     /**
      * 个人主页（个人资料）
      * 只允许修改用户名， 简介， 地址
+     * redis缓存修改
      * @param username
      * @param introduction
      * @param adress
@@ -96,9 +103,157 @@ public class homePageController {
         updateWrapper.set("address", adress);
         updateWrapper.set("introduction", introduction);
         userEntityMapper.update(personInformation, updateWrapper);
-
+        cookieService.RedisAndCookieUpdate(request);
         return "redirect:/personalInformation?xiugai=0";
 
     }
 
+    /**
+     * 账户信息页面（用来绑定和换绑，如：手机号，微信，邮箱，qq等）
+     * 账户的信息安全强度
+     * @param request
+     * @param model
+     * @param status
+     * @return
+     */
+    @GetMapping("/accountSettings")
+    public String accountSettings(HttpServletRequest request, Model model, Integer status){
+        if (status == 0){
+            UserEntity userEntity = personService.getPersonInformation(request);
+            AccountInformation account = accountSettingsService.accountSafetyFactor(userEntity);
+            model.addAttribute("userEntity", userEntity);
+            model.addAttribute("account", account);
+        }
+        model.addAttribute("status", status);
+        return "accountSettings";
+    }
+
+    /**
+     * 修改密码，查询用户信息，修改密码，更新缓存,更新cookie
+     * 修改完跳到账号信息页面
+     * @param oldPassword
+     * @param newPassword
+     * @param passwordConfirmation
+     * @param request
+     * @param model
+     * @return
+     */
+    @PostMapping("/passwordModification")
+    private String passwordModification(
+            @RequestParam(value = "oldPassword", required = false) String oldPassword,
+            @RequestParam(value = "newPassword", required = false) String newPassword,
+            @RequestParam(value = "passwordConfirmation", required = false) String passwordConfirmation,
+                                  HttpServletRequest request, Model model, HttpServletResponse response){
+        UserEntity personInformation = cookieService.getPersonInformation(request);
+        try {
+            accountSettingsService.passwordModify(personInformation, oldPassword, newPassword, passwordConfirmation);
+            cookieService.RedisAndCookieUpdate(request);
+            cookieService.addUserToken(response, personInformation.getTelephone(), newPassword);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/accountSettings?status=1";
+        }
+        return "redirect:/accountSettings?status=0";
+    }
+
+    /**
+     * 旧手机验证，以前的手机号+验证码，成功进入下一步，输入新的手机号
+     * @param oldTelephone
+     * @param code
+     * @param request
+     * @param model
+     * @return
+     */
+    @PostMapping("/phoneModification")
+    private String phoneModification(
+            @RequestParam(value = "oldTelephone", required = false) String oldTelephone,
+            @RequestParam(value = "code", required = false) String code,
+            HttpServletRequest request, Model model){
+        UserEntity personInformation = cookieService.getPersonInformation(request);
+        try {
+            accountSettingsService.telephoneModifyCode(oldTelephone, code, personInformation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/accountSettings?status=2";
+        }
+        return "redirect:/accountSettings?status=3";
+    }
+
+    /**
+     * 更新手机号，更新缓存，cookie
+     * @param newTelephone
+     * @param newcode
+     * @param request
+     * @param model
+     * @param response
+     * @return
+     */
+    @PostMapping("/newphoneModification")
+    private String newphoneModification(
+            @RequestParam(value = "newTelephone", required = false) String newTelephone,
+            @RequestParam(value = "newcode", required = false) String newcode,
+            HttpServletRequest request, Model model, HttpServletResponse response){
+        UserEntity personInformation = cookieService.getPersonInformation(request);
+        try {
+            accountSettingsService.updatePhone(newTelephone, newcode, personInformation, response);
+            cookieService.addUserToken(response, newTelephone, newcode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/accountSettings?status=3";
+        }
+        return "redirect:/accountSettings?status=0";
+    }
+
+    /**
+     * 邮箱验证码正确，就可以进入下一步，换绑新的邮箱
+     * @param oldemial
+     * @param oldcodeemail
+     * @param request
+     * @param model
+     * @return
+     */
+    @PostMapping("/emailModification")
+    private String emailModification(
+            @RequestParam(value = "oldemail", required = false) String oldemial,
+            @RequestParam(value = "oldcodeemail", required = false) String oldcodeemail,
+            HttpServletRequest request, Model model){
+        UserEntity personInformation = cookieService.getPersonInformation(request);
+        try {
+            accountSettingsService.emailModifyCode(oldemial, oldcodeemail, personInformation);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/accountSettings?status=5";
+        }
+        return "redirect:/accountSettings?status=4";
+    }
+
+    /**
+     * 更新邮箱，更新redis和cookie
+     * @param newemial
+     * @param newcodeemail
+     * @param request
+     * @param model
+     * @param response
+     * @return
+     */
+    @PostMapping("/newemailModification")
+    private String newemailModification(
+            @RequestParam(value = "newemail", required = false) String newemial,
+            @RequestParam(value = "newcodeemail", required = false) String newcodeemail,
+            HttpServletRequest request, Model model, HttpServletResponse response){
+        UserEntity personInformation = cookieService.getPersonInformation(request);
+        try {
+            accountSettingsService.updateEamil(newemial, newcodeemail, personInformation, response);
+            cookieService.addUserToken(response, newemial, newcodeemail);
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", e.getMessage());
+            return "redirect:/accountSettings?status=4";
+        }
+        return "redirect:/accountSettings?status=0";
+    }
 }

@@ -29,7 +29,7 @@ import java.util.UUID;
 @Service
 public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEntity> implements UserEntityService {
     @Override
-    public UserEntity register(String username, String password, String telephone) throws Exception {
+    public UserEntity register(String username, String password, String telephone, String email) throws Exception {
         Integer nouser = this.baseMapper.exitUserName(username);
         if (nouser > 0) {
             throw new Exception("用户名已存在");
@@ -44,6 +44,7 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         userEntity.setUserName(username);
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setRegisterTime(System.currentTimeMillis());
+        userEntity.setMail(email);
 
         this.baseMapper.insert(userEntity);
         return userEntity;

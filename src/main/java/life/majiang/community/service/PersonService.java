@@ -27,10 +27,9 @@ public class PersonService {
      * 个人信息，包括用户所有信息
      * 其中密码， 手机号， 邮箱， 微信号， qq号隐藏中间四位数
      * @param request
-     * @param model
      * @return
      */
-    public UserEntity getPersonInformation(HttpServletRequest request, Model model) {
+    public UserEntity getPersonInformation(HttpServletRequest request) {
         UserEntity personInformation = cookieService.getPersonInformation(request);
         personInformation.setTelephone(hideFourDigit(personInformation.getTelephone()));
         personInformation.setMail(hideFourDigit(personInformation.getMail()));

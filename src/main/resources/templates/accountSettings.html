@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>lpf社区</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="/css/community.css">
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <style type="text/css">
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        ul > li {
+            list-style: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        section {
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-box-direction: normal;
+            flex-direction: column;
+            min-height: calc(100% - 140px);
+            margin-bottom: 32px;
+            background: #F7F9FC;
+        }
+
+        .container {
+            position: relative;
+            width: auto;
+            min-width: 896px;
+            min-height: 800px;
+            background: transparent;
+            margin: 10px auto 0;
+        }
+
+        .container > .container-left {
+            position: absolute;
+            width: 190px;
+            top: 0;
+            float: left;
+            background: #fff;
+        }
+
+
+        .container > .container-left > ul {
+            width: 100%;
+            list-style: none;
+            font-size: 14px;
+            padding: 8px 0;
+        }
+
+        .router-link-active {
+            font-weight: 500;
+            color: #222226;
+            background: #f0f0f5;
+        }
+
+
+        .container > .container-left > ul > li > a {
+            display: block;
+            width: 100%;
+            height: 48px;
+            line-height: 48px;
+            text-align: center;
+            color: #555666;
+        }
+
+
+        .general-info .general-info-t .general-info-avatar > img {
+            width: 100%;
+            height: 100%;
+            display: block;
+            border-radius: 50%;
+        }
+
+
+        .general-info .general-info-t .general-info-t-info .profile-name-info .person-code-age span {
+            padding: 0 6px 0 4px;
+            font-size: 12px;
+            display: block;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+        }
+
+
+        ul {
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            margin: 0;
+            padding: 0;
+            font-family: PingFang SC, Hiragino Sans GB, Arial, Microsoft YaHei, Verdana, Roboto, Noto, Helvetica Neue, sans-serif !important;
+        }
+
+        .base-info .base-info-content .base-info-content-show ul li {
+            line-height: 24px;
+            font-size: 14px;
+            margin-bottom: 32px;
+            display: -webkit-box;
+            display: flex;
+        }
+
+        .container .container-right {
+            min-width: 1000px;
+            margin-left: 200px;
+            min-height: 800px;
+        }
+
+        .container-account {
+            width: 100%;
+        }
+
+        .container-account .account-head {
+            width: 100%;
+            height: 208px;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            padding-top: 24px;
+            margin-bottom: 10px;
+            background: url(./img/beijing.png) no-repeat 50%;
+            background-size: contain;
+            font-size: 12px;
+            color: #555666;
+            text-align: center;
+        }
+
+        .container-account .account-head .account-shield {
+            display: block;
+            width: 83px;
+            height: 100px;
+            line-height: 100px;
+            margin: auto;
+            background: url(./img/dunpai.png) no-repeat 50%;
+            background-size: cover;
+            color: #fff;
+            font-size: 40px;
+        }
+
+        .container-account .account-head .account-desc {
+            display: inline-block;
+            min-width: 40px;
+            padding: 0 8px;
+            height: 20px;
+            line-height: 20px;
+            margin: 8px auto;
+            background: #fc1944;
+            border-radius: 12px;
+            color: #fff;
+        }
+
+        .container-account .account-head .account-suggest {
+            height: 24px;
+            line-height: 24px;
+        }
+
+        .container-account .account-head .account-suggest span {
+            color: #222226;
+            font-weight: 500;
+        }
+
+        .container-account .accout-body {
+            width: 100%;
+            padding: 24px 16px 0;
+            min-height: 200px;
+            background: #fff;
+            font-size: 14px;
+        }
+
+        .container-account .accout-body .accout-body-title {
+            min-width: 72px;
+            height: 24px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #2e2e2e;
+            line-height: 24px;
+        }
+
+        ul {
+            border: 0;
+            font-size: 100%;
+            vertical-align: baseline;
+            margin: 0;
+            padding: 0;
+            font-family: PingFang SC, Hiragino Sans GB, Arial, Microsoft YaHei, Verdana, Roboto, Noto, Helvetica Neue, sans-serif !important;
+        }
+
+        .container-account .accout-body .accout-body-item {
+            height: 72px;
+            padding: 32px 0 16px;
+            color: #555666;
+        }
+
+        .container-account .accout-body .accout-body-item > span {
+            float: left;
+            width: 56px;
+            height: 24px;
+            display: -webkit-box;
+            display: flex;
+            -webkit-box-pack: justify;
+            justify-content: space-between;
+            padding-left: 16px;
+            -webkit-box-sizing: content-box;
+            box-sizing: content-box;
+        }
+
+        .container-account .accout-body .accout-body-item > p {
+            float: left;
+            text-align: right;
+            width: calc(100% - 72px);
+            color: #222226;
+        }
+
+        .container-account .accout-body .accout-body-item > p a {
+            display: inline-block;
+            min-width: 56px;
+            margin-left: 32px;
+            color: #1989fa;
+        }
+
+        .hengxian {
+            border-top: 1px solid #f0f0f5;
+        }
+
+        .container .container-right {
+            min-width: 1000px;
+            margin-left: 200px;
+            min-height: 800px;
+        }
+
+        .container .container-right .user-account-content {
+            padding: 16px;
+            background: #fff;
+        }
+
+        .user-center-bread {
+            color: #999aaa;
+            font-size: 14px;
+            height: 20px;
+            line-height: 20px;
+            font-weight: 400;
+            margin-bottom: 32px;
+        }
+
+        .user-center-bread span {
+            cursor: pointer;
+        }
+
+        .user-center-bread span em {
+            display: inline-block;
+            margin: 0 4px 0 6px;
+            font-style: normal;
+        }
+
+        .acc_pass_con {
+            padding: 28px 0 30px;
+        }
+
+        .acc_pass_con .acc_pass_list {
+            width: 360px;
+            margin: 0 auto;
+        }
+
+        .acc_pass_con .acc_pass_list li {
+            position: relative;
+            margin-bottom: 8px;
+            font-size: 0;
+        }
+
+        .acc_pass_con .acc_pass_list li label {
+            width: 100px;
+            text-align: right;
+            font-size: 14px;
+            color: #4d4d4d;
+        }
+
+        .acc_pass_con .acc_pass_list li input {
+            width: 252px;
+            height: 32px;
+            line-height: 30px;
+            margin-left: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 0 8px;
+            font-size: 14px;
+            color: #4d4d4d;
+        }
+
+        .acc_pass_con .acc_pass_list .acc_pass_b {
+            padding: 20px 0 0 108px;
+        }
+
+        .acc_pass_con .acc_pass_list li .confirm_disable {
+            color: #4d4d4d;
+            background: #f5f5f5;
+            border: 1px solid #f5f5f5;
+            cursor: default;
+            color: #999;
+        }
+
+        .homebutton {
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 90px;
+            line-height: 38px;
+            font-size: 14px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            line-height: inherit;
+            transition: all .3s;
+            margin-left: 109px;
+            margin-top: 15px;
+        }
+        .btn-primary__disabled{
+            color: #c2c2c2;
+            background-color: #f5f5f5;
+            border-color: transparent;
+            width: 80px;
+            border: none;
+        }
+        .status-box {
+            position: relative;
+            margin-left: 28px;
+        }
+        .status-box > .input2 {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 54%;
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            color: #aaa;
+            font-size: 14px;
+            padding: 10px;
+            height: 38px;
+            vertical-align: middle;
+            border-radius: 4px;
+        }
+        .btn-login {
+            border: 1px solid #0381aa;
+            color: #fff;
+            background-color: #00a7de;
+        }
+        .btn-login1 {
+            color: #555;
+            display: inline-block;
+            height: 36px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            width: 100px;
+            line-height: 38px;
+            font-size: 15px;
+            text-align: center;
+            cursor: pointer;
+            -webkit-transition: all .3s;
+            line-height: inherit;
+            transition: all .3s;
+            padding-top: 6px;
+        }
+    </style>
+    <script>
+        function sendCode() {
+            var memPhone = $("#oldTelephone").val();
+            console.log(memPhone.length);
+            if (memPhone == '' || memPhone.length != 11) {
+                console.log("请输入正确的手机号！");
+                return;
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/fitness/code',
+                    data: {
+                        memPhone: memPhone
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data) {
+                            timer();
+                        } else {
+                            console.log("获取验证码失败");
+                        }
+                    },
+                    error: function (data) {
+                        console.log('连接超时！');
+                    },
+                });
+            }
+        }
+        function sendnewCode() {
+            var memPhone = $("#newTelephone").val();
+            console.log(memPhone.length);
+            if (memPhone == '' || memPhone.length != 11) {
+                console.log("请输入正确的手机号！");
+                return;
+            } else {
+                $.ajax({
+                    type: 'GET',
+                    url: '/fitness/code',
+                    data: {
+                        memPhone: memPhone
+                    },
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data) {
+                            timer();
+                        } else {
+                            console.log("获取验证码失败");
+                        }
+                    },
+                    error: function (data) {
+                        console.log('连接超时！');
+                    },
+                });
+            }
+        }
+        function sendMailCode() {
+            var Email = $("#oldemail").val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/sendEmail',
+                data: {
+                    email: Email
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        timer();
+                    } else {
+                        console.log("获取验证码失败");
+                    }
+                }
+            });
+
+        }
+
+        function sendnewMailCode() {
+            var Email = $("#newemail").val();
+
+            $.ajax({
+                type: 'GET',
+                url: '/sendEmail',
+                data: {
+                    email: Email
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data) {
+                        timer();
+                    } else {
+                        console.log("获取验证码失败");
+                    }
+                }
+            });
+
+        }
+
+        var wait = 60;
+
+        //倒计时
+        function timer() {
+            if (wait == 0) {
+                $("#sendBtn").val("获取验证码");
+                $("#sendBtn").removeAttr("disabled");
+                $("#sendBtn").css("border-color", "1e9fff").css("background", "#ffffff").css("cursor", "pointer");
+                wait = 60;
+            } else {
+                $("#sendBtn").attr("disabled", "true");
+                $("#sendBtn").css("border-color", "fbfbfb").css("background", "#ccc").css("cursor", "not-allowed");
+                $("#sendBtn").val(wait + "秒后重发");
+                wait--;
+                setTimeout(function () {
+                    timer()
+                }, 1000);
+            }
+        }
+
+    </script>
+</head>
+<body>
+
+<section>
+    <div class="container">
+        <div class="container-left">
+            <ul>
+                <li class="">
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5413&quot;}"
+                       href="/personalInformation?xiugai=0">个人资料</a>
+                </li>
+                <li class="router-link-active">
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5414&quot;}"
+                       href="/accountSettings?status=0">账号设置</a>
+                </li>
+                <li>
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5699&quot;}">隐私设置</a>
+                </li>
+                <li>
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5415&quot;}">信息认证</a>
+                </li>
+                <li>
+                    <a data-report-click="{&quot;spm&quot;:&quot;3001.5453&quot;}">我的收藏</a>
+                </li>
+            </ul>
+        </div>
+        <div class="container-right" th:if="${status == 0}">
+            <div class="container-account">
+                <div class="account-head">
+                    <span class="account-shield">[[${account.accountSafetyFactor}]]</span>
+                    <span class="account-desc no-risk">[[${account.accountSafe}]]</span>
+                    <p class="account-suggest">[[${account.accountSafes}]]</p>
+                </div>
+                <div class="accout-body">
+                    <span class="accout-body-title">账号设置</span>
+                    <ul>
+                        <li class="accout-body-item">
+									<span>
+										<span>密</span><span>码</span>
+									</span>
+                            <p>
+                                <span>[[${userEntity.passWord}]]</span>
+                                <a href="/accountSettings?status=1" class="">[[${account.passWordModification}]]</a>
+                            </p>
+                        </li>
+                        <li class="accout-body-item hengxian">
+									<span>
+										<span>邮</span><span>箱</span>
+									</span>
+                            <p>
+                                <span>[[${userEntity.mail}]]</span>
+                                <a href="/accountSettings?status=5" class="">[[${account.mailTip}]]</a>
+                            </p>
+                        </li>
+                        <li class="accout-body-item hengxian">
+									<span>
+										<span>手</span><span>机</span>
+									</span>
+                            <p>
+                                <span>[[${userEntity.telephone}]]</span>
+                                <a href="/accountSettings?status=2" class="">[[${account.telephoneTip}]]</a>
+                            </p>
+                        </li>
+                        <li class="accout-body-item hengxian">
+									<span>
+										<span>微</span><span>信</span>
+									</span>
+                            <p>
+                                <span>[[${userEntity.weChat}]]</span>
+                                <a href="" class="">[[${account.weChatTip}]]（此功能无法使用）</a>
+                            </p>
+                        </li>
+                        <li class="accout-body-item hengxian">
+									<span>
+										<span>Q</span><span>Q</span>
+									</span>
+                            <p>
+                                <span>[[${userEntity.qq}]]</span>
+                                <a href="" class="">[[${account.qqTip}]]（此功能无法使用）</a>
+                            </p>
+                        </li>
+                        <li class="accout-body-item hengxian">
+									<span>
+										<span>账号注销</span>
+									</span>
+                            <p>
+                                <a>不可用!!!</a>
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="container-right" th:if="${status == 1}">
+            <div class="acc_pass user-account-content">
+                <div class="user-center-bread">
+                    <span>账号设置</span>
+                    <em>/</em>
+                    <span>修改密码</span>
+                </div>
+                <div class="acc_pass_con">
+                    <form action="/passwordModification" method="post">
+                        <ul class="acc_pass_list">
+                            <li>
+                                <label>输入旧密码</label>
+                                <input type="text" th:value="${oldPassword}" id="oldPassword" name="oldPassword" placeholder="请输入旧密码" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <li>
+                                <label>输入新密码</label>
+                                <input type="text" th:value="${newPassword}" id="newPassword" name="newPassword" placeholder="请输入新密码" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <li>
+                                <label>确认新密码</label>
+                                <input type="text" th:value="${passwordConfirmation}" id="passwordConfirmation" name="passwordConfirmation" placeholder="确认新密码" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <button type="submit" class="homebutton" placeholder="确认">确认</button>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container-right" th:if="${status == 2}">
+            <div class="acc_pass user-account-content">
+                <div class="user-center-bread">
+                    <span>账号设置</span>
+                    <em>/</em>
+                    <span>修改手机</span>
+                </div>
+                <div class="acc_pass_con">
+                    <form action="/phoneModification" method="post">
+                        <ul class="acc_pass_list">
+                            <li>
+                                <label>输入手机号</label>
+                                <input type="text" th:value="${oldTelephone}" id="oldTelephone" name="oldTelephone" placeholder="请输入手机号码" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <div class="status-box">
+                                <label>验证码</label>
+                                <input type="text" th:value="${code}" id="code" name="code" class="input2"
+                                       placeholder="验证码"/>
+                                <div  class="btn-login1 btn-login" onclick="sendCode()">发送验证码</div>
+                                <div class="text"></div>
+                            </div>
+                        </ul>
+                        <button  type="submit" class="btn btn-primary__disabled" placeholder="下一步">下一步</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="container-right" th:if="${status == 3}">
+            <div class="acc_pass user-account-content">
+                <div class="user-center-bread">
+                    <span>账号设置</span>
+                    <em>/</em>
+                    <span>修改手机</span>
+                </div>
+                <div class="acc_pass_con">
+                    <form action="/newphoneModification" method="post">
+                        <ul class="acc_pass_list">
+                            <li>
+                                <label>输入手机号</label>
+                                <input type="text" th:value="${newTelephone}" id="newTelephone" name="newTelephone" placeholder="请输入新的手机号码" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <div class="status-box">
+                                <label>验证码</label>
+                                <input type="text" th:value="${newcode}" id="newcode" name="newcode" class="input2"
+                                       placeholder="验证码"/>
+                                <div  class="btn-login1 btn-login" onclick="sendnewCode()">发送验证码</div>
+                                <div class="text"></div>
+                            </div>
+                        </ul>
+                        <button  type="submit" class="btn btn-primary__disabled" placeholder="确定修改">确定修改</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="container-right" th:if="${status == 4}">
+            <div class="acc_pass user-account-content">
+                <div class="user-center-bread">
+                    <span>账号设置</span>
+                    <em>/</em>
+                    <span>修改邮箱</span>
+                </div>
+                <div class="acc_pass_con">
+                    <form action="/newemailModification" method="post">
+                        <ul class="acc_pass_list">
+                            <li>
+                                <label>输入邮箱</label>
+                                <input type="text" th:value="${newemail}" id="newemail" name="newemail" placeholder="请输入新的邮箱" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <div class="status-box">
+                                <label>验证码</label>
+                                <input type="text" th:value="${newcodeemail}" id="newcodeemail" name="newcodeemail" class="input2"
+                                       placeholder="验证码"/>
+                                <div  class="btn-login1 btn-login" onclick="sendnewMailCode()">发送验证码</div>
+                                <div class="text"></div>
+                            </div>
+                        </ul>
+                        <button  type="submit" class="btn btn-primary__disabled" placeholder="确定修改">确定修改</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        <div class="container-right" th:if="${status == 5}">
+            <div class="acc_pass user-account-content">
+                <div class="user-center-bread">
+                    <span>账号设置</span>
+                    <em>/</em>
+                    <span>修改邮箱</span>
+                </div>
+                <div class="acc_pass_con">
+                    <form action="/emailModification" method="post">
+                        <ul class="acc_pass_list">
+                            <li>
+                                <label>输入邮箱</label>
+                                <input type="text" th:value="${oldemail}" id="oldemail" name="oldemail" placeholder="请输入邮箱" max-length="20"
+                                       autocomplete="off" oncopy="return false" class="inpt">
+                            </li>
+                            <div class="status-box">
+                                <label>验证码</label>
+                                <input type="text" th:value="${oldcodeemail}" id="oldcodeemail" name="oldcodeemail" class="input2"
+                                       placeholder="验证码"/>
+                                <div  class="btn-login1 btn-login" onclick="sendMailCode()">发送验证码</div>
+                                <div class="text"></div>
+                            </div>
+                        </ul>
+                        <button  type="submit" class="btn btn-primary__disabled" placeholder="下一步">下一步</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

@@ -3,6 +3,7 @@ package life.majiang.community.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.javafx.collections.MappingChange;
 import com.zhenzi.sms.ZhenziSmsClient;
+import life.majiang.community.service.CookieService;
 import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Random;
@@ -54,10 +57,14 @@ public class CodeController {
             ZhenziSmsClient client = new ZhenziSmsClient(apiUrl, appId, appSecret);
 
             HashMap<String, Object> map = new HashMap<>();
-            map.put("templateId", "6783");
+            map.put("templateId", "6816");
             map.put("message", "亲爱的用户，您的短信验证码为" + code + ",5分钟内有效，若非本人操作请忽略。");
             // 接收短信的手机号码
             map.put("number", memPhone);
+            String[] templateParams = new String[1];
+            templateParams[0] = code;
+//            templateParams[1] = "5分钟";
+            map.put("templateParams", templateParams);
 
             String result = client.send(map);
 
@@ -77,6 +84,9 @@ public class CodeController {
     @Resource
     private UserEntityService userEntityService;
 
+    @Resource
+    private CookieService cookieService;
+
     /**
      * 手机验证码登录的请求
      * @param memPhone
@@ -87,9 +97,10 @@ public class CodeController {
     @PostMapping("/loginPhoneYan")
     public String login(@RequestParam(value = "memPhone",required = false) String memPhone,
                         @RequestParam(value = "phoneCode",required = false) String phoneCode,
-                        Model model){
+                        Model model, HttpServletResponse response){
         try {
             userEntityService.loginPhoneCode(memPhone, phoneCode);
+            cookieService.addUserToken(response, memPhone, phoneCode);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("error", e.getMessage());

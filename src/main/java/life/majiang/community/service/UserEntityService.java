@@ -24,7 +24,7 @@ public interface UserEntityService extends IService<UserEntity> {
      * @return
      * @throws Exception
      */
-    UserEntity register(String username, String password, String telephone) throws Exception;
+    UserEntity register(String username, String password, String telephone, String email) throws Exception;
 
     /**
      * 查询redis是否有该电话号码 密码是否正确

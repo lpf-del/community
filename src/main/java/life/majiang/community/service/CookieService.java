@@ -89,4 +89,26 @@ public class CookieService {
         }
         return userEntity;
     }
+
+    /**
+     * redis缓存更新
+     * 从cookie取出username
+     * 查询数据库，修改对应数据
+     * @param request
+     */
+    public void RedisAndCookieUpdate(HttpServletRequest request){
+        String username = "";
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("username")){
+                username = cookie.getValue();
+            }
+        }
+        UserEntity userEntity = null;
+        if (username.contains("@")){
+            userEntity = userEntityMapper.getUserEntityByEmail(username);
+        }else {
+            userEntity = userEntityMapper.getUserEntityByPhone(username);
+        }
+        redisUtil.set(username, JSON.toJSONString(userEntity));
+    }
 }

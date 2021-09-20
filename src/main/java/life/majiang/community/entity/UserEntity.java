@@ -20,7 +20,7 @@ import java.io.Serializable;
 public class UserEntity implements Serializable {
     private Integer userId;         //用户id自增
     private String userName;        //用户名
-    private String passWord;        //密码（明文）
+    private String passWord;        //密码（md5密文）
     private String mail;            //邮箱
     private String telephone;       //电话号码
     private Integer medal;          //勋章 int的包装类每一位是一个勋章

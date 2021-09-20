@@ -56,61 +56,19 @@ public class GiteeController {
 
 
     @GetMapping("/log")
-    public String loin(HttpServletResponse response, HttpServletRequest request, Model model) {
-        String password = "";
-        String telephone = "";
-        if (request.getCookies() != null){
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("password")) {
-                    password = cookie.getValue();
-                } else if (cookie.getName().equals("telephone")) {
-                    telephone = cookie.getValue();
-                }
-            }
-        }
-        model.addAttribute("password", password);
-        model.addAttribute("telephone", telephone);
+    public String loin(HttpServletRequest request, Model model) {
         model.addAttribute("st1", 1);
-        response.addCookie(new Cookie("token", "111"));
         return "login";
     }
 
     @GetMapping("/log2")
-    public String loin2(HttpServletResponse response, HttpServletRequest request, Model model) {
-        String password = "";
-        String telephone = "";
-        if (request.getCookies() != null){
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("password")) {
-                    password = cookie.getValue();
-                } else if (cookie.getName().equals("telephone")) {
-                    telephone = cookie.getValue();
-                }
-            }
-        }
-        model.addAttribute("password", password);
-        model.addAttribute("telephone", telephone);
+    public String loin2(HttpServletRequest request, Model model) {
         model.addAttribute("st2", 2);
-        response.addCookie(new Cookie("token", "111"));
         return "login";
     }
     @GetMapping("/log3")
-    public String loin3(HttpServletResponse response, HttpServletRequest request, Model model) {
-        String password = "";
-        String telephone = "";
-        if (request.getCookies() != null){
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals("password")) {
-                    password = cookie.getValue();
-                } else if (cookie.getName().equals("telephone")) {
-                    telephone = cookie.getValue();
-                }
-            }
-        }
-        model.addAttribute("password", password);
-        model.addAttribute("telephone", telephone);
+    public String loin3(HttpServletRequest request, Model model) {
         model.addAttribute("st3", 3);
-        response.addCookie(new Cookie("token", "111"));
         return "login";
     }
 
@@ -140,17 +98,19 @@ public class GiteeController {
      * @param telephone
      * @param response
      * @param model
+     * @param email
      * @return
      */
     @PostMapping("/register")
     public String register(@RequestParam(value = "username", required = false) String username,
                            @RequestParam(value = "password", required = false) String password,
                            @RequestParam(value = "telephone", required = false) String telephone,
+                           @RequestParam(value = "email", required = false) String email,
                            HttpServletResponse response,
                            Model model) {
 
         try {
-            UserEntity userEntity = userEntityService.register(username,password,telephone);
+            UserEntity userEntity = userEntityService.register(username,password,telephone,email);
             cookieService.addUserToken(response, telephone, password);
             redisUtil.set(telephone, JSON.toJSONString(userEntity));
             return "redirect:/";
