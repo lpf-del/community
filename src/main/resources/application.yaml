@@ -69,12 +69,17 @@ spring:
             enable: true  #spring.mail.properties.mail.smtp.ssl.enable=true
     default-encoding: utf-8 #编码格式
 
+#lpf_comminity:
+#  apiUrl: https://sms_developer.zhenzikj.com
+#  appId: 110009
+#  appSecret: 132a87a8-0852-49b2-b972-9db2aa5efd67
+#  timeOut: 5
+#  codeLength: 6
 
-lpf_comminity:
-  apiUrl: https://sms_developer.zhenzikj.com
-  appId: 110009
-  appSecret: 132a87a8-0852-49b2-b972-9db2aa5efd67
-  timeOut: 5
-  codeLength: 6
-
+#分页配置
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
 

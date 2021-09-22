@@ -26,6 +26,7 @@ public class QuestionDtoService {
     @SuppressWarnings("all")
     UtilLi utilLi;
     public PageDTO List(Integer page) {
+
         Integer count = questionMapper.count();
         Integer maxsize = utilLi.maxsize(count);
         PageDTO pageDTO = new PageDTO();
@@ -33,7 +34,8 @@ public class QuestionDtoService {
         if (page>=maxsize){
             page=maxsize;
         }
-        List<Question> list = questionMapper.Lists((page - 1) * 10,10);
+//        if (page < 1) page = 1;
+        List<Question> list = questionMapper.Lists((page) * 10,10);
         List<QuestionDTO> questionDTOList = utilLi.questionDTOList(list);
         pageDTO.setQuestionDTOS(questionDTOList);
         pageDTO.pages(page,maxsize);

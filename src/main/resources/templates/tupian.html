@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="multipart/form-data; charset=utf-8" />
+    <title>Title</title>
+</head>
+<body>
+<form action="/upload_action" method="post" enctype="multipart/form-data">
+    <input type="file" id="file" name="file" value="file">
+    <div id="click" style="width: 200px; height: 200px; border: 1px solid #000;"></div>
+    <button  type="submit">上传</button>
+</form>
+<script>
+    document.getElementById('file').addEventListener('change', function (e) {
+        var files = this.files;
+        var img = new Image();
+        var reader = new FileReader();
+        reader.readAsDataURL(files[0]);
+        reader.onload = function (e) {
+            var mb = (e.total / 1024) / 1024;
+            if (mb >= 2) {
+                alert('文件大小大于2M');
+                return;
+            }
+            img.src = this.result;
+            img.style.width = "80%";
+            document.getElementById('click').style.width = "200px";
+            document.getElementById('click').style.height = "200px";
+            document.getElementById('click').innerHTML = "";
+            document.getElementById('click').appendChild(img);
+        }
+    });
+
+    var file = $("input[name='file']").attr("file");
+    function tupian() {
+        var data = new FormData($("#file")[0]);
+        $.ajax({
+            url: "/upload_action",
+            type: "post",
+            //不设置内容类型
+            contentType: false,
+            //不处理数据
+            processData: false,
+            //必须设置，保证你提交的数据和后台返回是同步的
+            async: false,
+            data: data,
+            dataType: 'json',
+            success: function (data) {
+                if(data.type == "success"){
+                    alert(data.msg);
+                }else {
+                    alert(data.msg);
+                }
+            }
+        });}
+
+
+</script>
+</body>
+</html>

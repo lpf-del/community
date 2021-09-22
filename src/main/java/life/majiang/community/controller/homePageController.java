@@ -4,21 +4,18 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.entity.AccountInformation;
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.UserEntityMapper;
-import life.majiang.community.service.AccountSettingsService;
-import life.majiang.community.service.CookieService;
-import life.majiang.community.service.PersonService;
-import life.majiang.community.service.UserEntityService;
+import life.majiang.community.service.*;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.HashMap;
 
 /**
@@ -256,4 +253,26 @@ public class homePageController {
         }
         return "redirect:/accountSettings?status=0";
     }
+
+    /**
+     * 参考文件上传
+     * @RequestMapping("/tupian")
+     *     public String tupian(){
+     *         return "tupian";
+     *     }
+     *     @Resource
+     *     private FileService fileService;
+     *     @RequestMapping(value = "/upload_action", method = RequestMethod.POST)
+     *     public String upload(@RequestParam("file") MultipartFile file, Model model) throws IOException {
+     *
+     *         if(file != null){
+     *             String upload = fileService.upload(file);
+     *
+     *         }
+     *
+     *         return "tupian";
+     *
+     *     }
+     */
+
 }
