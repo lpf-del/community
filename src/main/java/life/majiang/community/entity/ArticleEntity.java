@@ -21,7 +21,7 @@ import java.util.List;
 public class ArticleEntity {
     private Integer articleId;        //发表文章的id，自增主键
     private String title;             //文章标题
-    private List<String> picturePath; //图片路径，将第一张图片当作封面
+    private String picturePath;       //图片路径，将第一张图片当作封面
     private Integer authorId;         //作者id
     private String label;             //标签用#分割标签 建议三到四个
     private String classification;    //分类

@@ -35,17 +35,12 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
             throw new Exception("用户名已存在");
         }
         UserEntity userEntity = new UserEntity();
-        userEntity.setLikeCount(0);
-        userEntity.setPostCount(0);
-        userEntity.setHeatNumber(0);
-        userEntity.setAddress("");
         userEntity.setPassWord(DigestUtils.md5DigestAsHex(password.getBytes()));
         userEntity.setTelephone(telephone);
         userEntity.setUserName(username);
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setRegisterTime(System.currentTimeMillis());
         userEntity.setMail(email);
-
         this.baseMapper.insert(userEntity);
         return userEntity;
     }

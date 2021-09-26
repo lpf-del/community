@@ -3,18 +3,24 @@ package life.majiang.community.controller;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.deo.Question;
 import life.majiang.community.deo.User;
+import life.majiang.community.entity.ArticleEntity;
 import life.majiang.community.exception.CustomizeErrorCode;
 import life.majiang.community.exception.CustomizeException;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
+import life.majiang.community.service.ArticleEntityService;
+import life.majiang.community.service.CommentEntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,5 +82,25 @@ public class PublishController {
             questionMapper.update(question,updateWrapper);
         }
         return "redirect:/";
+    }
+
+    @Resource
+    private ArticleEntityService articleEntityService;
+
+    @GetMapping("/newPublish")
+    @ResponseBody
+    public String doNewPublish(@RequestParam(value = "title",required = false) String title,
+                               @RequestParam(value = "description",required = false) String description,
+                               @RequestParam(value = "myTags",required = false) String myTags,
+                               @RequestParam(value = "articleType",required = false) String articleType,
+                               @RequestParam(value = "releaseForm",required = false) String releaseForm,
+                               @RequestParam(value = "fileUrl",required = false) String fileUrl,
+                               HttpServletRequest request, HttpServletResponse response, Model model){
+        try {
+            articleEntityService.addArticle(title, description, myTags, articleType, releaseForm, fileUrl, request);
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+        return "发布成功";
     }
 }

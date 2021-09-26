@@ -63,7 +63,6 @@ public class CookieService {
      * 用username获取个人信息
      * username: 用手机登陆时为手机号， 用邮箱登录时是邮箱
      *     username从cookie中获取，先查redis后查mysql返回user所有信息
-     *
      * @param request
      * @return
      */

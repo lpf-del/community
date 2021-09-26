@@ -42,14 +42,14 @@ public class FileService {
         // 返回客户端 文件地址 URL
         String url = "http://121.40.218.249:8888"+"/upload/" + fileName;
 
-        File dest = new File(UPLOAD_PATH + fileName);
+//        File dest = new File(UPLOAD_PATH + fileName);
 
         // 检测是否存在目录
-        if (!dest.getParentFile().exists()) {
-            dest.getParentFile().mkdirs();
-        }
-
-        file.transferTo(dest);
+//        if (!dest.getParentFile().exists()) {
+//            dest.getParentFile().mkdirs();
+//        }
+//
+//        file.transferTo(dest);
 
         return url;
     }

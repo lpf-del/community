@@ -45,7 +45,7 @@ public class PersonService {
      * @return
      */
     public String hideFourDigit(String str){
-        if (str == null) return null;
+        if (str == null || str.length() == 0) return "";
         StringBuffer sb = new StringBuffer(str);
         sb.replace(3, 7, "****");
         return sb.toString();

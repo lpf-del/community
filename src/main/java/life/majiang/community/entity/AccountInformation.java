@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 /**
+ * 不是数据库表
  * @author lpf
  * @description 账号的信息
  * @date 2021/9/20
