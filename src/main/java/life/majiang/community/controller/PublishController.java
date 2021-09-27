@@ -95,12 +95,14 @@ public class PublishController {
                                @RequestParam(value = "articleType",required = false) String articleType,
                                @RequestParam(value = "releaseForm",required = false) String releaseForm,
                                @RequestParam(value = "fileUrl",required = false) String fileUrl,
-                               HttpServletRequest request, HttpServletResponse response, Model model){
+                               @RequestParam(value = "x",required = false) Integer x,
+                               HttpServletRequest request){
         try {
-            articleEntityService.addArticle(title, description, myTags, articleType, releaseForm, fileUrl, request);
+            articleEntityService.addArticle(title, description, myTags, articleType, releaseForm, fileUrl, request, x);
         } catch (Exception e) {
             return e.getMessage();
         }
+        if (x == 0) return "草稿保存成功";
         return "发布成功";
     }
 }

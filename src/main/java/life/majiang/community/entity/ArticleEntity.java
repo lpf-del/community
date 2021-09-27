@@ -1,5 +1,7 @@
 package life.majiang.community.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,22 +16,21 @@ import java.util.List;
  * @description 文章
  * @date 2021/9/21
  */
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 public class ArticleEntity {
-    private Integer articleId;        //发表文章的id，自增主键
+    @TableId(value = "id",type= IdType.AUTO)
+    private Integer id;               //发表文章的id，自增主键
     private String title;             //文章标题
     private String picturePath;       //图片路径，将第一张图片当作封面
-    private Integer authorId;         //作者id
     private String label;             //标签用#分割标签 建议三到四个
     private String classification;    //分类
     private String type;              //文章类型：原创，转载，翻译
     private String releaseForm;       //发布形式：公开，私密
     private String content;           //文章内容
-    private Integer visits;           //访问量
-    private Integer praiseQuantity;   //点赞量
-    private Integer comment;          //评论
-    private Long releaseTime;         //发布时间
+    private Integer authorId;         //作者id
+    private Integer x;                //0草稿箱， 1发布
 }

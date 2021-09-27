@@ -23,5 +23,5 @@ public interface ArticleEntityService extends IService<ArticleEntity> {
      * @param request
      * @throws Exception
      */
-    void addArticle(String title, String description, String myTags, String articleType, String releaseForm, String fileUrl, HttpServletRequest request) throws Exception;
+    void addArticle(String title, String description, String myTags, String articleType, String releaseForm, String fileUrl, HttpServletRequest request, Integer x) throws Exception;
 }

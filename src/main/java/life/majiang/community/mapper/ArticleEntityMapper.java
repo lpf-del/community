@@ -11,7 +11,4 @@ import org.apache.ibatis.annotations.Select;
  * @date 2021/9/26
  */
 public interface ArticleEntityMapper extends BaseMapper<ArticleEntity> {
-
-    @Select("select * from article_entity where user_name = #{user_name}")
-    Integer exitUserName(@Param(value = "user_name") String username);
 }

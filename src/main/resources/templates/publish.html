@@ -7,12 +7,23 @@
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link href="/css/style.css" type="text/css" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/community.css">
-    <script type="text/javascript" src="js/jquery.1.4.2-min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <link rel="stylesheet" href="./css/editormd.css" />
+    <link rel="stylesheet" href="./css/editormd.logo.min.css" />
+    <link rel="stylesheet" href="./css/editormd.preview.css" />
+    <link rel="stylesheet" href="./css/style.css" />
     <script src="./js/jquery-3.6.0.min.js"></script>
+<!--    <script type="text/javascript" src="js/jquery.1.4.2-min.js"></script>-->
+<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>-->
     <script src="./js/bootstrap.min.js" type="application/javascript"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
-
+<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>-->
+    <script src="./js/editormd.js"></script>
+    <script src="./js/marked.min.js"></script>
+    <script src="./js/prettify.min.js"></script>
+    <script src="./js/raphael.min.js"></script>
+    <script src="./js/underscore.min.js"></script>
+    <script src="./js/sequence-diagram.min.js"></script>
+    <script src="./js/flowchart.min.js"></script>
+    <script src="./js/jquery.flowchart.min.js"></script>
     <style type="text/css">
         * {
             margin: 0;
@@ -471,6 +482,81 @@
             padding-bottom: 18px;
             padding-top: 9px;
         }
+
+        .el-form-item__content {
+            line-height: 40px;
+            position: relative;
+            font-size: 14px;
+        }
+
+        .opt-box {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            width: 816px;
+            height: 64px;
+            margin: 0 auto;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            align-items: center;
+            -webkit-transform: translateX(-16px);
+            transform: translateX(-16px);
+        }
+
+        .btn-box {
+            margin-left: auto;
+        }
+        .btn-outline-secondary {
+            height: 40px;
+            padding: 8px 24px;
+            line-height: 22px;
+            color: #999aaa;
+            background-color: transparent;
+            background-image: none;
+            border-color: #999aaa;
+            font-size: 16px;
+        }
+        .el-button--primary {
+            color: #fff;
+            background-color: #3399ea;
+            border-color: #3399ea;
+        }
+        .el-button {
+            display: inline-block;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #dcdfe6;
+            border-color: #dcdfe6;
+            color: #606266;
+            -webkit-appearance: none;
+            text-align: center;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            outline: none;
+            margin: 0;
+            -webkit-transition: .1s;
+            transition: .1s;
+            font-weight: 500;
+            -webkit-user-select: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 4px;
+        }
+        .is-round {
+            border-radius: 20px;
+            padding: 12px 23px;
+        }
+        .btn-outline-danger {
+            height: 40px;
+            padding: 8px 24px;
+            font-size: 16px;
+            color: #fff;
+            border: none;
+            white-space: nowrap;
+            background: #fc5531;
+        }
     </style>
 </head>
 <body>
@@ -490,6 +576,10 @@
                 <div class="" th:text="${description}" id="description" name="description" cols="30" rows="10"
                 ></div>
             </div>
+<!--            <div id="testEditorMdview" class="testEditoclass">-->
+<!--                <textarea id="appendTest" style="display:none;"></textarea>-->
+<!--            </div>-->
+            <div id="test-editormd"></div>
             <div class="demo">
                 <div class="plus-tag tagbtn clearfix" th:value="${myTags}" id="myTags" name="myTags"></div>
                 <div class="plus-tag-add">
@@ -569,21 +659,92 @@
                         class="tupian">私密</span> </label>
             </div>
             <hr>
-            <button class="btn btn-success btn-publish" onclick="tijiao()">发布</button>
+        </div>
+    </div>
+    <div class="el-form-item__content" style="margin-left: 80px;">
+        <div class="opt-box">
+            <div class="edit-tip-box">
+
+            </div>
+            <div class="btn-box">
+                <button type="button" class="el-button btn-outline-secondary el-button--primary is-round" onclick="tijiao(0)">
+                    <span>保存草稿</span>
+                </button>
+                <button type="button" class="el-button btn-outline-danger el-button--primary is-round" onclick="tijiao(1)">
+                    <span>发布文章</span>
+                </button>
+            </div>
         </div>
     </div>
 </div>
-<script type="text/javascript">
-    const E = window.wangEditor
-    const editor = new E("#description")
-    editor.create();
+<!--<script type="text/javascript">-->
+<!--    const E = window.wangEditor-->
+<!--    const editor = new E("#description")-->
+<!--    editor.create();-->
+<!--</script>-->
+<script>
+    //markDown转HTMl的方法
+    //这里的content就是你在数据库获取到的内容哦
+    //这样就会把markdown文件转换为一个html页面展示也是十分的美观的
+    function mdToHml(content) {
+        //先对容器初始化，在需要展示的容器中创建textarea隐藏标签，
+        $("#testEditorMdview").html('<textarea id="appendTest" style="display:none;"></textarea>');
+        $("#appendTest").val(content);//将需要转换的内容加到转换后展示容器的textarea隐藏标签中
+
+        editormd.markdownToHTML("testEditorMdview", {
+            htmlDecode: "style,script,iframe", //可以过滤标签解码
+            emoji: true,
+            taskList:true,
+            tex: true,               // 默认不解析
+            flowChart:true,         // 默认不解析
+            sequenceDiagram:true,  // 默认不解析
+        });
+    }
 </script>
+<script type="text/javascript">
+    var testEditor;
+
+    window.onload=function(){
+        loading_markdown('');
+    }
+    //这里直接调用这个加载方法就行了
+    //这里有个md参数默认你不是第一次写文章的话就传个空字符就可以了
+    //如果你是需要编辑原来的文章这里的md就传你原文档的内容，编辑器加载完后就会把传进来的内容显示
+    //怎样获取编辑器中我写的内容
+    //很简单这里定义了一个编辑器对象直接 testEditor.getMarkdown();
+    function loading_markdown(md) {
+        testEditor = editormd("test-editormd", {
+            placeholder:'左边编写，右边预览',  //默认显示的文字，这里就不解释了
+            width: "100%",
+            height: 640,
+            syncScrolling: "single",
+            path: "./editormd_lib/",   //你的path路径（原资源文件中lib包在我们项目中所放的位置）
+            theme : "dark",
+            previewTheme : "dark",
+            editorTheme : "pastel-on-dark",
+            markdown : md,
+            codeFold : true,
+            saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
+            searchReplace : true,
+            htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+            toolbar  : false,             //关闭工具栏
+            previewCodeHighlight : true, // 关闭预览 HTML 的代码块高亮，默认开启
+            emoji : true,
+            taskList : true,
+            tocm            : true,         // Using [TOCM]
+            tex : true,                   // 开启科学公式TeX语言支持，默认关闭
+            flowChart : true,             // 开启流程图支持，默认关闭
+            sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+        });
+    }
+</script>
+
 <script>
     var fileUrl = "";
-    function tijiao() {
+    function tijiao(x) {
         tupian()
+        var description = document.getElementsByName("test-editormd-markdown-doc")[0].defaultValue
         var title = $("#title").val();
-        var description = editor.txt.text();
         var myTagss = document.getElementById("myTags").childNodes
         var myTags = ''
         for (var i = 0, l = myTagss.length; i < l; i++) {
@@ -604,7 +765,7 @@
             }
         }
         $.ajax({
-            url: "/newPublish?title=" + title + "&description=" + description + "&myTags=" + myTags + "&articleType=" + articleType + "&releaseForm=" + releaseForm + "&fileUrl=" + fileUrl,
+            url: "/newPublish?title=" + title + "&description=" + description + "&myTags=" + myTags + "&articleType=" + articleType + "&releaseForm=" + releaseForm + "&fileUrl=" + fileUrl + "&x=" + x,
             type: "get",
             //不设置内容类型
             // contentType: false,
@@ -614,6 +775,9 @@
             async: false,
             data: {},
             dataType: 'json',
+            error(data){
+                alert(data.responseText)
+            }
         });
     }
 
