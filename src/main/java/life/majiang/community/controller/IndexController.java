@@ -32,7 +32,7 @@ public class IndexController {
         PageDTO pageDTO = questionDtoService.List(page);
 
         model.addAttribute("pageDTO",pageDTO);
-        return "index";
+        return "indexold";
     }
 
     @GetMapping("/login")
