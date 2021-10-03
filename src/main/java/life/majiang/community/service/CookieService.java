@@ -68,11 +68,14 @@ public class CookieService {
      */
     public UserEntity getPersonInformation(HttpServletRequest request) {
         String username = "";
-        for (Cookie cookie : request.getCookies()) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies == null || cookies.length == 0) return null;
+        for (Cookie cookie : cookies) {
             if (cookie.getName().equals("username")) {
                 username = cookie.getValue();
             }
         }
+        if (username.equals("")) return null;
         UserEntity userEntity;
         Object o = redisUtil.get(username);
         if (o == null) {
@@ -109,5 +112,34 @@ public class CookieService {
             userEntity = userEntityMapper.getUserEntityByPhone(username);
         }
         redisUtil.set(username, JSON.toJSONString(userEntity));
+    }
+
+    /**
+     * 获取cookie的username
+     * @param request
+     * @return
+     */
+    public String getUserName(HttpServletRequest request) {
+        String username = "";
+        for (Cookie cookie : request.getCookies()) {
+            if (cookie.getName().equals("username")){
+                username = cookie.getValue();
+                break;
+            }
+        }
+        return username;
+    }
+
+    /**
+     * 查看该用户是否为lpf（开发人员）
+     * @param request
+     * @return
+     */
+    public Integer UserLpf(HttpServletRequest request) {
+        String username = getUserName(request);
+        if (username.equals("2568034812@qq.com") || username.equals("19862125285")) {
+           return 0;
+        }
+        return 1;
     }
 }

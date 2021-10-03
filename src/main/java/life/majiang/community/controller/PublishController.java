@@ -87,6 +87,21 @@ public class PublishController {
     @Resource
     private ArticleEntityService articleEntityService;
 
+    /**
+     * 新的文章发布接口
+     * 发布文章：(x:0 是草稿箱（不放入redis）， x:1 是正常发布)
+     *      将文章信息放入数据库和redis
+     *      初始化文章的访问量、创建时间。。用于做排行
+     * @param title
+     * @param description
+     * @param myTags
+     * @param articleType
+     * @param releaseForm
+     * @param fileUrl
+     * @param x
+     * @param request
+     * @return
+     */
     @GetMapping("/newPublish")
     @ResponseBody
     public String doNewPublish(@RequestParam(value = "title",required = false) String title,

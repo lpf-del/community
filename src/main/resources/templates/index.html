@@ -1,401 +1,407 @@
 <!doctype html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>《初见》响应式个人博客模板</title>
-<meta name="keywords" content="个人博客，个人网站，个人博客模板，个人网站模板" />
-<meta name="description" content="《初见》响应式个人博客模板是由前端设计师杨青青（www.qingqingblog.com）于2021年5月份设计完成的，模板主要展示个人博客、相册、视频、介绍等功能。" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="css/base.css" rel="stylesheet">
-<link href="css/m.css" rel="stylesheet">
-<script src="js/jquery-3.6.0.min.js" ></script>
-<script src="js/comm.js"></script>
-<style type="text/css">
-			video {
-			    position: relative;
-			    z-index: 1;
-			    width: 100%;
-			    height: 100%;
-			    -o-object-fit: cover;
-			    object-fit: cover;
-			}
-		</style>
-		<script src="" type="text/javascript" charset="utf-8">
-			var video=document.getElementById("startvideo"); 
-			video.play(); 
-		</script>
+    <meta charset="utf-8">
+    <title>lpf-个人社区首页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/base.css" rel="stylesheet">
+    <link href="./css/m.css" rel="stylesheet">
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/comm.js"></script>
+
 </head>
 <body>
 <header>
-	
-  <div class="box">
-	 
-    <div class="logo"><a href="/"><img src="images/logo.png" alt="logo"></a></div>
-    <div class="ad_top"><a href="/"><img src="images/ad01.jpg" alt="广告"></a></div>
-    <div class="contact_icon">
-      <ul>
-        <li><a href="http://wpa.qq.com/msgrd?v=3&uin=2677086147&site=qq&menu=yes"><i class="icon_qq"></i></a></li>
-        <li><a href="tel:186491309**"><i class="icon_tel"></i></a></li>
-        <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=2677086147@qq.com" target="_blank"><i class="icon_email"></i></a></li>
-        <li><i class="icon_weixin"><img src="images/wx.png" alt="微信号：476847"></i></li>
-      </ul>
-    </div>
-    <div class="clear"></div>
-    <nav>
-      <ul id="starlist">
-        <li><a href="index.html">网站首页</a></li>
-        <li><a href="blog.html">博文日记</a></li>
-        <li class="menu"><a href="#">所有内容</a>
-          <ul class="sub">
-            <li><a href="blog_info.html">文章内容</a></li>
-            <li><a href="photos_info.html">相册内容</a></li>
-            <li><a href="videos_info.html">视频内容</a></li>
-            <li><a href="page_info.html">单页内容</a></li>
-          </ul>
-          <span></span></li>
-        <li><a href="photos.html">我的相册<i></i></a></li>
-        <li><a href="videos.html">我的视频</a></li>
-        <li><a href="about.html">个人简历</a></li>
-      </ul>
-      <h2 id="mnavh"><span class="navicon"></span></h2>
-      <div class="is-search"> <i></i> </div>
-      <div class="search-page">
-        <div class="search_box">
-          <div class="go-left"></div>
-          <div class="search">
-            <form action="http://zhuanti.ip3q.com/e/search/index.php" method="post" name="searchform" id="searchform">
-              <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
-              <input name="show" value="title" type="hidden">
-              <input name="tempid" value="1" type="hidden">
-              <input name="tbname" value="news" type="hidden">
-              <input name="Submit" class="input_submit" value="搜索" type="submit">
-            </form>
-          </div>
+
+    <div class="box">
+
+        <div class="logo"><a href="/"><img src="images/logo.png" alt="logo"></a></div>
+        <div class="contact_icon">
+            <ul>
+                <li><a href="http://wpa.qq.com/msgrd?v=3&uin=2677086147&site=qq&menu=yes"><i class="icon_qq"></i></a>
+                </li>
+                <li><a href="tel:186491309**"><i class="icon_tel"></i></a></li>
+                <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=2677086147@qq.com" target="_blank"><i
+                        class="icon_email"></i></a></li>
+                <li><i class="icon_weixin"><img src="images/wx.png" alt="微信号：476847"></i></li>
+            </ul>
         </div>
-      </div>
-      <!--search end--> 
-    </nav>
-  </div>
+        <div class="clear"></div>
+        <nav>
+            <ul id="starlist">
+                <li><a href="/">网站首页</a></li>
+                <li><a href="blog.html">博文日记</a></li>
+                <li><a href="photos.html">我的相册<i></i></a></li>
+                <li><a href="videos.html">我的视频</a></li>
+                <li><a href="about.html">个人简历</a></li>
+                <li><a href="/publish">发布</a></li>
+                <li th:if="${session.user==null}"><a th:href="@{/log}">登录</a></li>
+                <li class="menu" th:if="${session.user!=null}">
+                    <a href="#" th:text="${session.user.getName()}"></a>
+                    <ul class="sub">
+                        <li><a href="/personalInformation?xiugai=0">个人中心</a></li>
+                        <li><a href="/homePage">个人主页</a></li>
+                        <li><a href="/login">退出登录</a></li>
+                    </ul>
+                    <span></span>
+                </li>
+            </ul>
+            <h2 id="mnavh"><span class="navicon"></span></h2>
+            <div class="is-search"><i></i></div>
+            <div class="search-page">
+                <div class="search_box">
+                    <div class="go-left"></div>
+                    <div class="search">
+                        <form action="http://zhuanti.ip3q.com/e/search/index.php" method="post" name="searchform"
+                              id="searchform">
+                            <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词"
+                                   style="color: rgb(153, 153, 153);"
+                                   onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
+                                   onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+                            <input name="show" value="title" type="hidden">
+                            <input name="tempid" value="1" type="hidden">
+                            <input name="tbname" value="news" type="hidden">
+                            <input name="Submit" class="input_submit" value="搜索" type="submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--search end-->
+        </nav>
+    </div>
 </header>
 <div class="ph_margin"></div>
 <!-- banner -->
 <div class="banner_box">
-  <ul class="banner" style="margin-left: 180px;">
-    <li><a href="/" target="_blank"><img src="images/01.jpg">
-      <section><span>创造时尚1</span>
-        <p>轻薄素颜妆让你与众不同</p>
-      </section>
-      </a></li>
-    <li><a href="/" target="_blank"><img src="images/02.jpg">
-      <section><span>创造时尚2</span>
-        <p>轻薄素颜妆让你与众不同</p>
-      </section>
-      </a></li>
-    <li><a href="/" target="_blank"><img src="images/03.jpg">
-      <section><span>创造时尚3</span>
-        <p>轻薄素颜妆让你与众不同</p>
-      </section>
-      </a></li>
-  </ul>
+    <ul class="banner" style="margin-left: 180px;">
+        <li><a href="https://blog.csdn.net/m0_55452176/article/details/120529775" target="_blank"><img src="img/zixun1.png">
+            <section><span>Facebook</span>
+                <p>Facebook 员工年薪中位数高达 170 万元，年均创造的利润约为薪资的 6 倍</p>
+            </section>
+        </a></li>
+        <li><a href="https://blog.csdn.net/super111t/article/details/120526028" target="_blank"><img src="img/zixun2.png">
+            <section><span>苹果</span>
+                <p>苹果安全赏金计划玩不起？研究人员怒发其未修复漏洞的源代码</p>
+            </section>
+        </a></li>
+        <li><a href="https://blog.csdn.net/dQCFKyQDXYm3F8rB0/article/details/120451388" target="_blank"><img src="img/zixun3.png">
+            <section><span>AI</span>
+                <p>谷歌 AI 编舞师</p>
+            </section>
+        </a></li>
+    </ul>
 </div>
 <div class="clear"></div>
 <div class="box">
-  <div class="featured_news">
-    <div class="featured_nav">
-      <h2 class="h_title">精选文章</h2>
-      <ul id="tab">
-        <li class="tab-current"><a href="/" target="_blank">栏目名称</a></li>
-        <li><a href="/" target="_blank">栏目名称</a></li>
-        <li><a href="/" target="_blank">栏目名称</a></li>
-      </ul>
+    <div class="featured_news">
+        <div class="featured_nav">
+            <h2 class="h_title">精选文章</h2>
+            <ul id="tab">
+                <li class="tab-current"><a href="/" target="_blank">栏目名称</a></li>
+                <li><a href="/" target="_blank">栏目名称</a></li>
+                <li><a href="/" target="_blank">栏目名称</a></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <div id="tab-content">
+            <section class="tab-box">
+                <div class="f_news_pic"><i><img src="images/04.jpg" alt=""></i>
+                    <div class="f_news_pic_box"><a href="/developmentDiary" target="_blank" class="f_news_tag">开发日记</a>
+                        <p class="f_news_title"><a href="/developmentDiary">个人博客，属于我的小世界！</a></p>
+                        <p class="f_news_info"><span>2021-9-29</span><span>3090</span></p>
+                    </div>
+                </div>
+                <ul class="f_news_list">
+                    <li><a href="/"><i><img src="images/news01.jpg" alt=""></i>
+                        <p>十条设计原则教你学会如何设计网页布局!</p>
+                        <span>2018-11-08</span></a></li>
+                    <li><a href="/"><i><img src="images/news02.jpg" alt=""></i>
+                        <p>为什么说10月24日是程序员的节日？</p>
+                        <span>2018-11-08</span></a></li>
+                    <li><a href="/"><i><img src="images/news03.jpg" alt=""></i>
+                        <p>个人网站做好了，百度不收录怎么办？来，看看他们怎么做的。</p>
+                        <span>2018-11-08</span></a></li>
+                </ul>
+            </section>
+            <section class="tab-box">
+                <div class="f_news_pic"><i><img src="images/05.jpg" alt=""></i>
+                    <div class="f_news_pic_box"><a href="/" target="_blank" class="f_news_tag">博文日记</a>
+                        <p class="f_news_title"><a href="/">个人网站做好了，百度不收录怎么办？来，看看他们怎么做的。</a></p>
+                        <p class="f_news_info"><span>2021-05-01</span><span>3090</span></p>
+                    </div>
+                </div>
+                <ul class="f_news_list">
+                    <li><a href="/"><i><img src="images/news04.jpg" alt=""></i>
+                        <p>10年前的个人博客模板设计风格，你都还有印象吗？</p>
+                        <span>2018-11-08</span></a></li>
+                    <li><a href="/"><i><img src="images/news05.jpg" alt=""></i>
+                        <p>2020年个人博客还有哪些个人网站站长在坚持？</p>
+                        <span>2018-11-08</span></a></li>
+                    <li><a href="/"><i><img src="images/news06.jpg" alt=""></i>
+                        <p>记录下我第一次在阿里云618活动做直播的感受和心得</p>
+                        <span>2018-11-08</span></a></li>
+                </ul>
+            </section>
+            <section class="tab-box">
+                <div class="f_news_pic"><i><img src="images/06.jpg" alt=""></i>
+                    <div class="f_news_pic_box"><a href="/" target="_blank" class="f_news_tag">博文日记</a>
+                        <p class="f_news_title"><a href="/">为什么说10月24日是程序员的节日？</a></p>
+                        <p class="f_news_info"><span>2021-05-01</span><span>3090</span></p>
+                    </div>
+                </div>
+                <ul class="f_news_list">
+                    <li><a href="/"><i><img src="images/news07.jpg" alt=""></i>
+                        <p>世界上根本没有感同身受这回事</p>
+                        <span>2018-11-08</span></a></li>
+                    <li><a href="/"><i><img src="images/news02.jpg" alt=""></i>
+                        <p>兴趣支撑梦想，兴趣是支撑我自己前行的动力</p>
+                        <span>2018-11-08</span></a></li>
+                    <li><a href="/"><i><img src="images/news03.jpg" alt=""></i>
+                        <p>忙碌是自由活着的一种底气</p>
+                        <span>2018-11-08</span></a></li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    <!--featured_news-->
+    <div class="mycard">
+        <section>
+            <p class="mycard_title">个人名片</p>
+            <p class="mycard_title_en">my</p>
+            <p class="mycard_title_en">profile</p>
+            <div class="ewm"><img src="img/weixin.jpg" alt="二维码"></div>
+            <i><img src="img/mingpian.webp" alt="头像"></i>
+            <ul>
+                <li><span>name</span>[[${userEntity.userName}]]</span></li>
+                <li><span>job</span>程序员</li>
+                <li><span>web</span><a href="http://www.lpf-pqcm.top:8888/" target="_blank">www.lpf-pqcm.top</a>
+                </li>
+                <li><span>add</span>[[${userEntity.address}]]</li>
+            </ul>
+        </section>
     </div>
     <div class="clear"></div>
-    <div id="tab-content">
-      <section class="tab-box">
-        <div class="f_news_pic"><i><img src="images/04.jpg" alt=""></i>
-          <div class="f_news_pic_box"><a href="/" target="_blank" class="f_news_tag">博文日记</a>
-            <p class="f_news_title"><a href="/">个人博客，属于我的小世界！</a></p>
-            <p class="f_news_info"><span>2021-05-01</span><span>3090</span></p>
-          </div>
-        </div>
-        <ul class="f_news_list">
-          <li><a href="/"><i><img src="images/news01.jpg" alt=""></i>
-            <p>十条设计原则教你学会如何设计网页布局!</p>
-            <span>2018-11-08</span></a></li>
-          <li><a href="/"><i><img src="images/news02.jpg" alt=""></i>
-            <p>为什么说10月24日是程序员的节日？</p>
-            <span>2018-11-08</span></a></li>
-          <li><a href="/"><i><img src="images/news03.jpg" alt=""></i>
-            <p>个人网站做好了，百度不收录怎么办？来，看看他们怎么做的。</p>
-            <span>2018-11-08</span></a></li>
+    <div class="featured_pics">
+        <ul>
+            <li><a href="/"><i><img src="images/01.jpg" alt=""></i>
+                <section>
+                    <p>毕业相册</p>
+                    <span>6</span></section>
+            </a></li>
+            <li><a href="/"><i><img src="images/02.jpg" alt=""></i>
+                <section>
+                    <p>宝宝成长记录</p>
+                    <span>23</span></section>
+            </a></li>
+            <li><a href="/"><i><img src="images/03.jpg" alt=""></i>
+                <section>
+                    <p>婚礼相册</p>
+                    <span>8</span></section>
+            </a></li>
+            <li><a href="/"><i><img src="images/04.jpg" alt=""></i>
+                <section>
+                    <p>旅行纪念</p>
+                    <span>6</span></section>
+            </a></li>
+            <li><a href="/"><i><img src="images/05.jpg" alt=""></i>
+                <section>
+                    <p>写真相册</p>
+                    <span>4</span></section>
+            </a></li>
         </ul>
-      </section>
-      <section class="tab-box">
-        <div class="f_news_pic"><i><img src="images/05.jpg" alt=""></i>
-          <div class="f_news_pic_box"><a href="/" target="_blank" class="f_news_tag">博文日记</a>
-            <p class="f_news_title"><a href="/">个人网站做好了，百度不收录怎么办？来，看看他们怎么做的。</a></p>
-            <p class="f_news_info"><span>2021-05-01</span><span>3090</span></p>
-          </div>
-        </div>
-        <ul class="f_news_list">
-          <li><a href="/"><i><img src="images/news04.jpg" alt=""></i>
-            <p>10年前的个人博客模板设计风格，你都还有印象吗？</p>
-            <span>2018-11-08</span></a></li>
-          <li><a href="/"><i><img src="images/news05.jpg" alt=""></i>
-            <p>2020年个人博客还有哪些个人网站站长在坚持？</p>
-            <span>2018-11-08</span></a></li>
-          <li><a href="/"><i><img src="images/news06.jpg" alt=""></i>
-            <p>记录下我第一次在阿里云618活动做直播的感受和心得</p>
-            <span>2018-11-08</span></a></li>
+    </div>
+    <div class="clear"></div>
+    <div class="blogs">
+        <h2 class="h_title"><span class="icon_more"><a href="/" target="_blank">查看更多</a></span>最新文章</h2>
+        <ul>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news02.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>一个32岁程序员的倔强——十年程序人生</h2>
+            </a>
+                <p>创业+自由职业的时间差不多已经一年了，还好没饿死，而且应该还能坚持一两年或者更久吧。最近不少朋友推荐去工作：搞区块链的黄总想拉去开发公链、钢哥要推荐去“得到”、晋哥推荐到支付公司当技术总监。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-05-06</span><span class="blogs_onclick">956</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news03.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>我是个女程序员，反正我就是来活跃气氛的</h2>
+            </a>
+                <p>某网站上有人问：有什么借口让自己写出低质量的代码？一位匿名用户的回答获得高票：我是个女程序员，反正我就是来活跃气氛的。「优秀的女生写出来的程序比男生的更漂亮，世界上第一个程序员好像就是女的」</p>
+                <div class="blogs_base"><span class="blogs_time">2021-04-06</span><span class="blogs_onclick">731</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news04.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>安静地做一个爱设计的女子</h2>
+            </a>
+                <p>自从入了这行，很多人跟我说可以做网络教程，我也有考虑，但最终没有实现，因为我觉得在这个教程泛滥的时代，直接做一套免费的原创个人博客模板更为实在。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-03-26</span><span class="blogs_onclick">96</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news05.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>个人博客，属于我的小世界！</h2>
+            </a>
+                <p>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-02-13</span><span class="blogs_onclick">921</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news02.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>一个32岁程序员的倔强——十年程序人生</h2>
+            </a>
+                <p>创业+自由职业的时间差不多已经一年了，还好没饿死，而且应该还能坚持一两年或者更久吧。最近不少朋友推荐去工作：搞区块链的黄总想拉去开发公链、钢哥要推荐去“得到”、晋哥推荐到支付公司当技术总监。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-05-06</span><span class="blogs_onclick">956</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news03.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>我是个女程序员，反正我就是来活跃气氛的</h2>
+            </a>
+                <p>某网站上有人问：有什么借口让自己写出低质量的代码？一位匿名用户的回答获得高票：我是个女程序员，反正我就是来活跃气氛的。「优秀的女生写出来的程序比男生的更漂亮，世界上第一个程序员好像就是女的」</p>
+                <div class="blogs_base"><span class="blogs_time">2021-04-06</span><span class="blogs_onclick">731</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news04.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>安静地做一个爱设计的女子</h2>
+            </a>
+                <p>自从入了这行，很多人跟我说可以做网络教程，我也有考虑，但最终没有实现，因为我觉得在这个教程泛滥的时代，直接做一套免费的原创个人博客模板更为实在。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-03-26</span><span class="blogs_onclick">96</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news05.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>个人博客，属于我的小世界！</h2>
+            </a>
+                <p>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-02-13</span><span class="blogs_onclick">921</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news02.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>一个32岁程序员的倔强——十年程序人生</h2>
+            </a>
+                <p>创业+自由职业的时间差不多已经一年了，还好没饿死，而且应该还能坚持一两年或者更久吧。最近不少朋友推荐去工作：搞区块链的黄总想拉去开发公链、钢哥要推荐去“得到”、晋哥推荐到支付公司当技术总监。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-05-06</span><span class="blogs_onclick">956</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news03.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>我是个女程序员，反正我就是来活跃气氛的</h2>
+            </a>
+                <p>某网站上有人问：有什么借口让自己写出低质量的代码？一位匿名用户的回答获得高票：我是个女程序员，反正我就是来活跃气氛的。「优秀的女生写出来的程序比男生的更漂亮，世界上第一个程序员好像就是女的」</p>
+                <div class="blogs_base"><span class="blogs_time">2021-04-06</span><span class="blogs_onclick">731</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news04.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>安静地做一个爱设计的女子</h2>
+            </a>
+                <p>自从入了这行，很多人跟我说可以做网络教程，我也有考虑，但最终没有实现，因为我觉得在这个教程泛滥的时代，直接做一套免费的原创个人博客模板更为实在。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-03-26</span><span class="blogs_onclick">96</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
+            <li class="blogs_list"><a href="/" target="_blank"><i><img src="images/news05.jpg" alt="机械制造行业未来的前景"></i>
+                <h2>个人博客，属于我的小世界！</h2>
+            </a>
+                <p>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。</p>
+                <div class="blogs_base"><span class="blogs_time">2021-02-13</span><span class="blogs_onclick">921</span>
+                </div>
+                <a href="/" target="_blank" class="read_more">阅读更多</a></li>
         </ul>
-      </section>
-      <section class="tab-box">
-        <div class="f_news_pic"><i><img src="images/06.jpg" alt=""></i>
-          <div class="f_news_pic_box"><a href="/" target="_blank" class="f_news_tag">博文日记</a>
-            <p class="f_news_title"><a href="/">为什么说10月24日是程序员的节日？</a></p>
-            <p class="f_news_info"><span>2021-05-01</span><span>3090</span></p>
-          </div>
+    </div>
+    <aside class="rbox">
+        <div class="isgood_news">
+            <h2 class="h_title">站长推荐</h2>
+            <ul>
+                <li><a href="/" title="" target="_blank"> <i><img src="images/news02.jpg" alt=""></i><em>1</em>
+                    <p>一个32岁程序员的倔强——十年程序人生</p>
+                    <span class="star5"></span> </a></li>
+                <li><a href="/" title="" target="_blank"> <i><img src="images/news03.jpg" alt=""></i><em>2</em>
+                    <p>我是个女程序员，反正我就是来活跃气氛的</p>
+                    <span class="star4"></span> </a></li>
+                <li><a href="/" title="" target="_blank"> <i><img src="images/news04.jpg" alt=""></i><em>3</em>
+                    <p>安静地做一个爱设计的女子</p>
+                    <span class="star4"></span> </a></li>
+                <li><a href="/" title="" target="_blank"> <i><img src="images/news05.jpg" alt=""></i><em>4</em>
+                    <p>个人博客，属于我的小世界！</p>
+                    <span class="star3"></span> </a></li>
+                <li><a href="/" title="" target="_blank"> <i><img src="images/news02.jpg" alt=""></i><em>5</em>
+                    <p>一个32岁程序员的倔强——十年程序人生</p>
+                    <span class="star2"></span> </a></li>
+                <li><a href="/" title="" target="_blank"> <i><img src="images/news05.jpg" alt=""></i><em>6</em>
+                    <p>个人博客，属于我的小世界！</p>
+                    <span class="star2"></span> </a></li>
+            </ul>
         </div>
-        <ul class="f_news_list">
-          <li><a href="/"><i><img src="images/news07.jpg" alt=""></i>
-            <p>世界上根本没有感同身受这回事</p>
-            <span>2018-11-08</span></a></li>
-          <li><a href="/"><i><img src="images/news02.jpg" alt=""></i>
-            <p>兴趣支撑梦想，兴趣是支撑我自己前行的动力</p>
-            <span>2018-11-08</span></a></li>
-          <li><a href="/"><i><img src="images/news03.jpg" alt=""></i>
-            <p>忙碌是自由活着的一种底气</p>
-            <span>2018-11-08</span></a></li>
-        </ul>
-      </section>
-    </div>
-  </div>
-  <!--featured_news-->
-  <div class="mycard">
-    <section>
-      <p class="mycard_title">个人名片</p>
-      <p class="mycard_title_en">my</p>
-      <p class="mycard_title_en">profile</p>
-      <div class="ewm"><img src="images/wx.png" alt="二维码"></div>
-      <i><img src="images/avatar.png" alt="头像"></i>
-      <ul>
-        <li><span>name</span>杨青青</li>
-        <li><span>job</span>前端设计师、程序员</li>
-        <li><span>web</span><a href="https://www.qingqingblog.com/" target="_blank">www.qingqingblog.com</a></li>
-        <li><span>add</span>天津市滨海新区</li>
-      </ul>
-    </section>
-  </div>
-  <div class="clear"></div>
-  <div class="featured_pics">
-    <ul>
-      <li><a href="/"><i><img src="images/01.jpg" alt=""></i>
-        <section>
-          <p>毕业相册</p>
-          <span>6</span></section>
-        </a></li>
-      <li><a href="/"><i><img src="images/02.jpg" alt=""></i>
-        <section>
-          <p>宝宝成长记录</p>
-          <span>23</span></section>
-        </a></li>
-      <li><a href="/"><i><img src="images/03.jpg" alt=""></i>
-        <section>
-          <p>婚礼相册</p>
-          <span>8</span></section>
-        </a></li>
-      <li><a href="/"><i><img src="images/04.jpg" alt=""></i>
-        <section>
-          <p>旅行纪念</p>
-          <span>6</span></section>
-        </a></li>
-      <li><a href="/"><i><img src="images/05.jpg" alt=""></i>
-        <section>
-          <p>写真相册</p>
-          <span>4</span></section>
-        </a></li>
-    </ul>
-  </div>
-  <div class="clear"></div>
-  <div class="blogs">
-    <h2 class="h_title"><span class="icon_more"><a href="/" target="_blank">查看更多</a></span>最新文章</h2>
-    <ul>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news02.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>一个32岁程序员的倔强——十年程序人生</h2>
-        </a>
-        <p>创业+自由职业的时间差不多已经一年了，还好没饿死，而且应该还能坚持一两年或者更久吧。最近不少朋友推荐去工作：搞区块链的黄总想拉去开发公链、钢哥要推荐去“得到”、晋哥推荐到支付公司当技术总监。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-05-06</span><span class="blogs_onclick">956</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news03.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>我是个女程序员，反正我就是来活跃气氛的</h2>
-        </a>
-        <p>某网站上有人问：有什么借口让自己写出低质量的代码？一位匿名用户的回答获得高票：我是个女程序员，反正我就是来活跃气氛的。「优秀的女生写出来的程序比男生的更漂亮，世界上第一个程序员好像就是女的」</p>
-        <div class="blogs_base"><span class="blogs_time">2021-04-06</span><span class="blogs_onclick">731</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news04.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>安静地做一个爱设计的女子</h2>
-        </a>
-        <p>自从入了这行，很多人跟我说可以做网络教程，我也有考虑，但最终没有实现，因为我觉得在这个教程泛滥的时代，直接做一套免费的原创个人博客模板更为实在。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-03-26</span><span class="blogs_onclick">96</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news05.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>个人博客，属于我的小世界！</h2>
-        </a>
-        <p>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-02-13</span><span class="blogs_onclick">921</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news02.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>一个32岁程序员的倔强——十年程序人生</h2>
-        </a>
-        <p>创业+自由职业的时间差不多已经一年了，还好没饿死，而且应该还能坚持一两年或者更久吧。最近不少朋友推荐去工作：搞区块链的黄总想拉去开发公链、钢哥要推荐去“得到”、晋哥推荐到支付公司当技术总监。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-05-06</span><span class="blogs_onclick">956</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news03.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>我是个女程序员，反正我就是来活跃气氛的</h2>
-        </a>
-        <p>某网站上有人问：有什么借口让自己写出低质量的代码？一位匿名用户的回答获得高票：我是个女程序员，反正我就是来活跃气氛的。「优秀的女生写出来的程序比男生的更漂亮，世界上第一个程序员好像就是女的」</p>
-        <div class="blogs_base"><span class="blogs_time">2021-04-06</span><span class="blogs_onclick">731</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news04.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>安静地做一个爱设计的女子</h2>
-        </a>
-        <p>自从入了这行，很多人跟我说可以做网络教程，我也有考虑，但最终没有实现，因为我觉得在这个教程泛滥的时代，直接做一套免费的原创个人博客模板更为实在。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-03-26</span><span class="blogs_onclick">96</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news05.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>个人博客，属于我的小世界！</h2>
-        </a>
-        <p>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-02-13</span><span class="blogs_onclick">921</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news02.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>一个32岁程序员的倔强——十年程序人生</h2>
-        </a>
-        <p>创业+自由职业的时间差不多已经一年了，还好没饿死，而且应该还能坚持一两年或者更久吧。最近不少朋友推荐去工作：搞区块链的黄总想拉去开发公链、钢哥要推荐去“得到”、晋哥推荐到支付公司当技术总监。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-05-06</span><span class="blogs_onclick">956</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news03.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>我是个女程序员，反正我就是来活跃气氛的</h2>
-        </a>
-        <p>某网站上有人问：有什么借口让自己写出低质量的代码？一位匿名用户的回答获得高票：我是个女程序员，反正我就是来活跃气氛的。「优秀的女生写出来的程序比男生的更漂亮，世界上第一个程序员好像就是女的」</p>
-        <div class="blogs_base"><span class="blogs_time">2021-04-06</span><span class="blogs_onclick">731</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news04.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>安静地做一个爱设计的女子</h2>
-        </a>
-        <p>自从入了这行，很多人跟我说可以做网络教程，我也有考虑，但最终没有实现，因为我觉得在这个教程泛滥的时代，直接做一套免费的原创个人博客模板更为实在。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-03-26</span><span class="blogs_onclick">96</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-      <li class="blogs_list"> <a href="/" target="_blank"><i><img src="images/news05.jpg" alt="机械制造行业未来的前景"></i>
-        <h2>个人博客，属于我的小世界！</h2>
-        </a>
-        <p>个人博客，用来做什么？我刚开始就把它当做一个我吐槽心情的地方，也就相当于一个网络记事本，写上一些关于自己生活工作中的小情小事，也会放上一些照片，音乐。</p>
-        <div class="blogs_base"><span class="blogs_time">2021-02-13</span><span class="blogs_onclick">921</span></div>
-        <a href="/" target="_blank" class="read_more">阅读更多</a> </li>
-    </ul>
-  </div>
-  <aside class="rbox">
-    <div class="isgood_news">
-      <h2 class="h_title">站长推荐</h2>
-      <ul>
-        <li><a href="/" title="" target="_blank"> <i><img src="images/news02.jpg" alt=""></i><em>1</em>
-          <p>一个32岁程序员的倔强——十年程序人生</p>
-          <span class="star5"></span> </a></li>
-        <li><a href="/" title="" target="_blank"> <i><img src="images/news03.jpg" alt=""></i><em>2</em>
-          <p>我是个女程序员，反正我就是来活跃气氛的</p>
-          <span class="star4"></span> </a></li>
-        <li><a href="/" title="" target="_blank"> <i><img src="images/news04.jpg" alt=""></i><em>3</em>
-          <p>安静地做一个爱设计的女子</p>
-          <span class="star4"></span> </a></li>
-        <li><a href="/" title="" target="_blank"> <i><img src="images/news05.jpg" alt=""></i><em>4</em>
-          <p>个人博客，属于我的小世界！</p>
-          <span class="star3"></span> </a></li>
-        <li><a href="/" title="" target="_blank"> <i><img src="images/news02.jpg" alt=""></i><em>5</em>
-          <p>一个32岁程序员的倔强——十年程序人生</p>
-          <span class="star2"></span> </a></li>
-        <li><a href="/" title="" target="_blank"> <i><img src="images/news05.jpg" alt=""></i><em>6</em>
-          <p>个人博客，属于我的小世界！</p>
-          <span class="star2"></span> </a></li>
-      </ul>
-    </div>
-    <div class="ad_r"><a href="/"><img src="images/ads.png" alt="广告图"></a></div>
-    <div class="hot_news">
-      <h2 class="h_title">人气点击</h2>
-      <ol start="1">
-        <li><a href="/" title="" target="_blank">
-          <p>个人博客，属于我的小世界！</p>
-          </a><span>900</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>我仅仅是一个“草根站长”</p>
-          </a><span>798</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>世界上根本没有感同身受这回事</p>
-          </a><span>765</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>兴趣支撑梦想，兴趣是支撑我自己前行的动力</p>
-          </a><span>659</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>忙碌是自由活着的一种底气</p>
-          </a><span>640</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>从互联网消失的那3年，都去哪儿了？</p>
-          </a><span>503</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>7年，一个80后女站长与阿里云携手创业的真实故事</p>
-          </a><span>500</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>【告别2018】耕耘才有所得，付出才有收获</p>
-          </a><span>469</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>网易博客关闭，何不从此开始潇洒行走江湖！</p>
-          </a><span>398</span></li>
-        <li><a href="/" title="" target="_blank">
-          <p>从互联网消失的那3年，都去哪儿了？</p>
-          </a><span>503</span></li>
-      </ol>
-    </div>
-    <div class="ad_r"><a href="/"><img src="images/ads2.png" alt="广告图"></a></div>
-    <div class="tagsclous">
-      <h2 class="h_title">标签云</h2>
-      <ul>
-        <a href="/" target="_blank">女程序员</a> <a href="/" target="_blank">互联网</a> <a href="/" target="_blank">自由</a> <a href="/" target="_blank">底气</a> <a href="/" target="_blank">忙碌生活</a> <a href="/" target="_blank">建站流程</a> <a href="/" target="_blank">个人网站</a> <a href="/" target="_blank">建站初衷</a> <a href="/" target="_blank">个人博客</a> <a href="/" target="_blank">草根站长</a> <a href="/" target="_blank">618活动</a> <a href="/" target="_blank">心得</a> <a href="/" target="_blank">感受</a> <a href="/" target="_blank">直播</a> <a href="/" target="_blank">阿里云</a>
-      </ul>
-    </div>
-    <div class="emial_box">
-      <p>您可以通过以下方式联系我们</p>
-      <p>（<b>提议</b>、<b>投诉</b>、<b>合作</b>推荐此方式）</p>
-      <p>发送邮件Email到</p>
-      <p><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=476847113@qq.com" target="_blank">dancesmiling@qq.com</a></p>
-    </div>
-  </aside>
-  <div class="clear"></div>
-  <div class="links">
-    <h2 class="h_title">友情链接</h2>
-    <ul>
-      <li><a href="https://www.qingqingblog.com/" target="_blank">杨青青个人博客</a></li>
-      <li><a href="http://www.ip3q.com/" target="_blank">IP3Q模板网</a></li>
-      <li><a href="https://www.3dst.cn/" target="_blank">阅读文章网</a></li>
-      <li><a href="http://www.cax8.com/" target="_blank">杨青青个人博客</a></li>
-      <li><a href="http://soutupian.ip3q.com/" target="_blank">搜图片网</a></li>
-      <li><a href="http://menhu.ip3q.com/" target="_blank">青于蓝门户网站</a></li>
-    </ul>
-  </div>
+        <div class="ad_r"><a href="/"><img src="images/ads.png" alt="广告图"></a></div>
+        <div class="hot_news">
+            <h2 class="h_title">人气点击</h2>
+            <ol start="1">
+                <li><a href="/" title="" target="_blank">
+                    <p>个人博客，属于我的小世界！</p>
+                </a><span>900</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>我仅仅是一个“草根站长”</p>
+                </a><span>798</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>世界上根本没有感同身受这回事</p>
+                </a><span>765</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>兴趣支撑梦想，兴趣是支撑我自己前行的动力</p>
+                </a><span>659</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>忙碌是自由活着的一种底气</p>
+                </a><span>640</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>从互联网消失的那3年，都去哪儿了？</p>
+                </a><span>503</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>7年，一个80后女站长与阿里云携手创业的真实故事</p>
+                </a><span>500</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>【告别2018】耕耘才有所得，付出才有收获</p>
+                </a><span>469</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>网易博客关闭，何不从此开始潇洒行走江湖！</p>
+                </a><span>398</span></li>
+                <li><a href="/" title="" target="_blank">
+                    <p>从互联网消失的那3年，都去哪儿了？</p>
+                </a><span>503</span></li>
+            </ol>
+        </div>
+        <div class="ad_r"><a href="/"><img src="images/ads2.png" alt="广告图"></a></div>
+        <div class="tagsclous">
+            <h2 class="h_title">标签云</h2>
+            <ul>
+                <a href="/" target="_blank">女程序员</a> <a href="/" target="_blank">互联网</a> <a href="/"
+                                                                                            target="_blank">自由</a> <a
+                    href="/" target="_blank">底气</a> <a href="/" target="_blank">忙碌生活</a> <a href="/" target="_blank">建站流程</a>
+                <a href="/" target="_blank">个人网站</a> <a href="/" target="_blank">建站初衷</a> <a href="/" target="_blank">个人博客</a>
+                <a href="/" target="_blank">草根站长</a> <a href="/" target="_blank">618活动</a> <a href="/" target="_blank">心得</a>
+                <a href="/" target="_blank">感受</a> <a href="/" target="_blank">直播</a> <a href="/"
+                                                                                         target="_blank">阿里云</a>
+            </ul>
+        </div>
+        <div class="emial_box">
+            <p>您可以通过以下方式联系我们</p>
+            <p>（<b>提议</b>、<b>投诉</b>、<b>合作</b>推荐此方式）</p>
+            <p>发送邮件Email到</p>
+            <p><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=2677086147@qq.com" target="_blank">lpf@qq.com</a>
+            </p>
+        </div>
+    </aside>
+    <div class="clear"></div>
+
 </div>
 <footer>
-  <div class="box">
-    <ul class="footer_nav">
-      <li><a href="/" target="_blank">网站地图</a></li>
-      <li><a href="all_list.html" target="_blank">所有文章</a></li>
-      <li><a href="tags.html" target="_blank">标签合集</a></li>
-      <li><a href="/" target="_blank">访问统计</a></li>
-    </ul>
-    <div class="guanzhu_img"><i><img src="images/wx.png" alt="微信:4768447113">微信号</i> <i><img src="images/wxgzh.jpg" alt="微信:4768447113">微信公众号</i></div>
-    <div class="copyright">
-      <p>杨青青个人博客网站 版权所有 </p>
-      <p>Copyright © <a href="https://www.qingqingblog.com/" target="_blank">www.qingqingblog.com</a> All Rights Reserved.</p>
-      <p>备案号：<a href="http://www.beian.miit.gov.cn/" target="_blank">津ICP备20005778号-1</a><i class="ga"><img src="images/ga.png" alt="公安备案号"></i>津公网安备 12011602000448 号</p>
+    <div class="box">
+        <ul class="footer_nav">
+            <li><a href="/" target="_blank">网站地图</a></li>
+            <li><a href="all_list.html" target="_blank">所有文章</a></li>
+            <li><a href="tags.html" target="_blank">标签合集</a></li>
+            <li><a href="/" target="_blank">访问统计</a></li>
+        </ul>
+        </div>
+        <div class="copyright">
+            <p>lpf个人博客网站 版权所有 </p>
+            <p>Copyright © <a href="https://www.qingqingblog.com/" target="_blank">www.qingqingblog.com</a> All Rights
+                Reserved.</p>
+            <p>备案号：<a href="http://www.beian.miit.gov.cn/" target="_blank">津ICP备20005778号-1</a><i class="ga"><img
+                    src="images/ga.png" alt="公安备案号"></i>津公网安备 12011602000448 号</p>
+        </div>
     </div>
-  </div>
 </footer>
 <a href="#" title="返回顶部" class="icon-top"></a>
 </body>

@@ -34,11 +34,11 @@ nav {line-height: 60px;height: 60px;padding-left: 50px;border-radius: 10px;margi
 #starlist li { position: relative; display: inline-block; font-size: 18px; text-align: center; font-weight: bold; }
 #starlist li a { display: block; color: #fff; padding: 0 35px; }
 #starlist li:hover a, #starlist ul.sub li a:hover { text-decoration: none }
-#starlist ul.sub { position: absolute; border-radius: 0 0 10px 10px; overflow: hidden; left: 0; top: 60px; z-index: 9; width: 130%; line-height: 50px; opacity: 0; transition: all .5s; box-shadow: 0px 5px 9px 1px rgba(144, 161, 180, 0.2); }
+#starlist ul.sub { position: absolute; border-radius: 0 0 10px 10px; overflow: hidden; left: 0; top: 10px; z-index: 9; width: 130%; line-height: 50px; opacity: 0; transition: all .5s; box-shadow: 0px 5px 9px 1px rgba(144, 161, 180, 0.2); }
 #starlist ul.sub li { width: 100%; background: #001737; float: left; font-size: 15px; transition: all .5s }
 #starlist ul.sub li a { padding: 0; display: none; width: 100%; color: #f8f8f8; border-bottom: 1px #10264a solid; }
 #starlist ul.sub li:last-child a { border: none }
-#starlist li:hover ul.sub { opacity: 1; top: 76px; }
+#starlist li:hover ul.sub { opacity: 1; top: 60px; }
 #starlist li:hover ul.sub li a { display: block; }
 #starlist ul.sub li:hover { padding-left: 5px; }
 #starlist li:hover ul.sub:after, #starlist ul.sub li:after, #starlist ul.sub li a:after { display: none; }
@@ -84,7 +84,7 @@ nav {line-height: 60px;height: 60px;padding-left: 50px;border-radius: 10px;margi
 .featured_nav { margin-bottom: 30px; overflow: hidden; }
 .featured_nav h2 { float: left; }
 h2.h_title { line-height: 50px; font-size: 22px; }
-.featured_nav #tab { border-radius: 120px; padding: 0px 35px; float: right; background: #fff; line-height: 50px }
+.featured_nav #tab { border-radius: 120px; padding: 0px 35px; float: right; background: #fff; line-height: 50px; margin-right: 12px }
 .featured_nav #tab li { display: inline-block }
 .featured_nav #tab li a { display: block; margin: 0 20px; padding: 0 10px; position: relative; }
 .featured_nav #tab li a:after { content: ""; position: absolute; width: 0; height: 0; background: #fff; left: 0; bottom: 0; transition: all .5s }

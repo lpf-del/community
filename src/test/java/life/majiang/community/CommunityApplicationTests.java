@@ -23,7 +23,7 @@ class CommunityApplicationTests {
     UserEntityMapper userEntityMapper;
     @Test
     void contextLoads() {
-        System.out.println((String) null);
+        System.out.println(System.currentTimeMillis());
     }
 
 }
