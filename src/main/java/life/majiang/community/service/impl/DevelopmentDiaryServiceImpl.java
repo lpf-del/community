@@ -55,7 +55,6 @@ public class DevelopmentDiaryServiceImpl extends ServiceImpl<DevelopmentDiaryMap
         if (o == null){
             Integer integer = developmentDiaryMapper.selectCount(null);
             int pageMax = integer/10 + integer%10!=0?1:0;
-            System.out.println(pageMax);
             Page<DevelopmentDiary> developmentDiaryPage =
                     developmentDiaryMapper.selectPage(new Page<DevelopmentDiary>(Math.min(page,pageMax), 10), new QueryWrapper<DevelopmentDiary>().orderByDesc("diary_time"));
             List<DevelopmentDiary> records = developmentDiaryPage.getRecords();

@@ -60,4 +60,11 @@ public interface UserEntityService extends IService<UserEntity> {
      * @param phoneCode
      */
     void loginPhoneCode(String memPhone, String phoneCode) throws Exception;
+
+    /**
+     * 根据作者id获取简化的user信息
+     * @param authorId
+     * @return
+     */
+    UserEntity getAuthor(Integer authorId);
 }

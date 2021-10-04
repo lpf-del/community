@@ -10,4 +10,13 @@ import life.majiang.community.entity.ArticleRankingEntity;
  * @date 2021/9/26
  */
 public interface ArticleRankingEntityService extends IService<ArticleRankingEntity> {
+    void addArticleVisit();
+
+    void addArticlePraiseQuantity();
+
+    void subArticlePraiseQuantity();
+
+    void addArticleComment();
+
+    void subArticleComment();
 }

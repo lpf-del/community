@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,35 +51,35 @@ public class QuestionController {
 
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Long id, Model model, HttpServletRequest request){
-        QuestionDTO questionDTO = questionDtoService.selectById(id);
-        Question question = questionMapper.selectById(id);
-        if (question == null){
-            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
-        }
-        UpdateWrapper<Question> updateWrapper = new UpdateWrapper<Question>();
-        updateWrapper.setSql("view_count = view_count +1").eq("id",question.getId());
-        questionMapper.update(null,updateWrapper);
-        model.addAttribute("question",questionDTO);
-        String time = utilLi.time(questionDTO.getGmtCreate());
-        model.addAttribute("time",time);
-
-        List<Question> questionList= utilLi.selectRelated(questionDTO);
-        System.out.println(questionList);
-       model.addAttribute("relatedQuestions",questionList);
-
-
-        List<CommentUserDTO> list = utilLi.listByQuestionId(id,0L);
-
-        model.addAttribute("comments",list);
-
-        Map<String,Object> map = new HashMap<>();
-        map.put("wen_zhang_id",question.getId());
-        List<Utillpf> utilLpfs = utilLpfMapper.selectByMap(map);
-        if (utilLpfs.size()==1&&utilLpfs!=null){
-            model.addAttribute("zan",true);
-        }else {
+//        QuestionDTO questionDTO = questionDtoService.selectById(id);
+//        Question question = questionMapper.selectById(id);
+//        if (question == null){
+//            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+//        }
+//        UpdateWrapper<Question> updateWrapper = new UpdateWrapper<Question>();
+//        updateWrapper.setSql("view_count = view_count +1").eq("id",question.getId());
+//        questionMapper.update(null,updateWrapper);
+        model.addAttribute("question",new QuestionDTO());
+//        String time = utilLi.time(questionDTO.getGmtCreate());
+        model.addAttribute("time",1);
+//
+//        List<Question> questionList= utilLi.selectRelated(questionDTO);
+//        System.out.println(questionList);
+       model.addAttribute("relatedQuestions",new ArrayList<Question>());
+//
+//
+//        List<CommentUserDTO> list = utilLi.listByQuestionId(id,0L);
+//
+        model.addAttribute("comments",new ArrayList<CommentUserDTO>());
+//
+//        Map<String,Object> map = new HashMap<>();
+//        map.put("wen_zhang_id",question.getId());
+//        List<Utillpf> utilLpfs = utilLpfMapper.selectByMap(map);
+//        if (utilLpfs.size()==1&&utilLpfs!=null){
+//            model.addAttribute("zan",true);
+//        }else {
             model.addAttribute("zan",false);
-        }
+//        }
 
         return "question";
     }

@@ -133,4 +133,42 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
             }
         }
     }
+
+    /**
+     * 获取作者信息
+     * @param authorId
+     * @return
+     */
+    @Override
+    public UserEntity getAuthor(Integer authorId) {
+        Object o = redisUtil.get("au_" + authorId);
+        UserEntity author = null;
+        if (o == null){
+            author = userEntityMapper.selectById(authorId);
+            //作者信息简化处理
+            author = Author(author);
+            redisUtil.set("au_" + authorId, JSON.toJSONString(author));
+        }else {
+            author = JSON.parseObject(o.toString(), UserEntity.class);
+        }
+        return author;
+    }
+
+    /**
+     * 作者信息和用户信息用的同一数据
+     *
+     * 作者信息的某些信息不能泄露（如：qq，微信，电话等等），所以要变为空值: " "
+     * @param author
+     * @return
+     */
+    private UserEntity Author(UserEntity author) {
+        author.setWeChat("");
+        author.setQq("");
+        author.setMail("");
+        author.setTelephone("");
+        author.setAddress("");
+        author.setPassWord("");
+        author.setUuid("");
+        return author;
+    }
 }

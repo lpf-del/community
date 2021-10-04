@@ -13,4 +13,28 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ArticleRankingEntityServiceImpl extends ServiceImpl<ArticleRankingEntityMapper, ArticleRankingEntity> implements ArticleRankingEntityService {
+    @Override
+    public void addArticleVisit() {
+
+    }
+
+    @Override
+    public void addArticlePraiseQuantity() {
+
+    }
+
+    @Override
+    public void subArticlePraiseQuantity() {
+
+    }
+
+    @Override
+    public void addArticleComment() {
+
+    }
+
+    @Override
+    public void subArticleComment() {
+
+    }
 }

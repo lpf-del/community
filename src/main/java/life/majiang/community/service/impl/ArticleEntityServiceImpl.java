@@ -2,13 +2,16 @@ package life.majiang.community.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import life.majiang.community.entity.ArticleAndUserAndRang;
 import life.majiang.community.entity.ArticleEntity;
 import life.majiang.community.entity.ArticleRankingEntity;
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.ArticleEntityMapper;
 import life.majiang.community.mapper.ArticleRankingEntityMapper;
+import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.service.ArticleEntityService;
 import life.majiang.community.service.CookieService;
+import life.majiang.community.service.UserEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +38,10 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
 
     @Resource
     private RedisUtil redisUtil;
+
+
+    @Resource
+    private UserEntityService userEntityService;
 
     @Override
     public void addArticle(String title, String description, String myTags, String articleType, String releaseForm, String fileUrl, HttpServletRequest request, Integer x) throws Exception {
@@ -63,6 +70,11 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         addArticleRedis(articleRanking, articleEntity);
     }
 
+    /**
+     * 向redis存放文章信息，访问排行等设置超时时间
+     * @param articleRanking
+     * @param articleEntity
+     */
     private void addArticleRedis(ArticleRankingEntity articleRanking, ArticleEntity articleEntity) {
         Integer articleId = articleRanking.getArticleId();
         String articleIdName = "ar_" + articleId; //文章的信息
@@ -71,5 +83,63 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         redisUtil.expire(articleIdName, 60 * 60 * 24 * 7L);
         //文章访问量排行
         redisUtil.set("v_" + articleId, 0);
+    }
+
+    @Override
+    public ArticleAndUserAndRang getArticleById(Integer articleId) {
+        Object o = redisUtil.get("aauar_" + articleId);
+        ArticleAndUserAndRang aauar = null;
+        if (o == null){
+            //获取文章信息
+            ArticleEntity articleEntity = getArticle(articleId);
+            //获取文章的排行
+            ArticleRankingEntity articleRankingEntity = getArticleRanding(articleId, articleEntity.getId());
+            //获取文章的作者信息
+            UserEntity author = userEntityService.getAuthor(articleEntity.getAuthorId());
+            //信息放入包装类
+            aauar = new ArticleAndUserAndRang(author, articleEntity, articleRankingEntity);
+            redisUtil.set("aauar_" + articleId, JSON.toJSONString(aauar));
+        }else {
+            aauar = JSON.parseObject(o.toString(), ArticleAndUserAndRang.class);
+        }
+        return aauar;
+    }
+
+
+
+    /**
+     * 获取文章的排行
+     * @param articleId
+     * @param id
+     * @return
+     */
+    private ArticleRankingEntity getArticleRanding(Integer articleId, Integer id) {
+        Object o = redisUtil.get("v_" + articleId);
+        ArticleRankingEntity articleRankingEntity = null;
+        if (o == null){
+            articleRankingEntity = articleRankingEntityMapper.selectById(id);
+            redisUtil.set("v_" + articleId, JSON.toJSONString(articleRankingEntity));
+        }else {
+            articleRankingEntity = JSON.parseObject(o.toString(), ArticleRankingEntity.class);
+        }
+        return articleRankingEntity;
+    }
+
+
+    /**
+     * 获取文章的所有内容
+     * @param articleId
+     * @return
+     */
+    private ArticleEntity getArticle(Integer articleId) {
+        Object o = redisUtil.get("ar_" + articleId);
+        ArticleEntity articleEntity = null;
+        if (o == null){
+            articleEntity = articleEntityMapper.selectById(articleId);
+            redisUtil.set("ar_" + articleId, JSON.toJSONString(articleEntity));
+        }else {
+            articleEntity = JSON.parseObject(o.toString(), ArticleEntity.class);
+        }
+        return articleEntity;
     }
 }

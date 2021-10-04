@@ -1,20 +1,24 @@
 package life.majiang.community.controller;
 
+import com.alibaba.fastjson.JSON;
 import life.majiang.community.deo.Ifica;
 import life.majiang.community.deo.Notification;
 import life.majiang.community.deo.User;
+import life.majiang.community.entity.ArticleAndUserAndRang;
+import life.majiang.community.entity.CommentAndUser;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
-import life.majiang.community.service.PageDTO;
-import life.majiang.community.service.QuestionDtoService;
+import life.majiang.community.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,8 +41,8 @@ public class ProfileController {
     @SuppressWarnings("all")
     private NotificationMapper notificationMapper;
 
-    @GetMapping("/profile/{action}")
-    public String profile(@PathVariable(name = "action") String action,
+    @GetMapping("/profileold/{action}")
+    public String profileold(@PathVariable(name = "action") String action,
                           Model model,
                           HttpServletRequest request,
                           @RequestParam(name = "page",defaultValue = "1") Integer page){
@@ -82,6 +86,37 @@ public class ProfileController {
             return "redirect:/";
         }
 
+        return "profileold";
+    }
+
+    @Resource
+    private ArticleEntityService articleEntityService;
+
+    @Resource
+    private CommentEntityService commentEntityService;
+
+    @Resource
+    private ArticleRankingEntityService articleRankingEntityService;
+
+    /**
+     * 查看文章的请求
+     * 获取文章的所有信息：作者、文章内容、排名（文章）、评论数、点赞数等
+     * 获取前十条评论（评论文章的），评论的评论之后请求再获得
+     * @param articleId
+     * @param model
+     * @return
+     */
+    @GetMapping("/profile")
+    public String profile(@RequestParam(value = "articleId",required = false) Integer articleId,
+                           Model model){
+        ArticleAndUserAndRang aau = articleEntityService.getArticleById(articleId);
+        List<CommentAndUser> cau = commentEntityService.getFiveComment(articleId, 1);
+        model.addAttribute("articleAndUserAndRang", aau);
+        model.addAttribute("commentList", cau);
+        articleRankingEntityService.addArticleVisit();
         return "profile";
     }
+
+
+
 }

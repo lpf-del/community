@@ -1,19 +1,25 @@
 package life.majiang.community.controller;
 
+import com.alibaba.fastjson.JSON;
 import life.majiang.community.deo.*;
+import life.majiang.community.entity.CommentAndUser;
+import life.majiang.community.mapper.ArticleEntityMapper;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.CommentMapper;
+import life.majiang.community.service.ArticleEntityService;
+import life.majiang.community.service.ArticleRankingEntityService;
+import life.majiang.community.service.CommentEntityService;
+import life.majiang.community.service.CookieService;
 import life.majiang.community.util.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -65,6 +71,78 @@ public class CommentController {
 
 
         return map;
+    }
+
+    @Resource
+    private CommentEntityService commentEntityService;
+
+    @Resource
+    private CookieService cookieService;
+
+    @Resource
+    private ArticleRankingEntityService articleRankingEntityService;
+
+    /**
+     * 获取某一文章的5条评论，使用ajax
+     * @param articleId
+     * @param page
+     * @return
+     */
+    @GetMapping("/commentPage")
+    @ResponseBody
+    public String comment(@RequestParam(value = "articleId",required = false) Integer articleId,
+                          @RequestParam(value = "page",required = false) Integer page){
+        List<CommentAndUser> fiveComment = commentEntityService.getFiveComment(articleId, page);
+
+        return JSON.toJSONString(fiveComment);
+    }
+
+    /**
+     * 获取某一评论的所有评论
+     * @param articleId
+     * @param commentId
+     * @return
+     */
+    @GetMapping("/getComment")
+    @ResponseBody
+    public String getComment(@RequestParam(value = "articleId",required = false) Integer articleId,
+                             @RequestParam(value = "commentId",required = false) Integer commentId){
+        List<CommentAndUser> commentAll = commentEntityService.getCommentAll(articleId, commentId);
+        return JSON.toJSONString(commentAll);
+    }
+
+    /**
+     * 添加评论
+     * @param articleId
+     * @param commentId
+     * @param comment
+     * @param request
+     * @return
+     */
+    @GetMapping("/addComment")
+    @ResponseBody
+    public String addComment(@RequestParam(value = "articleId",required = false) Integer articleId,
+                             @RequestParam(value = "commentId",required = false) Integer commentId,
+                             @RequestParam(value = "comment",required = false) String comment,
+                             HttpServletRequest request){
+        String userName = cookieService.getUserName(request);
+        if (userName.equals("")) return "未登录请登录后再评论";
+        commentEntityService.addComment(articleId, commentId, comment, request);
+        articleRankingEntityService.addArticleComment();
+        return "评论成功";
+    }
+
+    /**
+     * 根据id删除评论
+     * @param commentId
+     * @return
+     */
+    @GetMapping("deleteComment")
+    @ResponseBody
+    public String deleteComment(@RequestParam(value = "commentId",required = false) Integer commentId){
+        commentMapper.deleteById(commentId);
+        articleRankingEntityService.subArticleComment();
+        return "删除成功";
     }
 }
 

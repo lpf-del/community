@@ -19,7 +19,7 @@ public class ArticleRankingEntity {
     private Integer authorId;         //作者id
     private Integer visits;           //访问量
     private Integer praiseQuantity;   //点赞量
-    private Integer comment;          //评论
+    private Integer comment;          //评论量
     private Long releaseTime;         //发布时间
     private Integer articleId;        //文章id
 }

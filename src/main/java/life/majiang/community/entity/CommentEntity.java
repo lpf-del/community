@@ -17,8 +17,10 @@ import lombok.ToString;
 public class CommentEntity {
     private Integer commentId;        //评论id
     private Integer commentator;      //评论人
-    private Integer reviewedByMan;    //被评论的
-    private boolean commentType;   //评论类型，true评论评论，false评论文章
-    private String commentContent; //评论内容
-    private String commentPicture; //评论图片，最多一张
+    private Integer reviewedByMan;    //被评论的:当评论文章时为文章的id，当评论评论时是评论的id
+    private Integer articleId;        //评论的文章
+    private Integer commentType;      //评论类型，true评论评论，false评论文章
+    private String commentContent;    //评论内容
+    private String commentPicture;    //评论图片，最多一张
+    private Long commentTime;         //评论时间
 }
