@@ -10,13 +10,28 @@ import life.majiang.community.entity.ArticleRankingEntity;
  * @date 2021/9/26
  */
 public interface ArticleRankingEntityService extends IService<ArticleRankingEntity> {
+    /**
+     * 访问量+
+     */
     void addArticleVisit();
 
+    /**
+     * 点赞+
+     */
     void addArticlePraiseQuantity();
 
+    /**
+     * 点赞-
+     */
     void subArticlePraiseQuantity();
 
+    /**
+     * 访问量+
+     */
     void addArticleComment();
 
+    /**
+     * 访问量-
+     */
     void subArticleComment();
 }
