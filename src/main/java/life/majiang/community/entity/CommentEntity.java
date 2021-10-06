@@ -22,5 +22,6 @@ public class CommentEntity {
     private Integer commentType;      //评论类型，true评论评论，false评论文章
     private String commentContent;    //评论内容
     private String commentPicture;    //评论图片，最多一张
+    private Integer likeCount;        //点赞数量
     private Long commentTime;         //评论时间
 }

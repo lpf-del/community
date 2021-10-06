@@ -7,10 +7,7 @@ import life.majiang.community.mapper.ArticleEntityMapper;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.CommentMapper;
-import life.majiang.community.service.ArticleEntityService;
-import life.majiang.community.service.ArticleRankingEntityService;
-import life.majiang.community.service.CommentEntityService;
-import life.majiang.community.service.CookieService;
+import life.majiang.community.service.*;
 import life.majiang.community.util.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -80,7 +77,7 @@ public class CommentController {
     private CookieService cookieService;
 
     @Resource
-    private ArticleRankingEntityService articleRankingEntityService;
+    private UserCommentLogEntityService userCommentLogEntityService;
 
     /**
      * 获取某一文章的5条评论，使用ajax
@@ -128,7 +125,7 @@ public class CommentController {
         String userName = cookieService.getUserName(request);
         if (userName.equals("")) return "未登录请登录后再评论";
         commentEntityService.addComment(articleId, commentId, comment, request);
-        articleRankingEntityService.addArticleComment();
+        userCommentLogEntityService.articleComment(articleId, 1);
         return "评论成功";
     }
 
@@ -139,9 +136,10 @@ public class CommentController {
      */
     @GetMapping("deleteComment")
     @ResponseBody
-    public String deleteComment(@RequestParam(value = "commentId",required = false) Integer commentId){
+    public String deleteComment(@RequestParam(value = "commentId",required = false) Integer commentId,
+                                @RequestParam(value = "articleId",required = false) Integer articleId){
         commentMapper.deleteById(commentId);
-        articleRankingEntityService.subArticleComment();
+        userCommentLogEntityService.articleComment(articleId, -1);
         return "删除成功";
     }
 }

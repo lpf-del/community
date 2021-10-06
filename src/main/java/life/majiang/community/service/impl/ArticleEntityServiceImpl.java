@@ -81,6 +81,8 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         //文章信息
         redisUtil.set(articleIdName, JSON.toJSONString(articleEntity));
         redisUtil.expire(articleIdName, 60 * 60 * 24 * 7L);
+        //文章排名
+        redisUtil.set("r_" + articleIdName, JSON.toJSONString(articleRanking));
         //文章访问量排行
         redisUtil.set("v_" + articleId, 0);
     }

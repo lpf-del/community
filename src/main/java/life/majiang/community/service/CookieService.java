@@ -142,4 +142,17 @@ public class CookieService {
         }
         return 1;
     }
+
+    /**
+     * 获取用户的id
+     * @param request
+     * @return
+     */
+    public Integer getUserId(HttpServletRequest request) {
+        String userName = getUserName(request);
+        Object o = redisUtil.get(userName);
+        if (o == null) return null;
+        UserEntity userEntity = JSON.parseObject(o.toString(), UserEntity.class);
+        return userEntity.getUserId();
+    }
 }

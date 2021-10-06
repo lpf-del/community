@@ -96,7 +96,14 @@ public class ProfileController {
     private CommentEntityService commentEntityService;
 
     @Resource
-    private ArticleRankingEntityService articleRankingEntityService;
+    private UserArticleVisitLogEntityService userArticleVisitLogEntityService;
+
+    @Resource
+    private UserPraiseQuantityLogEntityService userPraiseQuantityLogEntityService;
+
+    @Resource
+    private CookieService cookieService;
+
 
     /**
      * 查看文章的请求
@@ -104,19 +111,50 @@ public class ProfileController {
      * 获取前十条评论（评论文章的），评论的评论之后请求再获得
      * @param articleId
      * @param model
+     * @param request
      * @return
      */
     @GetMapping("/profile")
     public String profile(@RequestParam(value = "articleId",required = false) Integer articleId,
-                           Model model){
+                           Model model, HttpServletRequest request){
         ArticleAndUserAndRang aau = articleEntityService.getArticleById(articleId);
         List<CommentAndUser> cau = commentEntityService.getFiveComment(articleId, 1);
         model.addAttribute("articleAndUserAndRang", aau);
         model.addAttribute("commentList", cau);
-        articleRankingEntityService.addArticleVisit();
+        userArticleVisitLogEntityService.addArticleVisit(articleId, request);
         return "profile";
     }
 
-
-
+    /**
+     * 点赞的请求
+     * 文章的点赞数加一
+     * 作者的点赞数加一
+     * 点赞的日志
+     * @param articleId  文章id
+     * @param likeUserId 被点赞的用户id
+     * @param likeId     被点赞的id（评论或文章）
+     * @param likeType   点赞类型，标识是评论还是文章
+     * @param likeCount  点赞还是取消点赞
+     * @param request
+     * @return
+     */
+    @GetMapping("/likeCount")
+    @ResponseBody
+    public String likeCount(@RequestParam(value = "articleId",required = false) Integer articleId,
+                            @RequestParam(value = "likeUserId",required = false) Integer likeUserId,
+                            @RequestParam(value = "likeId",required = false) Integer likeId,
+                            @RequestParam(value = "likeType",required = false) Integer likeType,
+                            @RequestParam(value = "likeCount",required = false) Integer likeCount,
+                            HttpServletRequest request){
+        Integer userId = cookieService.getUserId(request);
+        //添加点赞日志
+        userPraiseQuantityLogEntityService.addPraiseQuantityLog(articleId, likeUserId, likeType, likeId, userId);
+        //作者点赞数增加
+        userPraiseQuantityLogEntityService.addUserPraiseQuantity(likeUserId, likeCount);
+        //文章的点赞数增加
+        if (likeType == 1) userPraiseQuantityLogEntityService.addArticlePraiseQuantity(likeId, likeCount);
+        if (likeType == 0) userPraiseQuantityLogEntityService.addCommentPraiseQuantity(likeId, likeCount);
+        if (likeCount == -1) return "取消点赞";
+        return "点赞成功";
+    }
 }
