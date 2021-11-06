@@ -13,6 +13,7 @@ import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,9 +46,10 @@ public class UserCommentLogEntityServiceImpl extends ServiceImpl<UserCommentLogE
             articleRankingEntity = articleRankingEntities.get(0);
         }else {
             articleRankingEntity = JSON.parseObject(o.toString(), ArticleRankingEntity.class);
+
         }
-        articleRankingEntity.setPraiseQuantity(articleRankingEntity.getPraiseQuantity() + count);
-        redisUtil.set("r_ar_" + articleId, articleRankingEntity);
+        articleRankingEntity.setPraiseQuantity(articleRankingEntity.getComment() + count);
+        redisUtil.set("r_ar_" + articleId, JSON.toJSONString(articleRankingEntity));
     }
 
 }

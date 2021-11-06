@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -102,18 +103,15 @@ public class PublishController {
      * @param request
      * @return
      */
-    @GetMapping("/newPublish")
+    @PostMapping("/newPublish")
     @ResponseBody
-    public String doNewPublish(@RequestParam(value = "title",required = false) String title,
-                               @RequestParam(value = "description",required = false) String description,
-                               @RequestParam(value = "myTags",required = false) String myTags,
-                               @RequestParam(value = "articleType",required = false) String articleType,
-                               @RequestParam(value = "releaseForm",required = false) String releaseForm,
-                               @RequestParam(value = "fileUrl",required = false) String fileUrl,
-                               @RequestParam(value = "x",required = false) Integer x,
-                               HttpServletRequest request){
+    public String doNewPublish(String title, String description, String myTags, String articleType, String releaseForm,
+                               String fileUrl, Integer x, HttpServletRequest request){
         try {
+//            description = URLEncoder.encode(description);
+//            System.out.println(title+":"+ description);
             articleEntityService.addArticle(title, description, myTags, articleType, releaseForm, fileUrl, request, x);
+            //articleEntityService.addUserArticleCount(request);
         } catch (Exception e) {
             return e.getMessage();
         }

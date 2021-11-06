@@ -40,16 +40,16 @@ public class FileService {
         fileName = UUID.randomUUID().toString().replace("-", "") + suffixName;
 
         // 返回客户端 文件地址 URL
-        String url = "http://121.40.218.249:8888"+"/upload/" + fileName;
+        String url = "https://www.lpf-pqcm.top/"+"/upload/" + fileName;
 
-//        File dest = new File(UPLOAD_PATH + fileName);
+        File dest = new File(UPLOAD_PATH + fileName);
 
-        // 检测是否存在目录
-//        if (!dest.getParentFile().exists()) {
-//            dest.getParentFile().mkdirs();
-//        }
-//
-//        file.transferTo(dest);
+//         检测是否存在目录
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
+        }
+
+        file.transferTo(dest);
 
         return url;
     }

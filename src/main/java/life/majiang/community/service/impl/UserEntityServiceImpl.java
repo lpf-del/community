@@ -3,6 +3,7 @@ package life.majiang.community.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
+import life.majiang.community.deo.User;
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.service.CookieService;
@@ -97,16 +98,8 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
     private CookieService cookieService;
 
     @Override
-    public Model getHomePageInformation(HttpServletRequest request, Model model) {
-        UserEntity userEntity = cookieService.getPersonInformation(request);
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("likeCount", userEntity.getLikeCount());
-        map.put("postCount", userEntity.getPostCount());
-        map.put("heatNumber", userEntity.getHeatNumber());
-        map.put("registerTime", userEntity.getRegisterTime());
-        model.addAllAttributes(map);
-
-        return model;
+    public UserEntity getHomePageInformation(HttpServletRequest request, Model model) {
+        return cookieService.getPersonInformation(request);
     }
 
 
@@ -152,6 +145,11 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
             author = JSON.parseObject(o.toString(), UserEntity.class);
         }
         return author;
+    }
+
+    @Override
+    public UserEntity getHomePageInformationById(String userId) {
+        return userEntityMapper.selectById(userId);
     }
 
     /**

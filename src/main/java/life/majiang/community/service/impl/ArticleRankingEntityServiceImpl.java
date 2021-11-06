@@ -40,7 +40,12 @@ public class ArticleRankingEntityServiceImpl extends ServiceImpl<ArticleRankingE
     @Override
     public void articleVisit(Integer articleId, HttpServletRequest request) {
         if (cookieService.getUserName(request).equals("")) return;
-        redisUtil.incr("v_" + articleId,1);
+        Object o = redisUtil.get("v_" + articleId);
+        if (o == null) {
+            redisUtil.set("v_" + articleId, 1);
+        }else {
+            redisUtil.incr("v_" + articleId,1);
+        }
         Integer authorId = addVisitCount(articleId);
         userArticleVisitLogEntityService.addUserVisitCount(authorId);
     }

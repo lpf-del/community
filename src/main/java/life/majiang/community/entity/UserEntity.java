@@ -1,5 +1,7 @@
 package life.majiang.community.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,7 +20,8 @@ import java.io.Serializable;
 @AllArgsConstructor
 @ToString
 public class UserEntity implements Serializable {
-    private Integer userId;         //用户id自增
+    @TableId(value = "id",type= IdType.AUTO)
+    private Integer id;         //用户id自增
     private String userName;        //用户名
     private String passWord;        //密码（md5密文）
     private String mail;            //邮箱

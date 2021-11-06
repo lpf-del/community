@@ -1,558 +1,37 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>xxx文章</title>
+    <title>[[${articleAndUserAndRang.articleEntity.title}]]</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="/css/community.css">
+    <link rel="stylesheet" href="/css/commentList.css">
+    <link rel="stylesheet" type="text/css" href="./css/xcConfirm.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/xcConfirm.css"/>
+    <link rel="stylesheet" href="css/profile.css">
     <script src="/js/jquery-3.6.0.min.js"></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
+    <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <script src="./js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
     <style type="text/css">
-        ::-webkit-scrollbar {
-            display: none;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        ul>li {
-            list-style: none;
-        }
-
-        html,
-        body {
-            width: 100%;
-            height: 100%;
-        }
-
-        .justify-content-center {
-            -webkit-box-pack: center !important;
-            justify-content: center !important;
-        }
-
-        .d-flex {
-            display: -webkit-box !important;
-            display: flex !important;
-        }
-
-        .main_father {
-            padding: 8px 12px 0 12px;
-        }
-
-        .container {
-            width: 300px;
-            margin-left: 8px;
-            box-sizing: border-box;
-            -webkit-box-sizing: border-box;
-            display: flex;
-        }
-
-        .container {
-            width: 1418px;
-        }
-
-        main {
-            width: 1010px;
-        }
-
-        .aside-box {
-            margin-bottom: 8px;
-            background-color: #fff;
-            -webkit-box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
-            box-shadow: 0 2px 4px 0 rgb(0 0 0 / 5%);
-        }
-
-        .profile-intro {
-            padding: 16px 16px 6px 16px;
-        }
-
-        .avatar-box {
-            position: relative;
-            width: 48px;
-            height: 48px;
-            flex-shrink: 0;
-        }
-
-        .avatar_pic {
-            display: block;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-        }
-
-        .user-info {
-            margin-left: 8px;
-            width: 156px;
-            position: relative;
-            padding-top: 4px;
-        }
-
-        .profile-intro-name-box {
-            -webkit-box-flex: 1;
-            flex-grow: 1;
-        }
-
-        .flex-column {
-            -webkit-box-orient: vertical !important;
-            -webkit-box-direction: normal !important;
-            flex-direction: column !important;
-        }
-
-        .name {
-            width: 100%;
-            font-size: 14px;
-            font-weight: 500;
-            height: 20px;
-            line-height: 20px;
-            display: block;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .profile-intro-name-boxFooter {
-            display: -webkit-box;
-            display: flex;
-        }
-
-        .profile-intro-name-boxTop {
-            display: -webkit-box;
-            display: flex;
-        }
-
-        .personal-home-years {
-            min-width: 54px;
-        }
-
-        .personal-home-page {
-            color: #999aaa;
-            font-size: 13px;
-            line-height: 20px;
-            height: 20px;
-            overflow: hidden;
-        }
-
-        .item-rank {
-            height: 1px;
-            background-color: #f5f6f7;
-            width: 268px;
-            margin: auto;
-        }
-
-        .data-info {
-            padding: 9px 10px;
-        }
-
-        .text-center {
-            text-align: center;
-            margin-left: 12px;
-        }
-
-        .count {
-            color: #4a4d52;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 22px;
-        }
-
-        dd {
-            color: #999aaa;
-            font-size: 14px;
-            line-height: 22px;
-            padding: 3px 0;
-        }
-
-        .profile-intro-name-boxOpration {
-            padding: 8px 16px 10px 16px;
-            display: -webkit-box;
-            display: flex;
-            -webkit-box-pack: justify;
-            justify-content: space-between;
-            -webkit-box-align: center;
-            align-items: center;
-        }
-
-        .opt-letter-watch-box {
-            color: #f5a523;
-            font-size: 12px;
-            width: 126px;
-            height: 28px;
-            border-radius: 14px;
-            line-height: 26px;
-            text-align: center;
-        }
-
-        .personal-letter {
-            border: 1px solid #ccccd8;
-            background-color: #fff;
-            color: #555666;
-            line-height: 28px;
-            border-radius: 14px;
-        }
-
-        .bt-button {
-            display: block;
-            border-radius: 4px;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            height: 100%;
-            font-size: 14px;
-        }
-
-        .personal-watch {
-            color: #555666;
-            line-height: 26px;
-            border-radius: 14px;
-            border: 1px solid #ccccd8;
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        .search-comter {
-            padding: 0 16px;
-        }
-
-        .aside-content {
-            padding: 12px 16px 16px 16px;
-            overflow: hidden;
-        }
-
-        .aside-search {
-            height: 32px;
-            border-radius: 5px;
-            background: #f0f0f5;
-            margin: 8px 0;
-            position: relative;
-        }
-
-        .input-serch-blog {
-            font-size: 14px;
-            color: #555666;
-            display: block;
-            float: left;
-            width: 226px;
-            padding-left: 16px;
-            border: 0;
-            height: 32px;
-            border-radius: 5px;
-            background: 0 0;
-        }
-
-        .btn-search-blog {
-            background-color: #e8e8ee;
-            color: #ccc;
-            font-size: 14px;
-            display: block;
-            text-align: center;
-            width: 32px;
-            height: 32px;
-            float: right;
-            line-height: 32px;
-            margin-top: 0;
-            -webkit-transition: background-color .5s;
-            transition: background-color .5s;
-            border-radius: 0 5px 5px 0;
-            cursor: pointer;
-        }
-
-        .input-serch-blog {
-            font-size: 14px;
-            color: #555666;
-            display: block;
-            float: left;
-            width: 220px;
-            padding-left: 16px;
-            border: 0;
-            height: 32px;
-            border-radius: 5px;
-            background: 0 0;
-        }
-
-        main {
-            margin-bottom: 40px;
-            float: right;
-        }
-
-        .blog-content-box {
-            position: relative;
-            padding: 0 24px 16px;
-            background: #fff;
-        }
-
-        .article-header-box {
-            border-bottom: 1px solid #f5f6f7;
-            padding-top: 8px;
-            z-index: 9;
-            background-color: #fff;
-        }
-
-        .article-title-box {
-            margin-bottom: 8px;
-        }
-
-        .title-article {
-            font-size: 28px;
-            word-wrap: break-word;
-            color: #222226;
-            font-weight: 600;
-            margin: 0;
-            word-break: break-all;
-        }
-
-        .article-info-box {
-            position: relative;
-            background: #f8f8f8;
-            border-radius: 4px;
-        }
-
-        .article-bar-top {
-            color: #999aaa;
-            width: 88%;
-            display: -webkit-box;
-            display: flex;
-        }
-
-        .article-type-img {
-            width: 36px;
-            height: 32px;
-            margin-right: 12px;
-            line-height: 32px;
-        }
-
-        .follow-nickName {
-            color: #555666;
-            margin-right: 20px;
-        }
-
-        .article-read-img {
-            width: 24px;
-            height: 24px;
-            margin-top: 4px;
-        }
-
-        .article-heard-img {
-            width: 20px;
-            height: 20px;
-            margin-top: 6px;
-        }
-
-        main div.blog-content-box pre.prettyprint .article-header div.article-info-box div.article-bar-top span,
-        main div.blog-content-box .article-header-box .article-header div.article-info-box div.article-bar-top span,
-        main div.blog-content-box pre.prettyprint .article-header div.article-info-box div.article-bar-top a,
-        main div.blog-content-box .article-header-box .article-header div.article-info-box div.article-bar-top a {
-            vertical-align: top;
-            margin-right: 12px;
-            line-height: 32px;
-        }
-
-        .un-collection {
-            font-size: 14px;
-            margin-right: 0;
-        }
-
-        .article-collect-img {
-            vertical-align: middle;
-            margin-top: 0;
-            width: 20px;
-            height: 20px;
-        }
-
-        .article-heard-img {
-            width: 20px;
-            height: 20px;
-            margin-top: 6px;
-        }
-
-        .un-collection {
-            font-size: 14px;
-            margin-right: 0;
-        }
-
-        .blog-tags-box {
-            padding-left: 48px;
-            display: -webkit-box;
-            display: flex;
-        }
-
-        .tags-box {
-            font-size: 14px;
-            line-height: 24px;
-            margin-bottom: 4px;
-            margin-right: 8px;
-        }
-
-        .label {
-            display: inline-block;
-            color: #999aaa;
-        }
-
-        .tag-link {
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            margin-right: 8px;
-            padding: 3px 6px;
-            font-size: 12px;
-            background-color: #fff;
-            color: #5094d5;
-            border: 1px solid #eaeaef;
-            height: 24px;
-            line-height: 17px;
-            border-radius: 2px;
-            display: inline-block;
-        }
-
-        .more-toolbox-new {
-            display: -webkit-box;
-            display: flex;
-            position: relative;
-            margin-bottom: 8px;
-        }
-
-        .left-toolbox {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            display: -webkit-box;
-            display: flex;
-            flex-wrap: nowrap;
-            -webkit-box-pack: justify;
-            justify-content: space-between;
-            -webkit-box-align: center;
-            align-items: center;
-            padding: 17px 24px;
-            height: 64px;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            background: #fff;
-            -webkit-box-shadow: 0 -1px 8px 0 rgb(0 0 0 / 6%);
-            box-shadow: 0 -1px 8px 0 rgb(0 0 0 / 6%);
-        }
-
-        .toolbox-left {
-            display: -webkit-box;
-            display: flex;
-            flex-wrap: nowrap;
-            -webkit-box-pack: justify;
-            justify-content: space-between;
-            -webkit-box-align: center;
-            align-items: center;
-        }
-        .profile-href {
-            display: -webkit-box;
-            display: flex;
-            flex-wrap: nowrap;
-            -webkit-box-pack: justify;
-            justify-content: space-between;
-            -webkit-box-align: center;
-            align-items: center;
-            overflow: hidden;
-        }
-        .profile-img {
-            width: 32px;
-            height: 32px;
-            border-radius: 32px;
-            border: 1px solid #f5f6f7;
-            margin-right: 8px;
-        }
-        .profile-name {
-            max-width: 160px;
-            height: 24px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 16px;
-            font-weight: 600;
-            color: #222226;
-            line-height: 24px;
-            margin-right: 8px;
-        }
-        .tool-bt-attend {
-            border: 1px solid #ccccd8;
-            color: #555666;
-        }
-        .profile-attend a {
-            display: block;
-            min-width: 60px;
-            height: 28px;
-            background: #fff;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 28px;
-            text-align: center;
-        }
-        .toolbox-middle {
-            -webkit-box-flex: 1;
-            flex: 1;
-        }
-        .toolbox-list {
-            width: 100%;
-            height: 30px;
-            display: -webkit-box;
-            display: flex;
-            flex-wrap: nowrap;
-            -webkit-box-align: center;
-            align-items: center;
-            -webkit-box-pack: end;
-            justify-content: flex-end;
-        }
-        .tool-active {
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        .tool-item {
-            padding: 0 8px;
-        }
-        .tool-item-href {
-            display: -webkit-box;
-            display: flex;
-            flex-wrap: nowrap;
-            -webkit-box-align: center;
-            align-items: center;
-        }
-        .tool-active img {
-            width: 24px;
-            height: 24px;
-        }
-        .company {
-            width: 40px;
-            height: 28px;
-            vertical-align: middle;
-        }
-        .tool-hover-tip {
-            width: 82px;
-            display: none;
-            height: 38px;
-            background: #fff;
-            border: 3px solid #ededef;
-            position: absolute;
-            color: #222226;
-            left: -20px;
-            bottom: 52px;
-        }
-        .three-click {
-            left: -14px;
-        }
-        .tool-hover-tip .text {
-            display: block;
-            position: absolute;
-            font-size: 14px;
-            text-align: center;
-            width: 100%;
-            padding: 6px 0;
-            z-index: 11;
+        .child{
+            margin-left: 100px;
         }
     </style>
 </head>
 <body>
 <div th:insert="~{navigation :: nav}"></div>
+<div id="top"></div>
+<!--<div class="btn btn-login" style="margin-top: 50px; float: right" onclick="huoqu(1)">获取评论</div>-->
+<div class="tubiao_index">
+    <a href="#top"><img src="./img/jump_top.jpg" class="daxiao"></a>
+    <a href="#pinglun"><img src="./img/jump_comment.jpg" class="daxiao" style="margin-top: 10px"></a>
+</div>
 <div class="justify-content-center d-flex main_father" style="height: 100%; background-color: #EDEDEF;">
     <div class="container">
         <aside class="blog_container_aside" style="margin-right: 20px;">
@@ -560,12 +39,14 @@
                 <div class="profile-intro d-flex">
                     <div class="d-flex justify-content-center avatar-box">
                         <a href="">
-                            <img src="https://profile.csdnimg.cn/F/E/7/3_momoda118" class="avatar_pic">
+                            <img src="./img/Touxiang.jpg"
+                                 class="avatar_pic">
                         </a>
                     </div>
                     <div class="user-info d-flex flex-column profile-intro-name-box">
                         <div class="profile-intro-name-boxTop">
-                            <a href="" class="" id="" title="曲鸟"><span class="name">曲鸟</span></a>
+                            <a th:href="@{/homePageById/{userId}(userId = ${articleAndUserAndRang.userEntity.id})}"
+                               class="" id="" title=""><span class="name">[[${articleAndUserAndRang.userEntity.userName}]]</span></a>
                         </div>
                         <div class="profile-intro-name-boxFooter">
                             <span class="personal-home-page personal-home-years"></span>
@@ -574,16 +55,16 @@
                 </div>
                 <div class="data-info d-flex item-tiling">
                     <dl class="text-center">
-                        <span class="count">18万+</span>
+                        <span class="count">[[${articleAndUserAndRang.userEntity.postCount}]]</span>
+                        <dd>原创</dd>
+                    </dl>
+                    <dl class="text-center">
+                        <span class="count">[[${articleAndUserAndRang.userEntity.heatNumber}]]</span>
                         <dd>访问</dd>
                     </dl>
                     <dl class="text-center">
-                        <span class="count">18万+</span>
-                        <dd>访问</dd>
-                    </dl>
-                    <dl class="text-center">
-                        <span class="count">18万+</span>
-                        <dd>访问</dd>
+                        <span class="count">[[${articleAndUserAndRang.userEntity.likeCount}]]</span>
+                        <dd>获赞</dd>
                     </dl>
                     <dl class="text-center">
                         <span class="count">18万+</span>
@@ -629,7 +110,7 @@
             <div class="aside-box">
                 <div class="aside-content search-comter">
                     <div class="aside-search aside-search-blog">
-                        <input type="text" class="input-serch-blog" id="" value="" placeholder="搜索作者文章" />
+                        <input type="text" class="input-serch-blog" id="" value="" placeholder="搜索作者文章"/>
                         <a href="" class="btn-search-blog" style="margin-left: 2px;">
                             <img src="./img/csdn-sou.png" style="width: 32px; height: 32px;">
                         </a>
@@ -642,18 +123,20 @@
                 <div class="article-header-box">
                     <div class="article-header">
                         <div class="article-title-box">
-                            <h1 class="title-article">****111</h1>
+                            <h1 class="title-article">[[${articleAndUserAndRang.articleEntity.title}]]</h1>
                         </div>
                         <div class="article-info-box">
                             <div class="article-bar-top">
                                 <img src="img/original.png" class="article-type-img">
                                 <div class="bar-content">
                                     <span class="c-gray" style="color: #858585;">置顶</span>
-                                    <a href="" class="follow-nickName ">曲鸟</a>
-                                    <span class="" style="position: relative;">2021-09-30 11:48:42</span>
+                                    <a href=""
+                                       class="follow-nickName ">[[${articleAndUserAndRang.userEntity.userName}]]</a>
+                                    <span class="" style="position: relative;"
+                                          th:text="${#dates.format((articleAndUserAndRang.articleRankingEntity.releaseTime),'yyyy-MM-dd')}">2021-09-30 11:48:42</span>
                                     <img src="img/articleReadEyes.png"
                                          class="article-read-img article-heard-img">
-                                    <span class="read-count">5559</span>
+                                    <span class="read-count">[[${articleAndUserAndRang.articleRankingEntity.visits}]]</span>
                                     <a id="blog_detail_zk_collection" class="un-collection"
                                        style="color: #999AAA; display: inline-block;">
                                         <img class="article-collect-img article-heard-img un-collect-status isdefault"
@@ -661,10 +144,8 @@
                                              src="img/tobarCollect.png" alt="">
                                         <img class="article-collect-img article-heard-img collect-status isactive"
                                              style="display:none" src="img/tobarCollectionActive.png" alt="">
-                                        <span class="" style="font-size: 16px;">收藏</span>
-                                        <span class="get-collection">
-													468
-												</span>
+                                        <span class="" style="font-size: 16px;">点赞</span>
+                                        <span class="get-collection">[[${articleAndUserAndRang.articleRankingEntity.praiseQuantity}]]</span>
                                     </a>
                                 </div>
 
@@ -672,12 +153,17 @@
                             <div class="blog-tags-box">
                                 <div class="tags-box artic-tag-box">
                                     <span class="label">文章标签：</span>
-                                    <a class="tag-link" href="" target="_blank" rel="noopener">python</a>
+                                    <span th:each="label : ${labelList}">
+                                        <a class="tag-link" href="" target="_blank" rel="noopener"
+                                           th:text="${label}"></a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        <div class="" style="height: 500px">
-
+                        <div class="" style="margin-top: 10px">
+                            <input type="hidden" id="makedownText"
+                                   th:value="${articleAndUserAndRang.articleEntity.content}">
+                            <div id="test-editormd"></div>
                         </div>
                         <div class="more-toolbox-new">
                             <div class="left-toolbox"
@@ -685,8 +171,9 @@
                                 <div class="toolbox-left">
                                     <div class="profile-box">
                                         <a class="profile-href" href="">
-                                            <img class="profile-img" src="https://profile.csdnimg.cn/F/E/7/3_momoda118">
-                                            <span class="profile-name">曲鸟</span>
+                                            <img class="profile-img"
+                                                 src="./img/Touxiang.jpg">
+                                            <span class="profile-name">[[${articleAndUserAndRang.userEntity.userName}]]</span>
                                         </a>
                                     </div>
                                     <div class="profile-attend" style="position: relative;">
@@ -698,25 +185,30 @@
                                     <ul class="toolbox-list">
                                         <li class="tool-item tool-item-size tool-active is-like">
                                             <a href="" class="tool-item-href">
-                                                <img class="isdefault" style="display: block;" id="is-like-img" src="img/newHeart1White.png" alt="">
-                                                <span id="spanCount1" class="count" style="color: rgb(153, 154, 170);">207</span>
+                                                <img class="isdefault" style="display: block;" id="is-like-img"
+                                                     src="img/newHeart1White.png" alt="">
+                                                <span id="spanCount1" class="count" style="color: rgb(153, 154, 170);">[[${articleAndUserAndRang.articleRankingEntity.praiseQuantity}]]</span>
                                             </a>
                                         </li>
                                         <li class="tool-item tool-item-size tool-active is-like">
                                             <a href="" class="tool-item-href">
-                                                <img class="isdefault" style="display: block;" id="is-like-img" src="img/newCommentWhite.png" alt="">
-                                                <span id="spanCount2" class="count" style="color: rgb(153, 154, 170);">207</span>
+                                                <img class="isdefault" style="display: block;" id="is-like-img"
+                                                     src="img/newCommentWhite.png" alt="">
+                                                <span id="spanCount2" class="count" style="color: rgb(153, 154, 170);">[[${articleAndUserAndRang.articleRankingEntity.comment}]]</span>
                                             </a>
                                         </li>
                                         <li class="tool-item tool-item-size tool-active is-like">
                                             <a href="" class="tool-item-href">
-                                                <img class="isdefault" style="display: block;" id="is-like-img" src="img/tobarCollect.png" alt="">
-                                                <span id="spanCount3" class="count" style="color: rgb(153, 154, 170);">207</span>
+                                                <img class="isdefault" style="display: block;" id="is-like-img"
+                                                     src="img/tobarCollect.png" alt="">
+                                                <span id="spanCount3" class="count" style="color: rgb(153, 154, 170);">[[${articleAndUserAndRang.articleRankingEntity.comment}]]</span>
                                             </a>
                                         </li>
                                         <li class="tool-item tool-active">
                                             <a class="" href="">
-                                                <img class="company active" id="health-companies" src="img/newHealthCompanies1Active.gif" alt="一键三连" style="width: 40px; height: 28px;">
+                                                <img class="company active" id="health-companies"
+                                                     src="img/newHealthCompanies1Active.gif" alt="一键三连"
+                                                     style="width: 40px; height: 28px;">
                                             </a>
                                             <div class="tool-hover-tip three-click"><span class="text">一键三连</span></div>
                                         </li>
@@ -728,7 +220,183 @@
                 </div>
             </div>
         </main>
+        <footerr>
+            <div id="pinglun" style="height: 300px" onclick="content_clear()"></div>
+            <div class="btn btn-login" style="margin-top: 50px; float: right" onclick="comment()">发表评论</div>
+        </footerr>
+        <div class="fffff">
+            <ul class="ul">
+                <li th:each="comment : ${commentList}" >
+                    <div class="btn_li" onclick="reply(this.getAttribute('value'), this.getAttribute('name'))"
+                         th:value="${comment.getCommentEntity().getCommentId()}"
+                         th:name="${comment.getUserEntity().getUserName()}">
+                        <div class="userPic"><img src="./img/TouXiang.jpg"
+                                                  style="height: 44px; border-radius: 50%; margin: 2px"/></div>
+                        <div class="content">
+                            <div class="userName" th:text="${comment.getUserEntity().getUserName()}"></div>
+                            <div class="msgInfo" th:text="${comment.getCommentEntity().getCommentContent()}"></div>
+                            <div class="times"><span
+                                    th:text="${#dates.format((comment.getCommentEntity().getCommentTime()),'yyyy-MM-dd')}"></span>
+                            </div>
+                        </div>
+
+<!--                        <div class="xuanxiang">-->
+
+<!--                            <div  class="btnn" onclick="reply1(this.getAttribute('value'))"-->
+<!--                                  th:value="${comment.getCommentEntity().getCommentId()}">删除-->
+<!--                            </div>-->
+<!--                        </div>-->
+                    </div>
+                    <div class="glyphicon glyphicon-comment" style="float: right; margin: 20px;" th:value="${comment.getCommentEntity().getCommentId()}"
+                         onclick="comment_show(this.getAttribute('value'))"> </div>
+<!--                    二级评论-->
+                    <div class="collapse child" th:id="${'child' + comment.getCommentEntity().getCommentId()}" >
+                        <ul th:id="${'two' + comment.getCommentEntity().getCommentId()}">
+
+                        </ul>
+                    </div>
+                </li>
+
+            </ul>
+        </div>
     </div>
 </div>
+
+<script type="text/javascript">
+
+    var text = document.getElementById("makedownText");
+    //创建实例
+    var converter = new showdown.Converter();
+    //进行转换
+    var html = converter.makeHtml(text.value);
+    //展示到对应的地方  result便是id名称
+    document.getElementById("test-editormd").innerHTML = html;
+</script>
+<script type="text/javascript">
+    const E = window.wangEditor
+    const editor = new E("#pinglun")
+    editor.create();
+</script>
+
+<script type="text/javascript">
+    var commentId = 0; //要评论的id，默认为0（评论文章）
+    var articleId = [[${articleAndUserAndRang.articleEntity.id}]];
+    function content_clear(){
+        //将评论的默认内容清空
+        var din = document.getElementsByClassName("w-e-text")[0].children[0].innerText;
+        if (!din.search('@')){
+            din = "";
+        }
+    }
+
+    function reply(comment_id, comment_name) {
+        commentId = comment_id; //评论回复，将评论id变为该回复
+        document.getElementsByClassName("w-e-text")[0].children[0].innerText = '@回复 ' + comment_name + ':  ';
+        $(window).scrollTop($('#pinglun').offset().top);  //跳转到锚定位置
+    }
+    function reply1(comment_id) {
+
+        console.log(commentId);
+    }
+
+    //评论发布函数
+    function comment() {
+        var comment = document.getElementsByClassName("w-e-text")[0].children[0].innerText;
+        if (comment.length==0){
+            window.wxc.xcConfirm("评论不能为空", window.wxc.xcConfirm.typeEnum.error);
+            return;
+        }
+        $.post("/addComment",
+            {
+                'articleId': articleId,
+                'commentId': commentId,
+                'comment': comment,
+            },
+            function (data) {
+                window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.success);
+            }
+        );
+        document.getElementsByClassName("w-e-text")[0].children[0].innerText = '';
+        commentId = 0;
+    }
+</script >
+<script type="text/javascript">
+    function comment_show(comment_id){
+        var comment_child_id = '#child' + comment_id;
+        var classs = $(comment_child_id);
+        var e = document.getElementById('child' + comment_id);
+        //获取评论的状态
+        var coll = e.getAttribute("data" + comment_id);
+        if (coll){ //状态是展开,关闭
+            classs.removeClass('in');
+            e.removeAttribute("data" + comment_id);
+        }else {  //状态是关闭,展开
+            classs.addClass('in');
+            e.setAttribute("data" + comment_id, "in");
+            getComment(comment_id);
+        }
+    }
+    //获取评论的下一级评论
+    function getComment(comment_id) {
+        $.post("/getComment",
+            {
+                'articleId': articleId,
+                'commentId': comment_id,
+            },
+            function (data) {
+                get_comment(data);
+            }
+        );
+    }
+    //解析二级评论所需要的信息
+    function get_comment(data){
+        var jsonData = JSON.parse(data);
+        let x = 0;
+        let y = 0;
+        let z = 0;
+        for (x in jsonData) {
+            var commen_id = "";
+            var username = "";
+            var comment_content = "";
+            var comment_time = "";
+            var reviewedByMan = "";
+            for (y in jsonData[x]) {
+                for (z in jsonData[x][y]){
+                    var values = jsonData[x][y][z];
+                    if (z == 'commentId') commen_id = values;
+                    if (z == 'commentContent') comment_content = values;
+                    if (z == 'userName') username = values;
+                    if (z == 'commentTime') comment_time = values;
+                    if (z == 'reviewedByMan') reviewedByMan = values;
+                }
+            }
+            show_comment(commen_id, username, comment_content, comment_time, reviewedByMan);
+        }
+    }
+    //二级标签展示
+    function show_comment(commen_id, username, comment_content, comment_time, reviewedByMan) {
+        $('#two' + reviewedByMan).append(
+            '<li>' +
+                '<div class="btn_li" onclick="reply('+ commen_id +'\,\'' + username+'\')">' +
+                    '<div class="content" style="width: 90%">' +
+                        '<span class="userName">' + username + '</span>' +
+                        '<span class="msgInfo">' + comment_content + ':' + '</span>' +
+                        '<span class="times" style="float: right;">' + time(comment_time) +'</span>' +
+                    '</div>' +
+                '</div>' +
+            '</li>');
+    }
+    //时间格式转化
+    function time(data) {
+        var date = new Date(data)
+        var Y = date.getFullYear() + '-'
+        var M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
+        var D = (date.getDate() < 10 ? '0' + date.getDate() : date.getDate()) + ' '
+        var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
+        var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
+        var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
+        return Y + M + D + h + m + s
+    }
+</script>
 </body>
 </html>

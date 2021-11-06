@@ -7,20 +7,23 @@
     <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
     <link href="./css/style.css" type="text/css" rel="stylesheet"/>
     <link rel="stylesheet" href="/css/community.css">
-    <link rel="stylesheet" href="./css/editormd.css" />
-    <link rel="stylesheet" href="./css/editormd.logo.min.css" />
-    <link rel="stylesheet" href="./css/editormd.preview.css" />
+    <link rel="stylesheet" href="./css/editormd.css"/>
+    <link rel="stylesheet" href="./css/editormd.logo.min.css"/>
+    <link rel="stylesheet" href="./css/editormd.preview.css"/>
+    <link rel="stylesheet" type="text/css" href="./css/xcConfirm.css"/>
     <style>
-        boby{
+        boby {
             background-color: #efefef;
         }
     </style>
-    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/style.css"/>
     <script src="./js/jquery-3.6.0.min.js"></script>
-<!--    <script type="text/javascript" src="js/jquery.1.4.2-min.js"></script>-->
-<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>-->
+    <script src="./js/jquery.cookie.js"></script>
+    <script src="./js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
+    <!--    <script type="text/javascript" src="js/jquery.1.4.2-min.js"></script>-->
+    <!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>-->
     <script src="./js/bootstrap.min.js" type="application/javascript"></script>
-<!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>-->
+    <!--    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>-->
     <script src="./js/editormd.js"></script>
     <script src="./js/marked.min.js"></script>
     <script src="./js/prettify.min.js"></script>
@@ -511,6 +514,7 @@
         .btn-box {
             margin-left: auto;
         }
+
         .btn-outline-secondary {
             height: 40px;
             padding: 8px 24px;
@@ -521,11 +525,13 @@
             border-color: #999aaa;
             font-size: 16px;
         }
+
         .el-button--primary {
             color: #fff;
             background-color: #3399ea;
             border-color: #3399ea;
         }
+
         .el-button {
             display: inline-block;
             line-height: 1;
@@ -549,10 +555,12 @@
             font-size: 14px;
             border-radius: 4px;
         }
+
         .is-round {
             border-radius: 20px;
             padding: 12px 23px;
         }
+
         .btn-outline-danger {
             height: 40px;
             padding: 8px 24px;
@@ -581,9 +589,9 @@
                 <div class="" th:text="${description}" id="description" name="description" cols="30" rows="10"
                 ></div>
             </div>
-<!--            <div id="testEditorMdview" class="testEditoclass">-->
-<!--                <textarea id="appendTest" style="display:none;"></textarea>-->
-<!--            </div>-->
+            <!--            <div id="testEditorMdview" class="testEditoclass">-->
+            <!--                <textarea id="appendTest" style="display:none;"></textarea>-->
+            <!--            </div>-->
             <div id="test-editormd"></div>
             <div class="demo">
                 <div class="plus-tag tagbtn clearfix" th:value="${myTags}" id="myTags" name="myTags"></div>
@@ -630,7 +638,8 @@
                         </div>
                         <div class="clearfix" style="display:none;"><a value="-1" title="媒体" href="javascript:void(0);"><span>媒体</span><em></em></a>
                         </div>
-                        <div class="clearfix" style="display:none;"><a value="-1" title="网络营销" href="javascript:void(0);"><span>网络营销</span><em></em></a>
+                        <div class="clearfix" style="display:none;"><a value="-1" title="网络营销"
+                                                                       href="javascript:void(0);"><span>网络营销</span><em></em></a>
                         </div>
                     </div>
                     <div align="right"><a href="javascript:void(0);" id="change-tips" style="color:#3366cc;">换一换</a>
@@ -671,10 +680,12 @@
 
             </div>
             <div class="btn-box">
-                <button type="button" class="el-button btn-outline-secondary el-button--primary is-round" onclick="tijiao(0)">
+                <button type="button" class="el-button btn-outline-secondary el-button--primary is-round"
+                        onclick="tijiao(0)">
                     <span>保存草稿</span>
                 </button>
-                <button type="button" class="el-button btn-outline-danger el-button--primary is-round" onclick="tijiao(1)">
+                <button id ="btn" type="button" class="el-button btn-outline-danger el-button--primary is-round"
+                        onclick="tijiao(1)">
                     <span>发布文章</span>
                 </button>
             </div>
@@ -698,17 +709,17 @@
         editormd.markdownToHTML("testEditorMdview", {
             htmlDecode: "style,script,iframe", //可以过滤标签解码
             emoji: true,
-            taskList:true,
+            taskList: true,
             tex: true,               // 默认不解析
-            flowChart:true,         // 默认不解析
-            sequenceDiagram:true,  // 默认不解析
+            flowChart: true,         // 默认不解析
+            sequenceDiagram: true,  // 默认不解析
         });
     }
 </script>
 <script type="text/javascript">
     var testEditor;
 
-    window.onload=function(){
+    window.onload = function () {
         loading_markdown('');
     }
     //这里直接调用这个加载方法就行了
@@ -718,33 +729,34 @@
     //很简单这里定义了一个编辑器对象直接 testEditor.getMarkdown();
     function loading_markdown(md) {
         testEditor = editormd("test-editormd", {
-            placeholder:'左边编写，右边预览',  //默认显示的文字，这里就不解释了
+            placeholder: '左边编写，右边预览',  //默认显示的文字，这里就不解释了
             width: "100%",
             height: 640,
             syncScrolling: "single",
             path: "./editormd_lib/",   //你的path路径（原资源文件中lib包在我们项目中所放的位置）
-            theme : "dark",
-            previewTheme : "dark",
-            editorTheme : "pastel-on-dark",
-            markdown : md,
-            codeFold : true,
-            saveHTMLToTextarea : true,    // 保存 HTML 到 Textarea
-            searchReplace : true,
-            htmlDecode : "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
-            toolbar  : false,             //关闭工具栏
-            previewCodeHighlight : true, // 关闭预览 HTML 的代码块高亮，默认开启
-            emoji : true,
-            taskList : true,
-            tocm            : true,         // Using [TOCM]
-            tex : true,                   // 开启科学公式TeX语言支持，默认关闭
-            flowChart : true,             // 开启流程图支持，默认关闭
-            sequenceDiagram : true,       // 开启时序/序列图支持，默认关闭,
+            theme: "dark",
+            previewTheme: "dark",
+            editorTheme: "pastel-on-dark",
+            markdown: md,
+            codeFold: true,
+            saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea
+            searchReplace: true,
+            htmlDecode: "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+            toolbar: false,             //关闭工具栏
+            previewCodeHighlight: true, // 关闭预览 HTML 的代码块高亮，默认开启
+            emoji: true,
+            taskList: true,
+            tocm: true,         // Using [TOCM]
+            tex: true,                   // 开启科学公式TeX语言支持，默认关闭
+            flowChart: true,             // 开启流程图支持，默认关闭
+            sequenceDiagram: true,       // 开启时序/序列图支持，默认关闭,
         });
     }
 </script>
 
 <script>
     var fileUrl = "";
+
     function tijiao(x) {
         tupian()
         var description = document.getElementsByName("test-editormd-markdown-doc")[0].defaultValue
@@ -768,23 +780,29 @@
                 var releaseForm = releaseForms[i].value;
             }
         }
-        $.ajax({
-            url: "/newPublish?title=" + title + "&description=" + description + "&myTags=" + myTags + "&articleType=" + articleType + "&releaseForm=" + releaseForm + "&fileUrl=" + fileUrl + "&x=" + x,
-            type: "get",
-            //不设置内容类型
-            // contentType: false,
-            //不处理数据
-            processData: false,
-            //必须设置，保证你提交的数据和后台返回是同步的
-            async: false,
-            data: {},
-            dataType: 'json',
-            error(data){
-                alert(data.responseText)
+        $.post("/newPublish",
+            {
+                'title': title,
+                'description': description,
+                'myTags': myTags,
+                'articleType': articleType,
+                'releaseForm': releaseForm,
+                'fileUrl': fileUrl,
+                'x': x
+            },
+            function (data) {
+                     console.log(data)
+                window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.success);
             }
-        });
-    }
+            );
 
+    }
+    // $(function(data){
+    //     $("#btn").click(function(data){
+    //         window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.success);
+    //     });
+    //
+    // });
     document.getElementById('file').addEventListener('change', function (e) {
         var files = this.files;
         var img = new Image();

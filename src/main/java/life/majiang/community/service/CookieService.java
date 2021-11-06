@@ -153,6 +153,6 @@ public class CookieService {
         Object o = redisUtil.get(userName);
         if (o == null) return null;
         UserEntity userEntity = JSON.parseObject(o.toString(), UserEntity.class);
-        return userEntity.getUserId();
+        return userEntity.getId();
     }
 }

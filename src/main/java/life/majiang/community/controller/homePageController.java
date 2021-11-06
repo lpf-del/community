@@ -56,8 +56,16 @@ public class homePageController {
     @GetMapping("/homePage")
     public String homePage(HttpServletRequest request, Model model) {
 
-        model = userEntityService.getHomePageInformation(request, model);
+        UserEntity homePageInformation = userEntityService.getHomePageInformation(request, model);
+        model.addAttribute("userEntity", homePageInformation);
 //        DigestUtils.md5DigestAsHex();
+        return "homePage";
+    }
+
+    @GetMapping("/homePageById")
+    public String homePageById(@RequestParam(value = "userId", required = false) String userId, Model model) {
+        UserEntity homePageInformationById = userEntityService.getHomePageInformationById(userId);
+        model.addAttribute("userEntity", homePageInformationById);
         return "homePage";
     }
 

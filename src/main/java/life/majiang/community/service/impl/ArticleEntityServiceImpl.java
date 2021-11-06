@@ -39,9 +39,11 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
     @Resource
     private RedisUtil redisUtil;
 
-
     @Resource
     private UserEntityService userEntityService;
+
+    @Resource
+    private UserEntityMapper userEntityMapper;
 
     @Override
     public void addArticle(String title, String description, String myTags, String articleType, String releaseForm, String fileUrl, HttpServletRequest request, Integer x) throws Exception {
@@ -57,15 +59,18 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         articleEntity.setType(articleType);//文章类型：原创。。。
         articleEntity.setReleaseForm(releaseForm);//文章发布形式：公开。。
         articleEntity.setContent(description==null?"":description);//文章内容
-        articleEntity.setAuthorId(personInformation.getUserId());//作者id
+        articleEntity.setAuthorId(personInformation.getId());//作者id
         articleEntity.setX(x);//0草稿箱，1发布
         articleEntityMapper.insert(articleEntity);
         Integer articleId = articleEntity.getId();
         if (x == 0) return;
         ArticleRankingEntity articleRanking = new ArticleRankingEntity();
-        articleRanking.setAuthorId(personInformation.getUserId());//作者id
+        articleRanking.setAuthorId(personInformation.getId());//作者id
         articleRanking.setArticleId(articleId);//文章id
         articleRanking.setReleaseTime(System.currentTimeMillis());//文章发布时间
+        articleRanking.setVisits(0);
+        articleRanking.setComment(0);
+        articleRanking.setPraiseQuantity(0);
         articleRankingEntityMapper.insert(articleRanking);
         addArticleRedis(articleRanking, articleEntity);
     }
@@ -107,6 +112,14 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         return aauar;
     }
 
+    @Override
+    public void addUserArticleCount(HttpServletRequest request) {
+        UserEntity personInformation = cookieService.getPersonInformation(request);
+        personInformation.setPostCount(personInformation.getPostCount() + 1);
+        userEntityMapper.updateById(personInformation);
+        String userName = cookieService.getUserName(request);
+        redisUtil.set(userName, personInformation);
+    }
 
 
     /**
@@ -116,11 +129,11 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
      * @return
      */
     private ArticleRankingEntity getArticleRanding(Integer articleId, Integer id) {
-        Object o = redisUtil.get("v_" + articleId);
+        Object o = redisUtil.get("r_ar_" + articleId);
         ArticleRankingEntity articleRankingEntity = null;
         if (o == null){
             articleRankingEntity = articleRankingEntityMapper.selectById(id);
-            redisUtil.set("v_" + articleId, JSON.toJSONString(articleRankingEntity));
+            redisUtil.set("r_ar_" + articleId, JSON.toJSONString(articleRankingEntity));
         }else {
             articleRankingEntity = JSON.parseObject(o.toString(), ArticleRankingEntity.class);
         }
@@ -140,7 +153,7 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
             articleEntity = articleEntityMapper.selectById(articleId);
             redisUtil.set("ar_" + articleId, JSON.toJSONString(articleEntity));
         }else {
-            articleEntity = JSON.parseObject(o.toString(), ArticleEntity.class);
+            articleEntity = JSON.parseObject(JSON.parse(o.toString()).toString(), ArticleEntity.class);
         }
         return articleEntity;
     }

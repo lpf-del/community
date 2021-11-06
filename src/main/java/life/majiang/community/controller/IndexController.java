@@ -59,6 +59,11 @@ public class IndexController {
         return "index";
     }
 
+    @GetMapping("/jianli")
+    public String jianli(){
+        return "about";
+    }
+
 
 
 }

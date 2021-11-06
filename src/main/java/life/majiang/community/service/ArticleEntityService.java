@@ -35,4 +35,10 @@ public interface ArticleEntityService extends IService<ArticleEntity> {
      * @return
      */
     ArticleAndUserAndRang getArticleById(Integer articleId);
+
+    /**
+     * 用户发布文章数量增加
+     * @param request
+     */
+    void addUserArticleCount(HttpServletRequest request);
 }

@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>lpf-个人社区首页</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./css/base.css" rel="stylesheet">
+    <link href="./css/m.css" rel="stylesheet">
+    <link href="./css/commentList.css" rel="stylesheet">
+    <script src="./js/jquery-3.6.0.min.js"></script>
+    <script src="./js/comm.js"></script>
+
+</head>
+<body>
+<header>
+
+    <div class="box">
+
+        <div class="logo"><a href="/"><img src="images/logo.png" alt="logo"></a></div>
+        <div class="contact_icon">
+            <ul>
+                <li><a href="http://wpa.qq.com/msgrd?v=3&uin=2677086147&site=qq&menu=yes"><i class="icon_qq"></i></a>
+                </li>
+                <li><a href="tel:186491309**"><i class="icon_tel"></i></a></li>
+                <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=2677086147@qq.com" target="_blank"><i
+                        class="icon_email"></i></a></li>
+                <li><i class="icon_weixin"><img src="images/wx.png" alt="微信号：476847"></i></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <nav>
+            <ul id="starlist">
+                <li><a href="/">网站首页</a></li>
+                <li><a href="blog.html">博文日记</a></li>
+                <li><a href="photos.html">我的相册<i></i></a></li>
+                <li><a href="videos.html">我的视频</a></li>
+                <li><a href="/jianli">个人简历</a></li>
+                <li><a href="/publish">发布</a></li>
+                <li th:if="${session.user==null}"><a th:href="@{/log}">登录</a></li>
+                <li class="menu" th:if="${session.user!=null}">
+                    <a href="#" th:text="${session.user.getName()}"></a>
+                    <ul class="sub">
+                        <li><a href="/personalInformation?xiugai=0">个人中心</a></li>
+                        <li><a href="/homePage">个人主页</a></li>
+                        <li><a href="/login">退出登录</a></li>
+                    </ul>
+                    <span></span>
+                </li>
+            </ul>
+            <h2 id="mnavh"><span class="navicon"></span></h2>
+            <div class="is-search"><i></i></div>
+            <div class="search-page">
+                <div class="search_box">
+                    <div class="go-left"></div>
+                    <div class="search">
+                        <form action="http://zhuanti.ip3q.com/e/search/index.php" method="post" name="searchform"
+                              id="searchform">
+                            <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词"
+                                   style="color: rgb(153, 153, 153);"
+                                   onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}"
+                                   onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
+                            <input name="show" value="title" type="hidden">
+                            <input name="tempid" value="1" type="hidden">
+                            <input name="tbname" value="news" type="hidden">
+                            <input name="Submit" class="input_submit" value="搜索" type="submit">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!--search end-->
+        </nav>
+    </div>
+</header>
+</body>
+</html>

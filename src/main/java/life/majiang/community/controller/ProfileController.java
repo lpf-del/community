@@ -20,10 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class ProfileController {
@@ -121,10 +118,26 @@ public class ProfileController {
         List<CommentAndUser> cau = commentEntityService.getFiveComment(articleId, 1);
         model.addAttribute("articleAndUserAndRang", aau);
         model.addAttribute("commentList", cau);
-        userArticleVisitLogEntityService.addArticleVisit(articleId, request);
+        List<String> list = labelS(aau.getArticleEntity().getLabel());
+        model.addAttribute("labelList", list);
+        //userArticleVisitLogEntityService.addArticleVisit(articleId, request);
         return "profile";
     }
 
+    /**
+     * 标签的拆分：（改为前端实现）
+     * @param label
+     * @return
+     */
+    public List<String> labelS(String label){
+        String[] split = label.split(",");
+        List<String> list = new ArrayList<>();
+        for (String s : split) {
+            list.add(s);
+        }
+        list.remove(0);
+        return list;
+    }
     /**
      * 点赞的请求
      * 文章的点赞数加一

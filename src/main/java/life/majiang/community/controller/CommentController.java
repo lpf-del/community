@@ -90,7 +90,6 @@ public class CommentController {
     public String comment(@RequestParam(value = "articleId",required = false) Integer articleId,
                           @RequestParam(value = "page",required = false) Integer page){
         List<CommentAndUser> fiveComment = commentEntityService.getFiveComment(articleId, page);
-
         return JSON.toJSONString(fiveComment);
     }
 
@@ -100,7 +99,7 @@ public class CommentController {
      * @param commentId
      * @return
      */
-    @GetMapping("/getComment")
+    @PostMapping("/getComment")
     @ResponseBody
     public String getComment(@RequestParam(value = "articleId",required = false) Integer articleId,
                              @RequestParam(value = "commentId",required = false) Integer commentId){
@@ -116,7 +115,7 @@ public class CommentController {
      * @param request
      * @return
      */
-    @GetMapping("/addComment")
+    @PostMapping("/addComment")
     @ResponseBody
     public String addComment(@RequestParam(value = "articleId",required = false) Integer articleId,
                              @RequestParam(value = "commentId",required = false) Integer commentId,
@@ -124,6 +123,8 @@ public class CommentController {
                              HttpServletRequest request){
         String userName = cookieService.getUserName(request);
         if (userName.equals("")) return "未登录请登录后再评论";
+        comment.replaceAll(" ", "");
+        if (comment.length() == 0) return "评论内容不能为空";
         commentEntityService.addComment(articleId, commentId, comment, request);
         userCommentLogEntityService.articleComment(articleId, 1);
         return "评论成功";
@@ -134,7 +135,7 @@ public class CommentController {
      * @param commentId
      * @return
      */
-    @GetMapping("deleteComment")
+    @GetMapping("/deleteComment")
     @ResponseBody
     public String deleteComment(@RequestParam(value = "commentId",required = false) Integer commentId,
                                 @RequestParam(value = "articleId",required = false) Integer articleId){

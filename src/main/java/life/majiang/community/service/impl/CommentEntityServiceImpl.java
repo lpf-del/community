@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import life.majiang.community.entity.ArticleEntity;
 import life.majiang.community.entity.CommentAndUser;
 import life.majiang.community.entity.CommentEntity;
+import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.CommentEntityMapper;
 import life.majiang.community.service.CommentEntityService;
 import life.majiang.community.service.CookieService;
@@ -48,7 +49,8 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
     public List<CommentAndUser> getFiveComment(Integer articleId, Integer page) {
         List<CommentAndUser> list = getCommentByArticle(articleId);
         List<CommentAndUser> collect = list.stream()
-                .filter(s -> s.getCommentEntity().getCommentType() == 1).collect(Collectors.toList());
+                .filter(s -> s.getCommentEntity().getCommentType() == 0)
+                .collect(Collectors.toList());
         return getCommentByPage(collect, page);
     }
 
@@ -61,6 +63,7 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
         int size = collect.size();
         if (page * 5 > size) page = size / 5 + size % 5 == 0 ? 0 : 1;
         int left = (page - 1) * 5, right = (page * 5) > size ? size : (page * 5);
+        if (size == 0 || right > size) return new ArrayList<CommentAndUser>();
         List<CommentAndUser> list = collect.subList(left, right);
         return list;
     }
@@ -76,17 +79,30 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
             HashMap<String, Object> map = new HashMap<>();
             map.put("article_id", articleId);
             List<CommentAndUser> list = commentAndUser(commentEntityMapper.selectByMap(map));
-            redisUtil.set("a_i_c_" + articleId, JSON.toJSONString(list));
+            redisUtil.set("a_i_c_" + articleId, JSON.toJSONString(list==null?new ArrayList<>():list));
             return list;
         }
-        return (List<CommentAndUser>) JSON.parseObject(o.toString(), List.class);
+        return commentAndUserConversion(JSON.parseObject(o.toString(), ArrayList.class));
+    }
+
+    /**
+     * 将ArryList类型的JSON，遍历转化其中的元素，变为CommentAndUserList
+     * @param arrayList
+     * @return
+     */
+    public List<CommentAndUser> commentAndUserConversion(ArrayList arrayList){
+        List<CommentAndUser> commentAndUsers = new ArrayList<>();
+        for (Object o : arrayList) {
+            commentAndUsers.add(JSON.parseObject(o.toString(), CommentAndUser.class));
+        }
+        return commentAndUsers;
     }
 
     @Override
     public List<CommentAndUser> getCommentAll(Integer articleId, Integer commentId) {
         List<CommentAndUser> commentByArticle = getCommentByArticle(articleId);
         List<CommentAndUser> collect = commentByArticle.stream().filter(s -> s.getCommentEntity()
-                .getCommentType() == 0 && s.getCommentEntity().getCommentId().equals(commentId))
+                .getCommentType() != 0 && s.getCommentEntity().getReviewedByMan().equals(commentId))
                 .collect(Collectors.toList());
         return collect;
     }
@@ -96,7 +112,7 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
     public void addComment(Integer articleId, Integer commentId, String comment, HttpServletRequest request) {
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setArticleId(articleId);//文章id
-        commentEntity.setCommentator(cookieService.getPersonInformation(request).getUserId());//评论人id
+        commentEntity.setCommentator(cookieService.getPersonInformation(request).getId());//评论人id
         commentEntity.setCommentContent(comment);//评论内容
         commentEntity.setCommentPicture("");//评论的图片
         commentEntity.setCommentTime(System.currentTimeMillis());//评论时间

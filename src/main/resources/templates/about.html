@@ -1,123 +1,84 @@
 <!doctype html>
-<html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>《初见》响应式个人博客模板</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="css/base.css" rel="stylesheet">
-<link href="css/m.css" rel="stylesheet">
-<script src="js/jquery-3.6.0.min.js" ></script>
-<script src="js/comm.js"></script>
+  <meta charset="utf-8">
+  <title>lpf-个人社区首页</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./css/base.css" rel="stylesheet">
+  <link href="./css/m.css" rel="stylesheet">
+  <script src="./js/jquery-3.6.0.min.js"></script>
+  <script src="./js/comm.js"></script>
+
 </head>
 <body>
-<header>
-  <div class="box">
-    <div class="logo"><a href="/"><img src="images/logo.png" alt="logo"></a></div>
-    <div class="ad_top"><a href="/"><img src="images/ad01.jpg" alt="广告"></a></div>
-    <div class="contact_icon">
-      <ul>
-        <li><a href="http://wpa.qq.com/msgrd?v=3&uin=476847113&site=qq&menu=yes"><i class="icon_qq"></i></a></li>
-        <li><a href="tel:186491309**"><i class="icon_tel"></i></a></li>
-        <li><a href="http://mail.qq.com/cgi-bin/qm_share?t=qm_mailme&email=476847113@qq.com" target="_blank"><i class="icon_email"></i></a></li>
-        <li><i class="icon_weixin"><img src="images/wx.png" alt="微信号：476847113"></i></li>
-      </ul>
-    </div>
-    <div class="clear"></div>
-    <nav>
-      <ul id="starlist">
-        <li><a href="index.html">网站首页</a></li>
-        <li><a href="blog.html">博文日记</a></li>
-        <li class="menu"><a href="#">所有内容</a>
-          <ul class="sub">
-            <li><a href="blog_info.html">文章内容</a></li>
-            <li><a href="photos_info.html">相册内容</a></li>
-            <li><a href="videos_info.html">视频内容</a></li>
-            <li><a href="page_info.html">单页内容</a></li>
-          </ul>
-          <span></span></li>
-        <li><a href="photos.html">我的相册<i></i></a></li>
-        <li><a href="videos.html">我的视频</a></li>
-        <li><a href="about.html">个人简历</a></li>
-      </ul>
-      <h2 id="mnavh"><span class="navicon"></span></h2>
-      <div class="is-search"> <i></i> </div>
-      <div class="search-page">
-        <div class="search_box">
-          <div class="go-left"></div>
-          <div class="search">
-            <form action="http://zhuanti.ip3q.com/e/search/index.php" method="post" name="searchform" id="searchform">
-              <input name="keyboard" id="keyboard" class="input_text" value="请输入关键字词" style="color: rgb(153, 153, 153);" onfocus="if(value=='请输入关键字词'){this.style.color='#000';value=''}" onblur="if(value==''){this.style.color='#999';value='请输入关键字词'}" type="text">
-              <input name="show" value="title" type="hidden">
-              <input name="tempid" value="1" type="hidden">
-              <input name="tbname" value="news" type="hidden">
-              <input name="Submit" class="input_submit" value="搜索" type="submit">
-            </form>
-          </div>
-        </div>
-      </div>
-      <!--search end--> 
-    </nav>
-  </div>
-</header>
+<div th:insert="~{header :: header}"></div>
 <div class="ph_margin"></div>
 <div class="box">
   <div class="resume">
     <div class="resume_left">
-      <section> <i><img src="images/resume.png" alt="头像"></i>
-        <h2>李晓红</h2>
-        <p>产品经理</p>
-        <span>抗压能力强</span><span>组织领导力</span><span>有执行力</span><span>耐心细心</span> </section>
+      <section> <i><img src="img/Touxiang.jpg" alt="头像"></i>
+        <h2>李鹏飞</h2>
+        <p>安全工程师</p>
+        <span>抗压能力强</span><span>学习力强</span><span>积极认真</span><span>责任心强</span> </section>
       <ul class="resume_con">
         <li class="re_xl">大学本科</li>
-        <li class="re_rq">1994年8月16日</li>
-        <li class="re_tell">19666668888</li>
-        <li class="re_email">dancesmiling@qq.com</li>
-        <li class="re_add">天津市滨海新区</li>
+        <li class="re_rq">2000年5月23日</li>
+        <li class="re_tell">19862125285</li>
+        <li class="re_email">2568034812@qq.com</li>
+        <li class="re_add">济南市历下区</li>
       </ul>
       <h3>技能特长</h3>
       <ul class="resume_tec">
-        <li class="tec80">python<span></span></li>
-        <li class="tec70">视频剪辑<span></span></li>
-        <li class="tec60">图片处理<span></span></li>
+        <li class="tec80">java<span></span></li>
+        <li class="tec60">web渗透<span></span></li>
       </ul>
     </div>
     <div class="resume_right">
       <h2>教育背景</h2>
-      <p><span style="color:#808080;">武汉理工大学 / 2013.9&mdash;2017.6</span></p>
-      <p>软件工程、算法设计与分析、软件管理、概率论与数理统计、线性代数、物理实验、编译原理</p>
-      <p>精通C/C++、Java、PHP，强烈的上进心和求知欲，较强的学习能力和沟通能力，具备良好的团队合作精神，熟练把握lamp，有大访问量web应用访问或数据库建设经验</p>
-      <h2>工作经历</h2>
-      <p><strong>会计师</strong></p>
-      <p><span style="color:#808080;">天津虹信有限公司 开发工程师助理 / 2016.7&mdash;2017.6</span></p>
+      <p><span style="color:#808080;">齐鲁工业大学 / 2018.9&mdash;2021.6</span></p>
+      <p>软件工程、算法设计与分析、软件管理、概率论与数理统计、线性代数、物理实验、编译原理等</p>
+      <p>精通Java，强烈的上进心和求知欲，较强的学习能力和沟通能力，具备良好的团队合作精神，有独立编写项目经验</p>
+      <h2>项目经历</h2>
+      <p><strong>信息安全--安全技术研究与实践</strong></p>
+      <p>参加学校社团组织的网络攻防比赛，此次比赛主要分为web攻防、杂项、加解密、逆向、二进制溢出等方面，在团队中我担任web渗透工作，任务目标为自主搭建的某个新闻发布系统，并撰写渗透思路。过程中使用的工具涵盖Nmap、AWVS、SQLmap、Burpsuite，用Nmap扫描开放的端口，并推测有什么服务运行、和哪个操作系统。用AWVS对目标网站进行漏洞探测，了解可能发生的位置，进行手动验证，基本确定漏洞的存在。使用burpsuit对后台登录的暴力破解，使用sqlmap对网站查询请求进行sql注入，以及对文章发布，评论界面的xss攻击。编写渗透测试报告。增加了web渗透的经验，并获取了老师的良好评价。</p>
+      <p><strong>研发--开发个人社区（springboot+mybatis+thymeleaf）</strong></p>
+      <p><span style="color:#808080;">2021.1&mdash;至今</span></p>
+      <p>社区有以下几个功能：文章发布，文章评论，评论信息提示，文章搜索，根据文章的标签进行相关文章推送。前端使用thymeleaf对服务器返回的数据进行解析，并将数据渲染到页面上。使用bootstrap生成页面代码，简化html页面的开发。使用css样式对界面进行调整。项目使用MySQL数据库，对表多个字段建立索引，并使用mybatis-plus来代替mybatis进行数据库表的操作。使用redis做缓存，减少了网站响应时间。社区的登录实现了短信、邮箱的验证，对于发布文章和回复进行了session和cookie的校验，并设置拦截器对于未登录的用户的某些操作进行限制。搜索采用模糊查询。有访问人数、点赞、评论数展示等基本功能。通过网站的开发更加深刻体会到web安全的重要性。</p>
+      <h2>IT技能</h2>
+      <p><span style="color:#808080;">web开发</span></p>
       <ul>
-        <li>参与系统的需求调研和需求分析，撰写相关技术文档;</li>
-        <li>参与软件开发，确保负责模块的质量，代码和文档符合规范要求;</li>
-        <li>根据项目经理的安排，按时完成指定软件模块的设计、开发、测试等过程。</li>
+        <li>具备扎实的java基础和面向对象思想，对java8的新特性有一定了解</li>
+        <li>熟悉常用java的集合类的使用，并对其实现原理有一定了解</li>
+        <li>熟悉使用mysql，对mysql的调优和引擎有一定的了解</li>
+        <li>了解redis的数据结构及用途，了解redis的持久化策略</li>
+        <li>对spring、springmvc、mybatis、mybatis-plus、springboot等开源框架有一定了解</li>
+        <li>熟悉idea开发工具的使用，使用maven依赖管理，使用git进行版本控制</li>
+        <li>了解常用的数据结构和算法</li>
       </ul>
-      <p><strong>java工程师</strong></p>
-      <p><span style="color:#808080;">上海幻电信息科技有限公司 工程师 / 2017.4&mdash;2019.6</span></p>
-      <p>运用Java这种开发语言去完成软件产品的软件程序设计、开发、测试、维护升级</p>
+      <p><span style="color:#808080;">web安全</span></p>
+      <ul>
+        <li>能够使用AWVS、Nessus进行系统漏洞扫描与分析，发现网站的漏洞</li>
+        <li>了解sql注入、xss跨站脚本、文件上传、文件包含等漏洞原理</li>
+        <li>能够使用sqlmap，nmap，wireshark，burpsuite等工具，对网站进行渗透</li>
+      </ul>
+      <p><span style="color:#808080;">操作系统</span></p>
+      <ul>
+        <li>具备Linux、Windows系统知识经验，熟悉Linux系统的命令，能够在Linux系统上搭建项目</li>
+        <li>可以使用docker搭建网站环境、进行项目部署</li>
+      </ul>
+      <p><span style="color:#808080;">计算机网络</span></p>
+      <ul>
+        <li>了解计算机网络七层模型，了解TCP/IP等基本网络协议</li>
+        <li>使用wireshark抓包了解数据包的信息</li>
+        <li>了解子网掩码及网络的划分</li>
+      </ul>
       <h2>自我评价</h2>
-      <p>在本科期间我不仅能够保持成绩在年级前5%，GPA3.5以上，还积极参与学校组织的各项活动和社团活动，我负责运营的AKB英语社最高可达2万的阅读量，我是一个极具领导才能和责任心的人，能够迅速和同学们打成一片。</p>
+      <p>本人态度积极认真，责任心强，具有很强的学习能力和适应性。在日常生活中，吃苦耐劳，热爱集体，积极参加各类公共活动，有良好的人际关系。在学习中，勤奋严谨，接受新知识能力强，有很强的自学能力。在工作中，为人诚恳，做事细心，认真负责，能够高效率的完成工作，易于沟通，具有良好的团队意识，热爱自己从事的工作，敢挑重担。</p>
     </div>
   </div>
 </div>
-<footer>
-  <div class="box">
-    <ul class="footer_nav">
-      <li><a href="/" target="_blank">网站地图</a></li>
-      <li><a href="all_list.html" target="_blank">所有文章</a></li>
-      <li><a href="tags.html" target="_blank">标签合集</a></li>
-      <li><a href="/" target="_blank">访问统计</a></li>
-    </ul>
-    <div class="guanzhu_img"><i><img src="images/wx.png" alt="微信:4768447113">微信号</i> <i><img src="images/wxgzh.jpg" alt="微信:4768447113">微信公众号</i></div>
-    <div class="copyright">
-      <p>杨青青个人博客网站 版权所有 </p>
-      <p>Copyright © <a href="https://www.qingqingblog.com/" target="_blank">www.qingqingblog.com</a> All Rights Reserved.</p>
-      <p>备案号：<a href="http://www.beian.miit.gov.cn/" target="_blank">津ICP备20005778号-1</a><i class="ga"><img src="images/ga.png" alt="公安备案号"></i>津公网安备 12011602000448 号</p>
-    </div>
-  </div>
-</footer>
+<div th:insert="~{footer :: footer}"></div>
 <a href="#" title="返回顶部" class="icon-top"></a>
 </body>
 </html>

@@ -42,7 +42,7 @@ public interface UserEntityService extends IService<UserEntity> {
      * @param model
      * @return
      */
-    Model getHomePageInformation(HttpServletRequest request, Model model);
+    UserEntity getHomePageInformation(HttpServletRequest request, Model model);
 
 
 
@@ -67,4 +67,10 @@ public interface UserEntityService extends IService<UserEntity> {
      * @return
      */
     UserEntity getAuthor(Integer authorId);
+
+    /**
+     * 根据id获取个人主页的信息
+     * @param userId
+     */
+    UserEntity getHomePageInformationById(String userId);
 }
