@@ -115,13 +115,24 @@ public class ProfileController {
     public String profile(@RequestParam(value = "articleId",required = false) Integer articleId,
                            Model model, HttpServletRequest request){
         ArticleAndUserAndRang aau = articleEntityService.getArticleById(articleId);
-        List<CommentAndUser> cau = commentEntityService.getFiveComment(articleId, 1);
         model.addAttribute("articleAndUserAndRang", aau);
-        model.addAttribute("commentList", cau);
         List<String> list = labelS(aau.getArticleEntity().getLabel());
         model.addAttribute("labelList", list);
-        //userArticleVisitLogEntityService.addArticleVisit(articleId, request);
+        Long count = commentEntityService.getCommentCount(articleId);
+        model.addAttribute("commentCount", countPage(count));
+//        userArticleVisitLogEntityService.addArticleVisit(articleId, request);
         return "profile";
+    }
+
+    /**
+     * 获取最大页数
+     */
+    private Long countPage(Long count) {
+        Long page = count / 5;
+        if (count % 5 != 0){
+            page ++;
+        }
+        return page;
     }
 
     /**

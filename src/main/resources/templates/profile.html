@@ -27,7 +27,7 @@
 <body>
 <div th:insert="~{navigation :: nav}"></div>
 <div id="top"></div>
-<!--<div class="btn btn-login" style="margin-top: 50px; float: right" onclick="huoqu(1)">获取评论</div>-->
+<!--<div class="btn btn-login" style="margin-top: 50px; float: right" onclick="comment_page(3)">获取评论</div>-->
 <div class="tubiao_index">
     <a href="#top"><img src="./img/jump_top.jpg" class="daxiao"></a>
     <a href="#pinglun"><img src="./img/jump_comment.jpg" class="daxiao" style="margin-top: 10px"></a>
@@ -225,45 +225,48 @@
             <div class="btn btn-login" style="margin-top: 50px; float: right" onclick="comment()">发表评论</div>
         </footerr>
         <div class="fffff">
-            <ul class="ul">
-                <li th:each="comment : ${commentList}" >
-                    <div class="btn_li" onclick="reply(this.getAttribute('value'), this.getAttribute('name'))"
-                         th:value="${comment.getCommentEntity().getCommentId()}"
-                         th:name="${comment.getUserEntity().getUserName()}">
-                        <div class="userPic"><img src="./img/TouXiang.jpg"
-                                                  style="height: 44px; border-radius: 50%; margin: 2px"/></div>
-                        <div class="content">
-                            <div class="userName" th:text="${comment.getUserEntity().getUserName()}"></div>
-                            <div class="msgInfo" th:text="${comment.getCommentEntity().getCommentContent()}"></div>
-                            <div class="times"><span
-                                    th:text="${#dates.format((comment.getCommentEntity().getCommentTime()),'yyyy-MM-dd')}"></span>
-                            </div>
-                        </div>
-
-<!--                        <div class="xuanxiang">-->
-
-<!--                            <div  class="btnn" onclick="reply1(this.getAttribute('value'))"-->
-<!--                                  th:value="${comment.getCommentEntity().getCommentId()}">删除-->
+            <ul class="ul" id="comment_page_one">
+<!--                <li th:each="comment : ${commentList}" >-->
+<!--                    <div class="btn_li" onclick="reply(this.getAttribute('value'), this.getAttribute('name'))"-->
+<!--                         th:value="${comment.getCommentEntity().getCommentId()}"-->
+<!--                         th:name="${comment.getUserEntity().getUserName()}">-->
+<!--                        <div class="userPic"><img src="./img/TouXiang.jpg"-->
+<!--                                                  style="height: 44px; border-radius: 50%; margin: 2px"/></div>-->
+<!--                        <div class="content">-->
+<!--                            <div class="userName" th:text="${comment.getUserEntity().getUserName()}"></div>-->
+<!--                            <div class="msgInfo" th:text="${comment.getCommentEntity().getCommentContent()}"></div>-->
+<!--                            <div class="times"><span-->
+<!--                                    th:text="${#dates.format((comment.getCommentEntity().getCommentTime()),'yyyy-MM-dd')}"></span>-->
 <!--                            </div>-->
 <!--                        </div>-->
-                    </div>
-                    <div class="glyphicon glyphicon-comment" style="float: right; margin: 20px;" th:value="${comment.getCommentEntity().getCommentId()}"
-                         onclick="comment_show(this.getAttribute('value'))"> </div>
-<!--                    二级评论-->
-                    <div class="collapse child" th:id="${'child' + comment.getCommentEntity().getCommentId()}" >
-                        <ul th:id="${'two' + comment.getCommentEntity().getCommentId()}">
 
-                        </ul>
-                    </div>
-                </li>
+<!--&lt;!&ndash;                        <div class="xuanxiang">&ndash;&gt;-->
+
+<!--&lt;!&ndash;                            <div  class="btnn" onclick="reply1(this.getAttribute('value'))"&ndash;&gt;-->
+<!--&lt;!&ndash;                                  th:value="${comment.getCommentEntity().getCommentId()}">删除&ndash;&gt;-->
+<!--&lt;!&ndash;                            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </div>&ndash;&gt;-->
+<!--                    </div>-->
+<!--                    <div class="glyphicon glyphicon-comment" style="float: right; margin: 20px;" th:value="${comment.getCommentEntity().getCommentId()}"-->
+<!--                         onclick="comment_show(this.getAttribute('value'))"> </div>-->
+<!--&lt;!&ndash;                    二级评论&ndash;&gt;-->
+<!--                    <div class="collapse child" th:id="${'child' + comment.getCommentEntity().getCommentId()}" >-->
+<!--                        <ul th:id="${'two' + comment.getCommentEntity().getCommentId()}">-->
+
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </li>-->
 
             </ul>
+            <div class="">
+                <ul id="pages" style="margin-top: 20px;margin-bottom: 30px;line-height: 33px;"></ul>
+            </div>
         </div>
+
     </div>
 </div>
 
 <script type="text/javascript">
-
     var text = document.getElementById("makedownText");
     //创建实例
     var converter = new showdown.Converter();
@@ -294,10 +297,6 @@
         document.getElementsByClassName("w-e-text")[0].children[0].innerText = '@回复 ' + comment_name + ':  ';
         $(window).scrollTop($('#pinglun').offset().top);  //跳转到锚定位置
     }
-    function reply1(comment_id) {
-
-        console.log(commentId);
-    }
 
     //评论发布函数
     function comment() {
@@ -316,7 +315,7 @@
                 window.wxc.xcConfirm(data, window.wxc.xcConfirm.typeEnum.success);
             }
         );
-        document.getElementsByClassName("w-e-text")[0].children[0].innerText = '';
+        document.getElementsByClassName("w-e-text")[0].children[0].innerText = '请输入正文';
         commentId = 0;
     }
 </script >
@@ -333,7 +332,10 @@
         }else {  //状态是关闭,展开
             classs.addClass('in');
             e.setAttribute("data" + comment_id, "in");
-            getComment(comment_id);
+            if (!e.getAttribute("have" + comment_id)){
+                getComment(comment_id);
+                e.setAttribute("have" + comment_id, comment_id);
+            }
         }
     }
     //获取评论的下一级评论
@@ -379,8 +381,8 @@
             '<li>' +
                 '<div class="btn_li" onclick="reply('+ commen_id +'\,\'' + username+'\')">' +
                     '<div class="content" style="width: 90%">' +
-                        '<span class="userName">' + username + '</span>' +
-                        '<span class="msgInfo">' + comment_content + ':' + '</span>' +
+                        '<span class="userName">' + username + ':' + '</span>' +
+                        '<span class="msgInfo">' + comment_content + '</span>' +
                         '<span class="times" style="float: right;">' + time(comment_time) +'</span>' +
                     '</div>' +
                 '</div>' +
@@ -395,7 +397,101 @@
         var h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours()) + ':'
         var m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()) + ':'
         var s = (date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds())
-        return Y + M + D + h + m + s
+        return Y + M + D + h + m + s;
+    }
+</script>
+<script>
+    //删除旧评论
+    function remove_comment_page(){
+        $('#comment_page_one').children().remove()
+    }
+    function remove_page(){
+        $('#pages').children().remove()
+    }
+    //首次先加载第一页评论
+    comment_page(1);
+    var pageMax = [[${commentCount}]];
+    showPage(1, pageMax);
+    //评论分页获取每一页的评论（5条）
+    function comment_page(page){
+        $.get("/commentPage",
+            {
+                'articleId': articleId,
+                'page': page,
+            },
+            function (data) {
+                get_comments(data);
+                remove_page();
+                showPage(page, pageMax);
+            }
+        );
+    }
+    //获取每一页评论的信息并展示
+    function get_comments(data){
+        remove_comment_page()
+        var jsonData = JSON.parse(data);
+        let xs = 0;
+        let ys = 0;
+        let zs = 0;
+        for (xs in jsonData) {
+            var commen_ids = "";
+            var usernames = "";
+            var comment_contents = "";
+            var comment_times = "";
+            var reviewedByMans = "";
+            for (ys in jsonData[xs]) {
+                for (zs in jsonData[xs][ys]){
+                    var values = jsonData[xs][ys][zs];
+                    if (zs == 'commentId') commen_ids = values;
+                    if (zs == 'commentContent') comment_contents = values;
+                    if (zs == 'userName') usernames = values;
+                    if (zs == 'commentTime') comment_times = values;
+                    if (zs == 'reviewedByMan') reviewedByMans = values;
+                }
+            }
+            show_comments(commen_ids, usernames, comment_contents, comment_times, reviewedByMans);
+        }
+    }
+    function show_comments(commen_ids, usernames, comment_contents, comment_times, reviewedByMans){
+        $('#comment_page_one').append(
+            '<li>' +
+                '<div class="btn_li" onclick="reply(' + commen_ids + ',\''+ usernames + '\')">' +
+                    '<div class="userPic"><img src="./img/TouXiang.jpg" style="height: 44px; border-radius: 50%; margin: 2px"/></div>' +
+                    '<div class="content">' +
+                        '<div class="userName">' + usernames + '</div>' +
+                        '<div class="msgInfo">' + comment_contents + '</div>' +
+                        '<div class="times">' +
+                            '<span>' + time(comment_times) +'</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+                ' <div class="glyphicon glyphicon-comment" style="float: right; margin: 20px;" onclick="comment_show('+ commen_ids +')"> </div>' +
+                '<div class="collapse child" id="child'+ commen_ids +'">' +
+                    '<ul id="two'+ commen_ids +'">' +
+                    '</ul>' +
+                '</div>' +
+            '</li>');
+
+    }
+
+    //标签展示
+    function showPage(pageCurrent, pageMax){
+        let pageL = pageCurrent - 1;
+        let pageR = pageCurrent + 1;
+        if (pageL<1) pageL = 1;
+        if (pageR>pageMax) pageR = pageMax;
+        $('#pages').append(
+            '<li class="btns" onclick="comment_page(' + pageL + ')">&lt;</li>'
+        );
+        for (let i = 1; i <= pageMax; i++) {
+            $('#pages').append(
+                '<li class="btns" id="page' + i + '" onclick="comment_page(' + i + ')">' + i + '</li>'
+            );
+        }
+        $('#pages').append(
+            '<li class="btns" onclick="comment_page(' + pageR + ')">&gt;</li>'
+        );
+        $('#page' + pageCurrent).addClass("redd");
     }
 </script>
 </body>

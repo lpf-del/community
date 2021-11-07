@@ -604,7 +604,21 @@ footerr {
     line-height: 50px;
     transition: all .3s;
 }
-
+.btns {
+    color: #555;
+    display: inline-block;
+    height: 36px;
+    border: 1px solid #ccc;
+    border-radius: 2px;
+    width: 50px;
+    line-height: 33px;
+    font-size: 14px;
+    text-align: center;
+    cursor: pointer;
+    -webkit-transition: all .3s;
+    line-height: inherit;
+    transition: all .3s;
+}
 .btn_li {
     display: inline-block;
     cursor: pointer;
@@ -613,12 +627,14 @@ footerr {
     transition: all .3s;
     width: 915px;
 }
-.daxiao{
+
+.daxiao {
     height: 60px;
     width: 60px;
     border-radius: 50%;
 }
-.tubiao_index{
+
+.tubiao_index {
     display: flex;
     width: 60px;
     flex-wrap: wrap;
@@ -626,3 +642,8 @@ footerr {
     top: 300px;
     left: 1450px;
 }
+.redd{
+    background-color: lightblue;
+}
+
+

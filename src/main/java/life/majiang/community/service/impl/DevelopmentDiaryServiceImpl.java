@@ -56,7 +56,8 @@ public class DevelopmentDiaryServiceImpl extends ServiceImpl<DevelopmentDiaryMap
             Integer integer = developmentDiaryMapper.selectCount(null);
             int pageMax = integer/10 + integer%10!=0?1:0;
             Page<DevelopmentDiary> developmentDiaryPage =
-                    developmentDiaryMapper.selectPage(new Page<DevelopmentDiary>(Math.min(page,pageMax), 10), new QueryWrapper<DevelopmentDiary>().orderByDesc("diary_time"));
+                    developmentDiaryMapper.selectPage(new Page<DevelopmentDiary>(Math.min(page,pageMax), 10),
+                            new QueryWrapper<DevelopmentDiary>().orderByDesc("diary_time"));
             List<DevelopmentDiary> records = developmentDiaryPage.getRecords();
             redisUtil.set("diary_page_" + page, JSON.toJSONString(records));
             return records;

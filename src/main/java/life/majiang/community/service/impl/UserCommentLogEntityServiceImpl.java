@@ -1,13 +1,16 @@
 package life.majiang.community.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import life.majiang.community.entity.ArticleRankingEntity;
+import life.majiang.community.entity.CommentAndUser;
 import life.majiang.community.entity.CommentEntity;
 import life.majiang.community.entity.UserCommentLogEntity;
 import life.majiang.community.mapper.ArticleRankingEntityMapper;
 import life.majiang.community.mapper.CommentEntityMapper;
 import life.majiang.community.mapper.UserCommentLogEntityMapper;
+import life.majiang.community.service.CommentEntityService;
 import life.majiang.community.service.UserCommentLogEntityService;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Service;
@@ -32,7 +35,7 @@ public class UserCommentLogEntityServiceImpl extends ServiceImpl<UserCommentLogE
     private RedisUtil redisUtil;
 
     @Resource
-    private CommentEntityMapper commentEntityMapper;
+    private CommentEntityService commentEntityService;
 
     @Override
     public void articleComment(Integer articleId, Integer count) {
@@ -48,8 +51,10 @@ public class UserCommentLogEntityServiceImpl extends ServiceImpl<UserCommentLogE
             articleRankingEntity = JSON.parseObject(o.toString(), ArticleRankingEntity.class);
 
         }
-        articleRankingEntity.setPraiseQuantity(articleRankingEntity.getComment() + count);
+        articleRankingEntity.setComment(articleRankingEntity.getComment() + count);
+        articleRankingEntityMapper.updateById(articleRankingEntity);
         redisUtil.set("r_ar_" + articleId, JSON.toJSONString(articleRankingEntity));
+        commentEntityService.refreshAllComment(articleId);
     }
 
 }

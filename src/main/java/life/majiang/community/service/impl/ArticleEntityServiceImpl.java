@@ -133,6 +133,7 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         ArticleRankingEntity articleRankingEntity = null;
         if (o == null){
             articleRankingEntity = articleRankingEntityMapper.selectById(id);
+            redisUtil.set("r_ar_count_" + articleId, articleRankingEntity.getComment());
             redisUtil.set("r_ar_" + articleId, JSON.toJSONString(articleRankingEntity));
         }else {
             articleRankingEntity = JSON.parseObject(o.toString(), ArticleRankingEntity.class);

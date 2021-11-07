@@ -41,4 +41,17 @@ public interface CommentEntityService extends IService<CommentEntity> {
      * @param request
      */
     void addComment(Integer articleId, Integer commentId, String comment, HttpServletRequest request);
+
+    /**
+     * 获取文章的回复数量
+     * @return
+     */
+    Long getCommentCount(Integer articleId);
+
+    /**
+     * 刷新指定文章的redis缓存
+     * @param articleId
+     */
+    void refreshAllComment(Integer articleId);
+
 }

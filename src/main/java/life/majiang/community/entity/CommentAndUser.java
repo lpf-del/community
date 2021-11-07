@@ -15,6 +15,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class CommentAndUser {
+    private Integer commentId;          //文章id
     private CommentEntity commentEntity;//评论
     private UserEntity userEntity;      //评论人
 }
