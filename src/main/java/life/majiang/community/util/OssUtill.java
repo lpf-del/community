@@ -23,11 +23,11 @@ import java.util.UUID;
  */
 @Component
 public class OssUtill {
-    private static String endPoint = "oss-cn-hangzhou.aliyuncs.com"; //Endpoint（地域节点）
-    private static String accessKeyId = "LTAI5t8rKk1B6B6i2Dt3ypCZ";  //AccessKey ID
-    private static String accessKeySecret = "lkEprS0oRCkrLeMy0SKX0azIFlKtBg"; //AccessKey Sevret
-    private static String bucketName = "oss-test-lpf"; //Bucket名称
-    private static String sufferUrl = "http://oss-test-lpf.oss-cn-hangzhou.aliyuncs.com/"; //Bucket 域名
+    private static String endPoint = ""; //Endpoint（地域节点）
+    private static String accessKeyId = ;  //AccessKey ID
+    private static String accessKeySecret = "; //AccessKey Sevret
+    private static String bucketName = ; //Bucket名称
+    private static String sufferUrl = "; //Bucket 域名
     private static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd"); //日期格式化对象
 
     /**
