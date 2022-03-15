@@ -171,6 +171,7 @@ public class AccountSettingsService {
         userEntity.setTelephone(newTelephone);
 
         redisUtil.set(newTelephone, JSON.toJSONString(userEntity));
+        redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
         response.addCookie(new Cookie("username", newTelephone));
     }
 
@@ -227,6 +228,7 @@ public class AccountSettingsService {
          */
         personInformation.setMail(newemial);
         redisUtil.set(newemial, JSON.toJSONString(personInformation));
+        redisUtil.set("u_" + personInformation.getId(), JSON.toJSONString(personInformation));
         response.addCookie(new Cookie("username", newemial));
     }
 }

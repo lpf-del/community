@@ -110,7 +110,7 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
 
 
     @Override
-    public void addComment(Integer articleId, Integer commentId, String comment, HttpServletRequest request) {
+    public CommentEntity addComment(Integer articleId, Integer commentId, String comment, HttpServletRequest request) {
         CommentEntity commentEntity = new CommentEntity();
         commentEntity.setArticleId(articleId);//文章id
         commentEntity.setCommentator(cookieService.getPersonInformation(request).getId());//评论人id
@@ -120,6 +120,7 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
         commentEntity.setCommentType(commentId==0?0:1);//评论种类
         commentEntity.setReviewedByMan(commentId==0?articleId:commentId);//被评论的id
         commentEntityMapper.insert(commentEntity);
+        return commentEntity;
     }
 
     @Override
@@ -149,7 +150,7 @@ public class CommentEntityServiceImpl extends ServiceImpl<CommentEntityMapper, C
     private List<CommentAndUser> commentAndUser(List<CommentEntity> records) {
         List<CommentAndUser> list = new ArrayList<>();
         for (CommentEntity record : records) {
-            CommentAndUser commentAndUser = new CommentAndUser(record.getCommentId(),record,
+            CommentAndUser commentAndUser = new CommentAndUser(record.getId(),record,
                     userEntityService.getAuthor(record.getCommentator()));
             list.add(commentAndUser);
         }

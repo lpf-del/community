@@ -113,6 +113,7 @@ public class GiteeController {
             UserEntity userEntity = userEntityService.register(username,password,telephone,email);
             cookieService.addUserToken(response, telephone, password);
             redisUtil.set(telephone, JSON.toJSONString(userEntity));
+            redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
             return "redirect:/";
         } catch (Exception e) {
             e.printStackTrace();

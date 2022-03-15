@@ -1,5 +1,7 @@
 package life.majiang.community.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +17,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 public class CommentEntity {
-    private Integer commentId;        //评论id
+    @TableId(value = "id",type= IdType.AUTO)
+    private Integer id;               //评论id
     private Integer commentator;      //评论人
     private Integer reviewedByMan;    //被评论的:当评论文章时为文章的id，当评论评论时是评论的id
     private Integer articleId;        //评论的文章

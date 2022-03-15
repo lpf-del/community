@@ -40,7 +40,7 @@ public interface CommentEntityService extends IService<CommentEntity> {
      * @param comment
      * @param request
      */
-    void addComment(Integer articleId, Integer commentId, String comment, HttpServletRequest request);
+    CommentEntity addComment(Integer articleId, Integer commentId, String comment, HttpServletRequest request);
 
     /**
      * 获取文章的回复数量

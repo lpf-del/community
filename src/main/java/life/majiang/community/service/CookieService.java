@@ -86,6 +86,7 @@ public class CookieService {
                 userEntity = userEntityMapper.getUserEntityByPhone(username);
             }
             redisUtil.set(username, JSON.toJSONString(userEntity));
+            redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
         } else {
             userEntity = JSON.parseObject(o.toString(), UserEntity.class);
         }
@@ -112,6 +113,7 @@ public class CookieService {
             userEntity = userEntityMapper.getUserEntityByPhone(username);
         }
         redisUtil.set(username, JSON.toJSONString(userEntity));
+        redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
     }
 
     /**
@@ -121,6 +123,7 @@ public class CookieService {
      */
     public String getUserName(HttpServletRequest request) {
         String username = "";
+        if (request.getCookies() == null) return username;
         for (Cookie cookie : request.getCookies()) {
             if (cookie.getName().equals("username")){
                 username = cookie.getValue();

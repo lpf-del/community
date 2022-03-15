@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>lpf-个人社区综合搜索</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./css/base.css" rel="stylesheet">
+  <link href="./css/m.css" rel="stylesheet">
+  <link href="./css/commentList.css" rel="stylesheet">
+  <link href="./css/search.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="./css/xcConfirm.css"/>
+  <link rel="stylesheet" type="text/css" href="./css/xcConfirm.css"/>
+  <link rel="stylesheet" href="./css/search_box.css">
+  <link href="./css/shai_xuan_style.css" rel="stylesheet" type="text/css"/>
+  <script src="./js/jquery-3.6.0.min.js"></script>
+  <script src="./js/comm.js"></script>
+  <script src="./js/xcConfirm.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<body>
+<div th:insert="~{header :: header}"></div>
+<div class="ph_margin"></div>
+
+<div class="container">
+
+  <div class="input">
+    <input type="text" placeholder="请输入要搜索的内容" autocomplete="off" id="search-input">
+    <div class="picker" id="search_type">文章搜索</div>
+    <ul class="picker-list" id="ul_list">
+      <li value="文章搜索" onclick="li_value(this.id)" id="li_v_1">文章搜索</li>
+      <li value="用户搜索" onclick="li_value(this.id)" id="li_v_2">用户搜索</li>
+      <li value="评论搜索" onclick="li_value(this.id)" id="li_v_3">评论搜索</li>
+    </ul>
+    <div class="hot-list"></div>
+  </div>
+  <div class="search" onclick="search()"></div>
+</div>
+<div class="cation-content">
+  <div style="height:10px"></div>
+  <div class="cation-middle">
+    <dl class="cation-list" id="label_id">
+      <dt>标签</dt>
+      <ul>
+        <li value="#" onclick="label_new(0)" name="labels" style="color: red;">全部标签</li>
+        <li value="java" onclick="label_new(1)" name="labels">java</li>
+        <li value="数据通信" onclick="label_new(2)" name="labels">数据通信</li>
+        <li value="测试" onclick="label_new(3)" name="labels">测试</li>
+        <li value="测试2" onclick="label_new(4)" name="labels">综合通用</li>
+      </ul>
+    </dl>
+    <dl class="cation-list" id="time_id">
+      <dt>时间</dt>
+      <ul>
+        <li onclick="time_new(0)" name="times" style="color: red;">全部时间</li>
+        <li onclick="time_new(1)" name="times">一天内</li>
+        <li onclick="time_new(2)" name="times">一周内</li>
+        <li onclick="time_new(3)" name="times">一月内</li>
+        <li onclick="time_new(4)" name="times">一年内</li>
+      </ul>
+    </dl>
+  </div>
+</div>
+<div class="box">
+    <ul id="show_ul">
+    </ul>
+  </div>
+</div>
+<div class="comment_div">
+    <ul class="comment_ul" id="comment_ul">
+    </ul>
+</div>
+<div th:insert="~{footer :: footer}"></div>
+<a href="#" title="返回顶部" class="icon-top"></a>
+<script type="text/javascript" src="./js/jquery.min.js"></script>
+<script type="text/javascript" src="./js/search_box.js"></script>
+<script type="text/javascript" src="./js/search.js"></script>
+</body>
+</html>

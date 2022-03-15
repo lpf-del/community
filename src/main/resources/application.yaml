@@ -42,9 +42,9 @@ spring:
     show-sql: true # 启动日志sql语句
   redis:
     database: 0 # 数据库索引默认0
-    host: 121.40.218.249  # 连接ip
+    host: 114.215.244.135  # 连接ip
     port: 6379 # 连接端口
-    password: root # 连接密码
+    password: 753963qweRT@ # 连接密码
 # springboot 2.0 redis默认客户端已换成lettuce
     lettuce:
       pool:
@@ -61,13 +61,20 @@ spring:
   mail:
     host: smtp.qq.com
     username: 2677086147@qq.com #2568034812@qq.com  自己的邮箱
-    password: sjvohrvfbgwbebai  #发送短信的授权码
+    password: cxbangwteapdeaai  #发送短信的授权码
     properties:
       mail:
         smtp:
           ssl:
             enable: true  #spring.mail.properties.mail.smtp.ssl.enable=true
     default-encoding: utf-8 #编码格式
+#RabbitMQ配置
+#  rabbitmq:
+#    port: 5672
+#    username: guest
+#    password: guest
+#    addresses: 121.40.218.249
+#    virtual-host: lpf_community
 
 #lpf_comminity:
 #  apiUrl: https://sms_developer.zhenzikj.com
@@ -82,4 +89,3 @@ pagehelper:
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
-

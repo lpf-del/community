@@ -36,4 +36,5 @@ public class UserEntity implements Serializable {
     private Integer postCount;      //发帖数量
     private Integer heatNumber;     //热度
     private String uuid;            //唯一标识
+    private String touXiangUrl;     //头像url地址
 }

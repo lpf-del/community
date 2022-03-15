@@ -18,7 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(sessionInterceptor).addPathPatterns("/**").excludePathPatterns(
                 "/static/**", "/callback","/log2","/log","/log3","/loginPhoneYan","/fitness/code"
                 ,"/telephoneLogin","/img/**","/register","/toRegister","/sendEmail","/loginYan",
-                "/test");
+                "/test","/profile");
     }
 
     //图片 映射配置

@@ -56,6 +56,7 @@ public class UserPraiseQuantityLogEntityServiceImpl extends ServiceImpl<UserPrai
         userEntityMapper.updateById(userEntity);
         redisUtil.set(userEntity.getMail(), JSON.toJSONString(userEntity));
         redisUtil.set(userEntity.getTelephone(), JSON.toJSONString(userEntity));
+        redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
     }
 
     @Override

@@ -69,5 +69,6 @@ public class UserArticleVisitLogEntityServiceImpl extends ServiceImpl<UserArticl
         userEntityMapper.updateById(userEntity);
         redisUtil.set(userEntity.getTelephone(), JSON.toJSONString(userEntity));
         redisUtil.set(userEntity.getMail(), JSON.toJSONString(userEntity));
+        redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
     }
 }

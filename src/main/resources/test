@@ -31,8 +31,9 @@ http://www.bootstrapmb.com/item/5239/preview
 
 基于SpringBoot整合Elasticsearch实现搜索补全功能：https://www.cnblogs.com/z-coding/p/14525201.html
 
-spring boot+全文搜索框架lucene：https://blog.csdn.net/weixin_38336658/article/details/80304326
-
 Spring Boot+RabbitMQ 实现延迟消息实现：https://javazhiyin.blog.csdn.net/article/details/106416616
 
 springboot 整合 websocket实现在线聊天和消息通知：https://blog.csdn.net/qq_41463655/article/details/107122235
+
+
+http://localhost:8888/swagger-ui.html#/

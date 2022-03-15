@@ -42,6 +42,7 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         userEntity.setUuid(UUID.randomUUID().toString());
         userEntity.setRegisterTime(System.currentTimeMillis());
         userEntity.setMail(email);
+        userEntity.setTouXiangUrl("https://oss-test-lpf.oss-cn-hangzhou.aliyuncs.com/TouXiang.gif");
         this.baseMapper.insert(userEntity);
         return userEntity;
     }
@@ -67,12 +68,13 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
             userEntity = userEntityMapper.exitTelephone(telephone);
             if (userEntity != null) {
                 redisUtil.set(telephone, JSON.toJSONString(userEntity));
+                redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
             } else {
                 throw new Exception("电话不存在");
             }
         }
         if (!userEntity.getPassWord().equals(password)){
-            repeatErrorLogin(telephone);
+            repeatErrorLogin(telephone + "_num");
             throw new Exception("密码错误");
         }
         return userEntity;
@@ -90,6 +92,7 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
         if (o == null){
             redisUtil.set(telephone, 1);
             redisUtil.expire(telephone, 60 * 10L);
+            return;
         }
         redisUtil.incr(telephone, 1);
     }
@@ -111,6 +114,7 @@ public class UserEntityServiceImpl extends ServiceImpl<UserEntityMapper, UserEnt
             throw new Exception("邮箱未注册");
         }else {
             redisUtil.set(email, JSON.toJSONString(userEntity));
+            redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
             return userEntity;
         }
     }

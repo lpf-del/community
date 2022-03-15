@@ -29,4 +29,7 @@ public interface UserEntityMapper extends BaseMapper<UserEntity> {
 
     @Select("select * from user_entity where user_name = #{user_name}")
     UserEntity getUserEntityByUserName(@Param(value = "user_name") String user_name);
+
+    @Select("select * from user_entity")
+    List<UserEntity> getAllDate();
 }

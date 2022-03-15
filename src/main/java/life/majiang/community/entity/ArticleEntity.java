@@ -33,4 +33,5 @@ public class ArticleEntity {
     private String content;           //文章内容
     private Integer authorId;         //作者id
     private Integer x;                //0草稿箱， 1发布
+    private Long releaseTime;         //发布时间
 }

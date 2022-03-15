@@ -1,0 +1,9 @@
+user_article_history_userId : uah_1 #用户文章预览历史 参数：userId
+参数2：articleId、time
+user_publish_article_userId : upa_1 #用户文章发布 参数：userId
+参数2：articleId、userId
+user_comment_notice_userId  : ucn_1 #用户评论通知 参数：userId
+参数2：articleId、commentId、time、userId
+user_heart_notice_userId    : uhn_1 #用户点赞通知 参数：userId
+参数2：articleId、commentId、time、userId
+user_follow_list_userId     : ufl_1 #用户关注列表 参数：userId

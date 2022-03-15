@@ -3,11 +3,13 @@ package life.majiang.community.controller;
 import com.alibaba.fastjson.JSON;
 import life.majiang.community.deo.*;
 import life.majiang.community.entity.CommentAndUser;
+import life.majiang.community.entity.CommentEntity;
 import life.majiang.community.mapper.ArticleEntityMapper;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.CommentMapper;
 import life.majiang.community.service.*;
+import life.majiang.community.util.AddRedisCache;
 import life.majiang.community.util.UtilLi;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -79,6 +81,9 @@ public class CommentController {
     @Resource
     private UserCommentLogEntityService userCommentLogEntityService;
 
+    @Resource
+    private AddRedisCache addRedisCache;
+
     /**
      * 获取某一文章的5条评论，使用ajax
      * @param articleId
@@ -125,8 +130,9 @@ public class CommentController {
         if (userName.equals("")) return "未登录请登录后再评论";
         comment.replaceAll(" ", "");
         if (comment.length() == 0) return "评论内容不能为空";
-        commentEntityService.addComment(articleId, commentId, comment, request);
+        CommentEntity commentEntity = commentEntityService.addComment(articleId, commentId, comment, request);
         userCommentLogEntityService.articleComment(articleId, 1);
+        addRedisCache.addUserCommentNotice(commentEntity.getReviewedByMan(), commentEntity.getCommentType(), articleId, commentEntity.getId());
         return "评论成功";
     }
 

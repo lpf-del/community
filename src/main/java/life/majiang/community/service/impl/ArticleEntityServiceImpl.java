@@ -12,6 +12,7 @@ import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.service.ArticleEntityService;
 import life.majiang.community.service.CookieService;
 import life.majiang.community.service.UserEntityService;
+import life.majiang.community.util.AddRedisCache;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +46,9 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
     @Resource
     private UserEntityMapper userEntityMapper;
 
+    @Resource
+    private AddRedisCache addRedisCache;
+
     @Override
     public void addArticle(String title, String description, String myTags, String articleType, String releaseForm, String fileUrl, HttpServletRequest request, Integer x) throws Exception {
         UserEntity personInformation = cookieService.getPersonInformation(request);
@@ -61,6 +65,7 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         articleEntity.setContent(description==null?"":description);//文章内容
         articleEntity.setAuthorId(personInformation.getId());//作者id
         articleEntity.setX(x);//0草稿箱，1发布
+        articleEntity.setReleaseTime(System.currentTimeMillis());
         articleEntityMapper.insert(articleEntity);
         Integer articleId = articleEntity.getId();
         if (x == 0) return;
@@ -73,6 +78,7 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         articleRanking.setPraiseQuantity(0);
         articleRankingEntityMapper.insert(articleRanking);
         addArticleRedis(articleRanking, articleEntity);
+        addRedisCache.addUserPublishArticle(cookieService.getUserId(request), articleEntity.getId());
     }
 
     /**
@@ -118,7 +124,8 @@ public class ArticleEntityServiceImpl extends ServiceImpl<ArticleEntityMapper, A
         personInformation.setPostCount(personInformation.getPostCount() + 1);
         userEntityMapper.updateById(personInformation);
         String userName = cookieService.getUserName(request);
-        redisUtil.set(userName, personInformation);
+        redisUtil.set(userName, JSON.toJSONString(personInformation));
+        redisUtil.set("u_" + personInformation.getId(), JSON.toJSONString(personInformation));
     }
 
 

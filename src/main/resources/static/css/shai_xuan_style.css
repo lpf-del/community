@@ -1,0 +1,76 @@
+
+.cation-content {
+    width: 1000px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+.cation-middle {
+    line-height: 48px;
+    background: #fff;
+    padding: 10px 20px 10px 30px;
+    font-size: 14px;
+    border-radius: 10px;
+}
+
+.cation-list {
+    overflow: hidden;
+}
+
+.cation-list dt {
+    float: left;
+    width: 64px;
+    font-weight: 700;
+    line-height: 48px;
+    position: relative;
+    color: #333;
+}
+
+:before, :after {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.cation-list dt:after {
+    content: "";
+    position: absolute;
+    right: 12px;
+    top: 22px;
+    border: 1px solid #333;
+    border-width: 0 1px 1px 0;
+    width: 4px;
+    height: 4px;
+    -webkit-transform: rotate(-45deg);
+    -moz-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.cation-list ul {
+    border-bottom: 1px dotted #e0e0e0;
+    margin-left: 64px;
+    overflow: hidden;
+}
+
+.cation-list ul li {
+    color: #8d8d91;
+    font-size: 14px;
+    line-height: 14px;
+    height: 14px;
+    float: left;
+    border-right: 1px solid #e0e0e0;
+    padding: 0 18px;
+    margin: 17px 0;
+}
+
+.cation-list ul li.on, .cation-list li:hover {
+    color: #fc8080;
+}
+
+.cation-list ul li:last-child {
+    border-right: 0 none;
+}
+
+.cation-list:last-of-type ul {
+    border-bottom: 0 none;
+}

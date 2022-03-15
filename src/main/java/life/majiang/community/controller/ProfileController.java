@@ -1,15 +1,14 @@
 package life.majiang.community.controller;
 
-import com.alibaba.fastjson.JSON;
 import life.majiang.community.deo.Ifica;
 import life.majiang.community.deo.Notification;
 import life.majiang.community.deo.User;
 import life.majiang.community.entity.ArticleAndUserAndRang;
-import life.majiang.community.entity.CommentAndUser;
 import life.majiang.community.mapper.NotificationMapper;
 import life.majiang.community.mapper.QuestionMapper;
 import life.majiang.community.mapper.UserMapper;
 import life.majiang.community.service.*;
+import life.majiang.community.util.AddRedisCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -101,6 +100,8 @@ public class ProfileController {
     @Resource
     private CookieService cookieService;
 
+    @Resource
+    private AddRedisCache addRedisCache;
 
     /**
      * 查看文章的请求
@@ -120,6 +121,7 @@ public class ProfileController {
         model.addAttribute("labelList", list);
         Long count = commentEntityService.getCommentCount(articleId);
         model.addAttribute("commentCount", countPage(count));
+        addRedisCache.addUserArticleHistory(request, articleId);
 //        userArticleVisitLogEntityService.addArticleVisit(articleId, request);
         return "profile";
     }

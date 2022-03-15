@@ -1,0 +1,222 @@
+
+    /**
+     * 搜索
+     */
+    @Test
+    public void testIndexSearch() throws ParseException, IOException {
+        //1.创建分词器（对搜索的关键字进行分词使用）
+        //注意：分词器要和创建索引的时候使用的分词器一模一样
+        Analyzer analyzer = new IKAnalyzer();
+        //2.创建查询对象  (1)默认查询域(如果查询的关键字中带搜索的域名，则从指定域中查询，
+        // 如果不带域名，从默认搜索域中查询)  (2)分词器
+        QueryParser queryParser = new QueryParser("name", analyzer);
+        //3.设置搜索关键词  华为 AND 手机  [1 To 100]
+        Query parse = queryParser.parse("commentContent:测试");
+        //4.创建Directory目录对象，指定索引库的位置
+        Directory dir = FSDirectory.open(Paths.get("E://luence"));
+        //5.创建输入流对象
+        IndexReader indexReader = DirectoryReader.open(dir);
+        //6.创建搜索对象
+        IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+        //7.搜索，并返回结果
+        TopDocs topDocs = indexSearcher.search(parse, 10);
+        //8.获取结果集
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+        //9.遍历结果集
+        if (scoreDocs != null) {
+            for (ScoreDoc scoreDoc : scoreDocs) {
+                //获取查询到的文档唯一标识，文档id，lucene在创建文档的时候自动分配的
+                int socID = scoreDoc.doc;
+                //通过文档id，读取文档
+                Document doc = indexSearcher.doc(socID);
+                System.out.println(doc.get("commentContent"));
+            }
+        }
+        //10.关闭流
+        indexReader.close();
+    }
+
+    /**
+     * 范围搜索
+     */
+    @Test
+    public void testIndexSearchRang() throws ParseException, IOException {
+        //1.创建分词器（对搜索的关键字进行分词使用）
+        //注意：分词器要和创建索引的时候使用的分词器一模一样
+        Analyzer analyzer = new IKAnalyzer();
+        //2.创建查询对象  (1)默认查询域(如果查询的关键字中带搜索的域名，则从指定域中查询，
+        // 如果不带域名，从默认搜索域中查询)  (2)分词器
+        Query parse = IntPoint.newRangeQuery("pi", 1, 100);
+        //4.创建Directory目录对象，指定索引库的位置
+        Directory dir = FSDirectory.open(Paths.get("E://luence"));
+        //5.创建输入流对象
+        IndexReader indexReader = DirectoryReader.open(dir);
+        //6.创建搜索对象
+        IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+        //7.搜索，并返回结果
+        TopDocs topDocs = indexSearcher.search(parse, 10);
+        //8.获取结果集
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+        //9.遍历结果集
+        if (scoreDocs != null) {
+            for (ScoreDoc scoreDoc : scoreDocs) {
+                //获取查询到的文档唯一标识，文档id，lucene在创建文档的时候自动分配的
+                int socID = scoreDoc.doc;
+                //通过文档id，读取文档
+                Document doc = indexSearcher.doc(socID);
+                System.out.println(doc.get("commentContent"));
+            }
+        }
+        //10.关闭流
+        indexReader.close();
+    }
+
+    /**
+     * 组合搜索
+     */
+    @Test
+    public void booleanIndexSearchRang() throws ParseException, IOException {
+        //1.创建分词器（对搜索的关键字进行分词使用）
+        //注意：分词器要和创建索引的时候使用的分词器一模一样
+        Analyzer analyzer = new IKAnalyzer();
+        //2.创建查询对象  (1)默认查询域(如果查询的关键字中带搜索的域名，则从指定域中查询，
+        // 如果不带域名，从默认搜索域中查询)  (2)分词器
+
+        Query parse1 = IntPoint.newRangeQuery("pi", 1, 100);
+        QueryParser queryParser = new QueryParser("name", analyzer);
+        Query parse2 = queryParser.parse("commentContent:测试");
+
+        /**
+         * BooleanClause.Occur.MUST and
+         * BooleanClause.Occur.SHOULD  or
+         * BooleanClause.Occur.MUST_NOT no
+         */
+        BooleanQuery.Builder parse = new BooleanQuery.Builder();
+        parse.add(parse1, BooleanClause.Occur.MUST);
+        parse.add(parse2, BooleanClause.Occur.MUST);
+
+        //4.创建Directory目录对象，指定索引库的位置
+        Directory dir = FSDirectory.open(Paths.get("E://luence"));
+        //5.创建输入流对象
+        IndexReader indexReader = DirectoryReader.open(dir);
+        //6.创建搜索对象
+        IndexSearcher indexSearcher = new IndexSearcher(indexReader);
+        //7.搜索，并返回结果
+        TopDocs topDocs = indexSearcher.search(parse.build(), 10);
+        //8.获取结果集
+        ScoreDoc[] scoreDocs = topDocs.scoreDocs;
+        //9.遍历结果集
+        if (scoreDocs != null) {
+            for (ScoreDoc scoreDoc : scoreDocs) {
+                //获取查询到的文档唯一标识，文档id，lucene在创建文档的时候自动分配的
+                int socID = scoreDoc.doc;
+                //通过文档id，读取文档
+                Document doc = indexSearcher.doc(socID);
+                System.out.println(doc.get("commentContent"));
+            }
+        }
+        //10.关闭流
+        indexReader.close();
+    }
+
+    /**
+     * 更新索引库
+     *
+     * @throws IOException
+     * @throws NullPointerException
+     */
+    @Test
+    public void updateIndexTest() throws IOException, NullPointerException {
+
+        Document doc = new Document();
+        doc.add(new TextField("commentId", "1", Field.Store.YES));
+        doc.add(new TextField("commentator", "1", Field.Store.YES));
+        doc.add(new TextField("commentContent", "啊啊啊啊", Field.Store.YES));
+
+        //3.创建分词器,StandarAnalyzer标准分析器，对英文分词效果好，对中文单字分词
+        Analyzer analyzer = new IKAnalyzer();
+        //4.创建Directory目录对象，目录对象表示索引库的位置
+        Directory dir = FSDirectory.open(Paths.get("E://luence"));
+        //5.创建IndexWriterConfig对象，这个对象中指定切分词使用的分词器
+        IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        //6.创建IndexWriter输出流对象，指定输出的位置和使用的config初始化对象
+        IndexWriter indexWriter = new IndexWriter(dir, config);
+        //7.修改文档到索引库  1.修改条件  2.修改内容
+        indexWriter.updateDocument(new Term("id", "1"), doc);
+        //8.释放资源
+        indexWriter.close();
+    }
+
+    /**
+     * 删除索引
+     * @throws IOException
+     * @throws NullPointerException
+     */
+    @Test
+    public void deleteIndexTest() throws IOException, NullPointerException {
+        //3.创建分词器,StandarAnalyzer标准分析器，对英文分词效果好，对中文单字分词
+        Analyzer analyzer = new IKAnalyzer();
+        //4.创建Directory目录对象，目录对象表示索引库的位置
+        Directory dir = FSDirectory.open(Paths.get("E://luence"));
+        //5.创建IndexWriterConfig对象，这个对象中指定切分词使用的分词器
+        IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        //6.创建IndexWriter输出流对象，指定输出的位置和使用的config初始化对象
+        IndexWriter indexWriter = new IndexWriter(dir, config);
+        //7.删除文档到索引库
+        indexWriter.deleteDocuments(new Term("commentId", "1"));
+        //8.释放资源
+        indexWriter.close();
+    }
+    /**
+         * 创建索引库
+         * Field：
+         * 是否存储：需要查询出信息
+         * 是否分词：id、身份证不用分词
+         * 是否索引：需要根据进行索引
+         */
+        @Test
+        public void createIndexTest() throws IOException, NullPointerException {
+            //1.采集数据
+            List<CommentEntity> comlist = commentEntityMapper.getAllDate();
+            //文档集合
+            List<Document> docList = new ArrayList<>();
+            for (CommentEntity commentEntity : comlist) {
+                System.out.println(commentEntity);
+                //2.创建文档对象
+                Document doc = new Document();
+                //创建域对象并且放入文档对象中  //域名   //域的值                           //是否存储
+                doc.add(new TextField("commentId", String.valueOf(commentEntity.getCommentId()), Field.Store.YES));
+                doc.add(new TextField("commentator", String.valueOf(commentEntity.getCommentator()), Field.Store.YES));
+                doc.add(new TextField("commentContent", commentEntity.getCommentContent(), Field.Store.YES));
+
+
+                //将文档对象放入到文档集合中
+                docList.add(doc);
+            }
+            /**
+             * private Integer commentId;        //评论id
+             *     private Integer commentator;      //评论人
+             *     private Integer reviewedByMan;    //被评论的:当评论文章时为文章的id，当评论评论时是评论的id
+             *     private Integer articleId;        //评论的文章
+             *     private Integer commentType;      //评论类型，true评论评论，false评论文章
+             *     private String commentContent;    //评论内容
+             *     private String commentPicture;    //评论图片，最多一张
+             *     private Integer likeCount;        //点赞数量
+             *     private Long commentTime;         //评论时间
+             */
+
+            //3.创建分词器,StandarAnalyzer标准分析器，对英文分词效果好，对中文单字分词
+            Analyzer analyzer = new IKAnalyzer();
+            //4.创建Directory目录对象，目录对象表示索引库的位置
+            Directory dir = FSDirectory.open(Paths.get("E://luence"));
+            //5.创建IndexWriterConfig对象，这个对象中指定切分词使用的分词器
+            IndexWriterConfig config = new IndexWriterConfig(analyzer);
+            //6.创建IndexWriter输出流对象，指定输出的位置和使用的config初始化对象
+            IndexWriter indexWriter = new IndexWriter(dir, config);
+            //7.写入文档到索引库
+            for (Document doc : docList) {
+                indexWriter.addDocument(doc);
+            }
+            //8.释放资源
+            indexWriter.close();
+        }

@@ -1,0 +1,97 @@
+ @Test
+    void producer() throws IOException, TimeoutException {
+        //连接参数配置
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.setHost("121.40.218.249");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("root");
+        connectionFactory.setPassword("root");
+        connectionFactory.setVirtualHost("/");
+
+        //获取tcp长连接
+        Connection connection = connectionFactory.newConnection();
+        //创建通信"通道"，相当于TCP中的虚拟连接
+        Channel channel = connection.createChannel();
+
+        /**
+         * 创建队列，声明并创建一个队列，如果队列已经存在，则使用这个队列
+         * 第一个参数：队列名称ID
+         * 第二个参数：是否持久化，false对应不持久化数据，MQ停掉数据会丢失
+         * 第三个参数：是否队列私有化，false代表所有消费者都可以访问，true代表只有第一次拥有
+         *   他的消费者才能一直使用。
+         * 第四个参数：是否自动删除，false代表连接停掉后不自动删掉这个队列
+         * 其他格外的参数，null
+         */
+        channel.queueDeclare("hello", false, false, false, null);
+        String message = "hello_lpf_2";
+
+        /**
+         * 四个参数
+         * exchange 交换机，暂时用不到，在后面进行发布订阅时才会用到
+         * 队列名称
+         * 额外的设置属性
+         * 最后一个参数是要传递的消息字节数组
+         */
+        channel.basicPublish("", "hello", null, message.getBytes());
+        channel.close();
+        connection.close();
+        System.out.println("发送成功");
+    }
+    @Test
+    void comsumer() throws IOException {
+        //获取TCP长连接
+        Connection connection = RabbitMQUtil.getConnection();
+        //创建通信"通道"，相当于TCP中的虚拟连接
+        Channel channel = connection.createChannel();
+        channel.queueDeclare("hello", false, false, false, null);
+        channel.basicQos(1);
+         //队列交换机绑定
+               channel.queueBind("duilie", "jiaohuanji", "");
+        //从MQ中获取数据
+        /**
+         * 创建一个消息消费者
+         * 第一个参数：队列名
+         * 第二个参数代表是否自动确认收到消息，false代表手动编程来确认消息，这是MQ的推荐做法
+         * 第三个参数是要传入DefaultConsumer的实现类
+         */
+        channel.basicConsume("hello", false, new Reciver(channel));
+    }
+}
+
+class RabbitMQUtil{
+    static ConnectionFactory connectionFactory = new ConnectionFactory();
+    static {
+        connectionFactory.setHost("121.40.218.249");
+        connectionFactory.setPort(5672);
+        connectionFactory.setUsername("root");
+        connectionFactory.setPassword("root");
+        connectionFactory.setVirtualHost("/");
+    }
+    public static Connection getConnection(){
+        Connection connection = null;
+        try {
+            connection = connectionFactory.newConnection();
+            return connection;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+class Reciver extends DefaultConsumer{
+    private Channel channel;
+    //重写构造函数，Channel通道对象需要从外层传入，在handleFelivery中要用到
+    public Reciver(Channel channel) {
+        super(channel);
+        this.channel = channel;
+    }
+
+    @Override
+    public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
+        String message = new String(body);
+        System.out.println("消费者接收到的消息：" + message);
+
+        System.out.println("消息的TagId：" + envelope.getDeliveryTag());
+        //false只确认签收当前的消息，设置为true的时候代表签收该消费者所有未签收的消息
+        channel.basicAck(envelope.getDeliveryTag(), false);
+    }
+}

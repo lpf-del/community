@@ -1,10 +1,12 @@
 package life.majiang.community.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import life.majiang.community.entity.AccountInformation;
 import life.majiang.community.entity.UserEntity;
 import life.majiang.community.mapper.UserEntityMapper;
 import life.majiang.community.service.*;
+import life.majiang.community.util.OssUtill;
 import life.majiang.community.util.RedisUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,8 +15,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.annotation.Resource;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
@@ -294,6 +299,9 @@ public class homePageController {
     @Resource
     private FileService fileService;
 
+    @Resource
+    private OssUtill ossUtill;
+
     /**
      * 文件上传服务器，返回file_url数据库保存url
      * 用ajax异步发送用var保存返回的url
@@ -307,8 +315,43 @@ public class homePageController {
     public String upload(MultipartFile file) throws IOException {
         String upload = "";
         if (file != null) {
-            upload = fileService.upload(file);
+//            upload = fileService.upload(file);
+            upload = ossUtill.uploadDocument(file, "image");
+        }else {
+            throw new IOException("文件上传失败");
         }
         return upload;
     }
+
+
+    /**
+     * 头像上传将上传的图片进行裁剪，并存放到阿里云oss中，返回图片保存url
+     * @param avatar_file
+     * @param user_id
+     * @param avatar_src
+     * @param avatar_data
+     * @param request
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "upload_TouXiang", method = RequestMethod.POST)
+    @ResponseBody
+    public String uploadTouXiang(MultipartFile avatar_file, Integer user_id, String avatar_src, String avatar_data, HttpServletRequest request)throws IOException{
+        String upload_url = "";
+        if (avatar_file != null) {
+            upload_url = ossUtill.uploadDocument(avatar_file, "TouXiang");
+            UserEntity userEntity = userEntityMapper.selectById(user_id);
+            userEntity.setTouXiangUrl(upload_url);
+            userEntityMapper.updateById(userEntity);
+            String userName = cookieService.getUserName(request);
+            redisUtil.set(userName, JSON.toJSONString(userEntity));
+            redisUtil.set("u_" + userEntity.getId(), JSON.toJSONString(userEntity));
+            System.out.println(avatar_src + "#" + avatar_data);
+        }else {
+            throw new IOException("头像上传失败");
+        }
+        return upload_url;
+    }
+
+
 }

@@ -9,7 +9,7 @@ ul, li { list-style: none; }
 a { text-decoration: none; color: #001737; }
 a:hover { color: #012684; text-decoration: none; }
 .clear { clear: both; width: 100%; overflow: hidden; }
-.box { width: 1200px; margin: auto; }
+.box { width: 1200px; margin: auto; margin-top: 10px;}
 /*header*/
 header { padding-top: 20px; position: relative; height: 140px; background: #fff; margin-bottom: 60px; }
 .logo { float: left }
